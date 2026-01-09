@@ -3,12 +3,12 @@
 import { useParams } from "next/navigation";
 
 export default function Page() {
-  const { id } = useParams<{ id: string }>();
+  const { checkpointId } = useParams<{ checkpointId: string }>();
   
 
     return (
         <div>
-            Stop: {id}
+            Stop: {checkpointId}
         </div>
     );
 }

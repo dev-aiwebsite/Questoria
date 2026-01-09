@@ -91,6 +91,26 @@ export const IconCloud2 = ({strokeWidth=1, width = 78, height = 68, className }:
   );
 };
 
+export const IconBell = ({strokeWidth=1, width = 26, height = 30, className }: IconType) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      viewBox="0 0 26 30"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.91667 26.9167H15.5833C15.5833 28.475 14.3083 29.75 12.75 29.75C11.1917 29.75 9.91667 28.475 9.91667 26.9167ZM25.5 24.0833V25.5H0V24.0833L2.83333 21.25V12.75C2.83333 8.35833 5.66667 4.53333 9.91667 3.25833V2.83333C9.91667 1.275 11.1917 0 12.75 0C14.3083 0 15.5833 1.275 15.5833 2.83333V3.25833C19.8333 4.53333 22.6667 8.35833 22.6667 12.75V21.25L25.5 24.0833ZM19.8333 12.75C19.8333 8.78333 16.7167 5.66667 12.75 5.66667C8.78333 5.66667 5.66667 8.78333 5.66667 12.75V22.6667H19.8333V12.75Z"
+        fill="black"
+        strokeWidth={strokeWidth}
+      />
+
+    </svg>
+  );
+};
+
 
 
 
