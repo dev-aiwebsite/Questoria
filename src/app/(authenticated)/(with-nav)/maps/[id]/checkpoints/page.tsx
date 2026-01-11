@@ -31,7 +31,7 @@ export default function Page() {
 
             <div className="text-center space-y-8">
                 <h3 className="header3">Way points</h3>
-                <p>Waypoints are key locations you’ll visit during your quest. Reach each one, complete the challenge, and continue onward. There’s no set order, follow the map, roam freely, and explore at your own pace.</p>
+                <p>Waypoints are key locations you’ll visit during your quest. Reach each one, complete the challenge, and continue onward. There’s no set order, follow the map, roam freely, and explore at your own pace. </p>
                 <div className="space-y-4">
                     {mapCheckpoints.length > 0 &&
                         mapCheckpoints.map(c => {
