@@ -47,6 +47,136 @@ export const maps = [
 ]
 
 
+
+export type Checkpoints = {
+    id: string;
+    map_id: string;
+    title: string;
+    subtitle: string;
+    pretext: string;
+    image: string;
+    description: string;
+    status: string;
+    progress_percent: number;
+    order: number;
+}
+export const checkpoints:Checkpoints[] = [
+    {
+        id: "234jfgfg1",
+        map_id: "234j3h4j3",
+        title: "Always start here - The Visitor Centre",
+        subtitle: "Starting point",
+        pretext: "The quest awaits! Make your way to The Visitor Centre to begin your adventure.",
+        image: "/images/maps/map1-checkpoint-1.jpg",
+        description: `Did you know? The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!  
+
+Over the decades, legendary botanists like Ferdinand von Mueller expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens! 
+
+The Visitor Centre you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.`,
+        status: "open",
+        progress_percent: 100,
+        order: 1
+
+    },
+    {
+    id: "234jfgfb2",
+    map_id: "234j3h4j3",
+    title: "Ironbark Garden",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 2
+},
+    {
+    id: "234jfgfb3",
+    map_id: "234j3h4j3",
+    title: "Box Garden",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 3
+},
+    {
+    id: "234jfgfg4",
+    map_id: "234j3h4j3",
+    title: "Peppermint Garden",
+    subtitle: "Peppermint Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 4
+},
+    {
+    id: "234jfgfb5",
+    map_id: "234j3h4j3",
+    title: "Bloodwood Garden",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 5
+},
+    {
+    id: "234jfgfb6",
+    map_id: "234j3h4j3",
+    title: "Stringbark Garden",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 6
+},
+    {
+    id: "234jfgfb7",
+    map_id: "234j3h4j3",
+    title: "Arid Garden",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 7
+},
+    {
+    id: "234jfgfb8",
+    map_id: "234j3h4j3",
+    title: "Desert Discovery Camp",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 8
+},
+    {
+    id: "234jfgfb4",
+    map_id: "234j3h4j3",
+    title: "Forest Clearing",
+    subtitle: "Ironbark Garden",
+    pretext: "",
+    image: "",
+    description: ``,
+    status: "close",
+    progress_percent: 0,
+    order: 9
+},
+]
+
+
 export type OnboardingQuestionsChoices = {
     id: string;
     text: string;
