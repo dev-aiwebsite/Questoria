@@ -1,5 +1,5 @@
 import { OnboardingQuestions } from "@/lib/dummy";
-import ChoiceInput from "./choiceInput";
+import InputChoices from "../inputChoices";
 
 export default function QuestionWrapper({
     onSubmit,
@@ -50,31 +50,18 @@ export default function QuestionWrapper({
         </div>
         <div className="space-y-4">
             <h3 className="header3 max-w-[250px]">{question.description}</h3>
-            {question.choices.map((c) => (
-                <ChoiceInput
-                    key={c.id}
-                    choice={c}
-                    type={question.type}
-                    name={`question-${currentStep}`}
-                    checked={
-                        question.type === "radio"
-                            ? value === c.id
-                            : Array.isArray(value) && value.includes(c.id)
+            <InputChoices
+                name={`question-${currentStep}`}
+                isMultiple={question.type !== "radio"} 
+                choices={question.choices}
+                onChange={(selectedIds) => {
+                    if (question.type === "radio") {
+                    onChange(selectedIds[0]); // radio → only first selected
+                    } else {
+                    onChange(selectedIds); // checkbox → array of selected
                     }
-                    onChange={() => {
-                        if (question.type === "radio") {
-                            onChange(c.id);
-                        } else {
-                            const current = Array.isArray(value) ? value : [];
-                            onChange(
-                                current.includes(c.id)
-                                    ? current.filter((v) => v !== c.id)
-                                    : [...current, c.id]
-                            );
-                        }
-                    }}
+                }}
                 />
-            ))}
 
         </div>
         <button

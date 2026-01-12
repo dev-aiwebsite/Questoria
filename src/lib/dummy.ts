@@ -68,11 +68,12 @@ export const checkpoints:Checkpoints[] = [
         subtitle: "Starting point",
         pretext: "The quest awaits! Make your way to The Visitor Centre to begin your adventure.",
         image: "/images/maps/map1-checkpoint-1.jpg",
-        description: `Did you know? The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!  
+        description: `<p><strong>Did you know?</strong> The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!</p>
 
-Over the decades, legendary botanists like Ferdinand von Mueller expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens! 
+<p>Over the decades, legendary botanists like <strong>Ferdinand von Mueller</strong> expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens!</p>
 
-The Visitor Centre you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.`,
+<p>The Visitor Centre you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.</p>
+`,
         status: "open",
         progress_percent: 100,
         order: 1

@@ -4,9 +4,10 @@ import { cn } from "@/lib/helper";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 export default function Page() {
+    const pathname = usePathname()
     const { id: mapId } = useParams<{ id: string }>();
     const mapCheckpoints_unsorted = checkpoints.filter(c => c.map_id == mapId)
     const mapCheckpoints = mapCheckpoints_unsorted.sort(
@@ -40,7 +41,7 @@ export default function Page() {
                             return <Link
                                 key={c.id}
                                 className={cn("bg-white rounded-xl border border-black px-4 py-3 text-sm flex flex-row flex-nowrap justify-between items-center", c.status === "open" && 'bg-green-700 text-white')}
-                                href={`/maps/${mapId}/checkpoints/${c.id}`}
+                                href={`${pathname}/${c.id}`}
                             >
                                 {c.title}
 

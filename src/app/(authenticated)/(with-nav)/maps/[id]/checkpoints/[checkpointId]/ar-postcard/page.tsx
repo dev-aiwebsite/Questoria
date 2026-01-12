@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 interface Props {
   stopId?: string;
+  oncCaptureImage?: (v:string) => void;
 }
 
-export default function ARPostcardPage({ stopId = "1" }: Props) {
+export default function ARPostcardPage({oncCaptureImage, stopId = "1" }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLImageElement>(null);
@@ -65,10 +66,13 @@ export default function ARPostcardPage({ stopId = "1" }: Props) {
   const dataUrl = canvas.toDataURL("image/png");
   setCapturedImage(dataUrl);
 
+  if(oncCaptureImage){
+    oncCaptureImage(dataUrl)
+  }
   // Auto download
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = `stop-${stopId}-ar-postcard.png`;
+  // const link = document.createElement("a");
+  // link.href = dataUrl;
+  // link.download = `stop-${stopId}-ar-postcard.png`;
 //   link.click();
 };
 
