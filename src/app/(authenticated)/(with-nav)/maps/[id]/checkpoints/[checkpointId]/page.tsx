@@ -30,7 +30,7 @@ export default function Page() {
                             dangerouslySetInnerHTML={{ __html: checkpointData.description }}
                         />
                     </div>
-                    <Link href={`${pathname}/ways`} className="btn primary w-full">Clear this checkpoint</Link>
+                    <Link href={`${pathname}/challenges`} className="btn primary w-full">Clear this checkpoint</Link>
                 </div>
             }
         </div>

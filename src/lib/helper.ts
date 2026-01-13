@@ -1,5 +1,6 @@
 
 import { twMerge } from "tailwind-merge"
+import { checkpointChallenges, CheckpointQuizData } from "./dummy";
 
 export type ClassValue = string | number | bigint | boolean | null | undefined | ClassDictionary | ClassValue[];
 export interface ClassDictionary { [key: string]: boolean | null | undefined }
@@ -15,4 +16,10 @@ export default clsx;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function isCheckpointQuiz(
+  challenge: checkpointChallenges
+): challenge is CheckpointQuizData {
+  return "choices" in challenge;
 }

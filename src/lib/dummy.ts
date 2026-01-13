@@ -1,3 +1,19 @@
+export type CheckpointQuizData = {
+    title: string;
+    description: string;
+    question: string;
+    choices: {
+        id: string;
+        text: string;
+    }[];
+    correct_answer: string;
+}
+
+export type checkpointChallenges = ({
+    title: string;
+    description: string;
+} | CheckpointQuizData)
+
 export type Map = {
     id: string;
     released: boolean;
@@ -47,7 +63,6 @@ export const maps = [
 ]
 
 
-
 export type Checkpoints = {
     id: string;
     map_id: string;
@@ -56,11 +71,11 @@ export type Checkpoints = {
     pretext: string;
     image: string;
     description: string;
-    status: string;
-    progress_percent: number;
+    challenges: checkpointChallenges[];
+    is_visited: boolean;
     order: number;
 }
-export const checkpoints:Checkpoints[] = [
+export const checkpoints: Checkpoints[] = [
     {
         id: "234jfgfg1",
         map_id: "234j3h4j3",
@@ -74,109 +89,129 @@ export const checkpoints:Checkpoints[] = [
 
 <p>The Visitor Centre you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.</p>
 `,
-        status: "open",
-        progress_percent: 100,
+        is_visited: true,
+        challenges: [
+             {
+        title: "selfie",
+        description: "Snap a magical moment! Capture a selfie or photo of the Visitor Centre. <strong>(Earn 1 Quest Gem)</strong>",
+
+    },
+    {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "When was the Victoria Botanical Gardens originally founded?",
+        choices: [
+            {id: "c1", text: "1820"},
+            {id: "c2", text: "1846"},
+            {id: "c3", text: "1901"},
+            {id: "c4", text: "1988"}],  
+        correct_answer: "c2",
+    },
+    {
+        title: "happiness",
+        description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>",
+    }
+        ],
         order: 1
 
     },
     {
-    id: "234jfgfb2",
-    map_id: "234j3h4j3",
-    title: "Ironbark Garden",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 2
-},
+        id: "234jfgfb2",
+        map_id: "234j3h4j3",
+        title: "Ironbark Garden",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 2
+    },
     {
-    id: "234jfgfb3",
-    map_id: "234j3h4j3",
-    title: "Box Garden",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 3
-},
+        id: "234jfgfb3",
+        map_id: "234j3h4j3",
+        title: "Box Garden",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 3
+    },
     {
-    id: "234jfgfg4",
-    map_id: "234j3h4j3",
-    title: "Peppermint Garden",
-    subtitle: "Peppermint Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 4
-},
+        id: "234jfgfg4",
+        map_id: "234j3h4j3",
+        title: "Peppermint Garden",
+        subtitle: "Peppermint Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 4
+    },
     {
-    id: "234jfgfb5",
-    map_id: "234j3h4j3",
-    title: "Bloodwood Garden",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 5
-},
+        id: "234jfgfb5",
+        map_id: "234j3h4j3",
+        title: "Bloodwood Garden",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 5
+    },
     {
-    id: "234jfgfb6",
-    map_id: "234j3h4j3",
-    title: "Stringbark Garden",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 6
-},
+        id: "234jfgfb6",
+        map_id: "234j3h4j3",
+        title: "Stringbark Garden",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 6
+    },
     {
-    id: "234jfgfb7",
-    map_id: "234j3h4j3",
-    title: "Arid Garden",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 7
-},
+        id: "234jfgfb7",
+        map_id: "234j3h4j3",
+        title: "Arid Garden",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 7
+    },
     {
-    id: "234jfgfb8",
-    map_id: "234j3h4j3",
-    title: "Desert Discovery Camp",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 8
-},
+        id: "234jfgfb8",
+        map_id: "234j3h4j3",
+        title: "Desert Discovery Camp",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 8
+    },
     {
-    id: "234jfgfb4",
-    map_id: "234j3h4j3",
-    title: "Forest Clearing",
-    subtitle: "Ironbark Garden",
-    pretext: "",
-    image: "",
-    description: ``,
-    status: "close",
-    progress_percent: 0,
-    order: 9
-},
+        id: "234jfgfb4",
+        map_id: "234j3h4j3",
+        title: "Forest Clearing",
+        subtitle: "Ironbark Garden",
+        pretext: "",
+        image: "",
+        description: ``,
+        challenges: [],
+        is_visited: false,
+        order: 9
+    },
 ]
-
 
 export type OnboardingQuestionsChoices = {
     id: string;
@@ -222,7 +257,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
     {
         id: "question2",
         question: "Your adventurer age band (tick all that apply!)",
-        description: "Who joins you in this grand adventure?",
+        description: "What is your company’s leve of expertise?",
         type: "checkbox",
         cta: {
             idle: "Select age group(s)",
@@ -266,7 +301,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
     {
         id: "question3",
         question: "From where does your journey begin?",
-        description: "Who joins you in this grand adventure?",
+        description: "From which land do you hail?",
         type: "radio",
         cta: {
             idle: "Choose a location",
