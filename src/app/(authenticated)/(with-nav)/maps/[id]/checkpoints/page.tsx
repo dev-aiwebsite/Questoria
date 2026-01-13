@@ -37,9 +37,10 @@ export default function Page() {
                     {mapCheckpoints.length > 0 &&
                         mapCheckpoints.map((c,index) => {
                             const totalStars = 3;
+                            const rewardImageLink = index == 0 ? "/images/IconRewards.png" : "/images/IconRewardWhite.png"
                             return <Link
                                 key={c.id}
-                                className={cn("bg-white rounded-xl border border-black px-4 py-3 text-sm flex flex-row flex-nowrap justify-between items-center", c.is_visited && 'bg-green-700 text-white')}
+                                className={cn("bg-white rounded-xl border border-black px-4 py-3 text-start text-sm flex flex-row flex-nowrap justify-between items-center", c.is_visited && 'bg-green-700 text-white')}
                                 href={`${pathname}/${c.id}`}
                             >
                                 {c.title}
@@ -47,14 +48,13 @@ export default function Page() {
 
                                 <span className="flex flex-row items-center gap-1">
                                     {Array.from({ length: totalStars }).map((_, i) => (
-                                        <Star
-                                            key={i}
-                                            className={
-                                                index == 0
-                                                    ? "text-yellow-400 fill-yellow-400"
-                                                    : "text-muted-foreground"
-                                            }
-                                        />
+                                      <Image
+                                      key={i}
+                                      src={rewardImageLink}
+                                      width={35}
+                                      height={35}
+                                      alt=""
+                                      />
                                     ))}
                                 </span>
                             </Link>

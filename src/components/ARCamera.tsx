@@ -21,7 +21,8 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
     "2": "/frames/frame2.png",
     "3": "/frames/frame3.png",
   };
-  const overlaySrc = overlays[stopId] || "/frames/frame1.png";
+  // const overlaySrc = overlays[stopId] || "/frames/frame1.png";
+  const overlaySrc ="/images/mascott1.png";
 
   useEffect(() => {
     let mounted = true;
@@ -88,7 +89,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
     // Draw overlay
     const overlayImg = overlayRef.current;
-    ctx.drawImage(overlayImg, 0, 0, width, height);
+    ctx.drawImage(overlayImg, -120, height - 300, 270, 300);
 
 
     // Save snapshot
@@ -119,11 +120,10 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
   return (
     <div className="flex flex-col flex-nowrap gap-0 h-screen w-screen absolute z-[999999] bg-black">
-      <div className="flex-1">
-
+      <div className="h-[200px]">
       </div>
       <div
-        className="relative w-full h-fit aspect-9/16 my-0 mx-auto overflow-hidden bg-white"
+        className="relative w-full h-fit aspect-4/3 my-0 mx-auto overflow-hidden bg-white"
       >
         {/* Camera feed */}
         <video
@@ -133,7 +133,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
         {/* Overlay image */}
         <img
-          className="absolute top-0 lef-0 w-full h-full pointer-events-none"
+          className="absolute w-[190px] h-[200px] bottom-0 -left-20 pointer-events-none"
           ref={overlayRef}
           src={overlaySrc}
           alt="AR Frame"
