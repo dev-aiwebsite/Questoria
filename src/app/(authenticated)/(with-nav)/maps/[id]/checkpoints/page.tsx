@@ -35,12 +35,11 @@ export default function Page() {
                 <p>Waypoints are key locations you’ll visit during your quest. Reach each one, complete the challenge, and continue onward. There’s no set order, follow the map, roam freely, and explore at your own pace. </p>
                 <div className="space-y-4">
                     {mapCheckpoints.length > 0 &&
-                        mapCheckpoints.map(c => {
+                        mapCheckpoints.map((c,index) => {
                             const totalStars = 3;
-                            const filledStars = Math.ceil((c.progress_percent / 100) * totalStars);
                             return <Link
                                 key={c.id}
-                                className={cn("bg-white rounded-xl border border-black px-4 py-3 text-sm flex flex-row flex-nowrap justify-between items-center", c.status === "open" && 'bg-green-700 text-white')}
+                                className={cn("bg-white rounded-xl border border-black px-4 py-3 text-sm flex flex-row flex-nowrap justify-between items-center", c.is_visited && 'bg-green-700 text-white')}
                                 href={`${pathname}/${c.id}`}
                             >
                                 {c.title}
@@ -51,7 +50,7 @@ export default function Page() {
                                         <Star
                                             key={i}
                                             className={
-                                                i < filledStars
+                                                index == 0
                                                     ? "text-yellow-400 fill-yellow-400"
                                                     : "text-muted-foreground"
                                             }
