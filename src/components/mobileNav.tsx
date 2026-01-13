@@ -58,7 +58,7 @@ export default function MobileNav() {
                 </span>
             </Link>
             <Link
-            href="/maps"
+            href="/account"
             >
                 <span className="flex flex-col flex-nowrap items-center justify-center">
                 <Image 

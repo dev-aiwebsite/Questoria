@@ -22,7 +22,7 @@ export default function Page() {
                     className="mb-4 border-3 border-black w-full object-cover object-center h-[250px] rounded-xl"
                     width={200}
                     height={200}
-                    src="/images/maps/map-botanical-garden.png"
+                    src="https://ucarecdn.com/8d9dea7b-e862-40dd-848b-260939817a62/-/preview/830x1000/"
                     alt="Victoria Botanical Garden" />
                 <Link
                     className="input btn primary "

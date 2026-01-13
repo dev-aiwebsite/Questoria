@@ -331,3 +331,87 @@ export const onboardingQuestions: OnboardingQuestions[] = [
         ]
     },
 ]
+
+
+
+export type User=  {
+    id: string;
+    name: string;
+    avatar: string;
+    onboarding: boolean;
+    xp: number;
+}
+
+export const users:User[] = [
+  {
+    id: "a9f3k2",
+    name: "Liam Carter",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "q7m2x9",
+    name: "Sofia Ramirez",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "w8c5d1",
+    name: "Ethan Brooks",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "r4t6p0",
+    name: "Ava Nguyen",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "m2z9l7",
+    name: "Noah Peterson",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "k8y3n5",
+   
+    name: "Isabella Hughes",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "f6v1b4",
+    name: "Lucas Bennett",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "h3q7r2",
+    name: "Mia Sullivan",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "p5w8x0",
+    name: "Oliver Diaz",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+  {
+    id: "t9k4m6",
+    name: "Emma Foster",
+    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    onboarding: true,
+    xp: 8080,
+  },
+];
