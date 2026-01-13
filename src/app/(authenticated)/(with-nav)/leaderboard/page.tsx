@@ -9,10 +9,12 @@ export default function Page() {
             <div className="border-3 border-black bg-white rounded-xl p-6">
                 <div className="flex flex-row flex-nowrap items-center mb-6">
                     <Image
+                    className="mr-3"
                         width={50}
                         height={50}
                         src="https://ucarecdn.com/c5547281-e8c9-4dc7-863d-890265f23786/-/preview/139x164/"
-                        alt="duckling" />
+                        alt="duckling"
+                    />
                     <div>
                         <p className="font-bold">Level 1</p>
                         <p className="text-sm">Duckling</p>
@@ -29,7 +31,7 @@ export default function Page() {
             </div>
 
             <div className="mt-6">
-                {users.map((u,index) => {
+                {users.map((u, index) => {
                     return <LeaderboardItem key={u.id} user={u} number={index + 1} />
                 })}
             </div>
