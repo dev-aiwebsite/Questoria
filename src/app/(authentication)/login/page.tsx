@@ -18,7 +18,15 @@ export default function Page() {
             <div className="mt-auto mb-10 space-y-4 mx-auto w-[300px] max-w-[95vw]">
                 <input className="w-full" type="email" placeholder="Email address..." />
                 <input className="w-full" type="password" placeholder="Password..." />
-                <button className="w-full font-bold input primary">START QUEST</button>
+                {/* <button className="w-full font-bold input primary">START QUEST</button> */}
+                {/* TEMPORARY FOR DEMO PURPOSES ONLY */}
+                 <Link
+                        className="btn primary font-bold w-full"
+                        href="/home">
+                        START QUEST
+                    </Link>
+
+
                 <div className="justify-center flex gap-4 flex-row font-bold">
                     <Link
                         className="underline flex-1 text-end"

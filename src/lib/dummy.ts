@@ -91,26 +91,26 @@ export const checkpoints: Checkpoints[] = [
 `,
         is_visited: true,
         challenges: [
-             {
-        title: "selfie",
-        description: "Snap a magical moment! Capture a selfie or photo of the Visitor Centre. <strong>(Earn 1 Quest Gem)</strong>",
+            {
+                title: "selfie",
+                description: "Snap a magical moment! Capture a selfie or photo of the Visitor Centre. <strong>(Earn 1 Quest Gem)</strong>",
 
-    },
-    {
-        title: "quiz",
-        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "When was the Victoria Botanical Gardens originally founded?",
-        choices: [
-            {id: "c1", text: "1820"},
-            {id: "c2", text: "1846"},
-            {id: "c3", text: "1901"},
-            {id: "c4", text: "1988"}],  
-        correct_answer: "c2",
-    },
-    {
-        title: "happiness",
-        description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>",
-    }
+            },
+            {
+                title: "quiz",
+                description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+                question: "When was the Victoria Botanical Gardens originally founded?",
+                choices: [
+                    { id: "c1", text: "1820" },
+                    { id: "c2", text: "1846" },
+                    { id: "c3", text: "1901" },
+                    { id: "c4", text: "1988" }],
+                correct_answer: "c2",
+            },
+            {
+                title: "happiness",
+                description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>",
+            }
         ],
         order: 1
 
