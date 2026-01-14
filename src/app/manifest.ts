@@ -56,7 +56,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "type": "image/png"
     }
   ],
-  "start_url": "/",
+  "start_url": "/login",
   "display": "standalone",
   "background_color": "#58b3e2",
   "theme_color": "#000000"
