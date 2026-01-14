@@ -47,7 +47,9 @@ export default function Page() {
           {checkpoints.length > 0 &&
             checkpoints.map((c,index) => {
                const userCheckPointChallengesData = currentUserCheckpoints.find(uc => uc.checkpoint_id === c.id)?.challenges
-               const finishedChallenges = userCheckPointChallengesData?.filter(c => c.value)
+               const finishedChallenges = userCheckPointChallengesData && Object.values(userCheckPointChallengesData).filter(Boolean)
+               const finishedChallengesCount = finishedChallenges?.length ?? 0
+              
               return <div
                 key={c.id}
                 onClick={()=>{
@@ -65,15 +67,15 @@ export default function Page() {
                   alt="lock"
                 />
                 }
-                {c.is_visited && finishedChallenges?.length && <div className="h-[22%] grid grid-cols-3 absolute left-[48%] top-[60%]">
-                  {finishedChallenges.map(uc => {
+                {c.is_visited && finishedChallenges && finishedChallengesCount !== 0 && <div className="h-[22%] grid grid-cols-3 absolute left-[48%] top-[60%]">
+                  {finishedChallenges.map((uc,index) => {
                     return  <Image
-                    key={c.id + uc.value}
+                    key={c.id + "star" + index}
                   className="w-auto h-full aspect-square "
                   src="/images/IconStar.png"
                   width={100}
                   height={100}
-                  alt="lock"
+                  alt={`${uc}`}
                 />
                   }) }
                  

@@ -718,10 +718,10 @@ export const user_checkpoints = [
     user_id: "a9f3k2",
     checkpoint_id: "234jfgfg1",
     is_visited: false,
-    challenges: [
-      { title: "selfie", value: null },
-      { title: "quiz", value: "c2" },
-      { title: "happiness", value: 5},
-    ],
+    challenges: {
+      "selfie": "",
+      "quiz": "c2",
+      "happiness": 5
+    } 
   }
 ]

@@ -4,8 +4,8 @@ import { cn } from "@/lib/helper";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function HappinessRating() {
-  const [value, setValue] = useState<number | null>(null);
+export default function HappinessRating({value, onChange}:{value?: number; onChange: (v:number)=> void;}) {
+  const [insideValue, setInsideValue] = useState<number | undefined>(value);
 
   const choices = [1, 2, 3, 4, 5];
 
@@ -22,8 +22,13 @@ export default function HappinessRating() {
             type="radio"
             name="happiness_rating"
             value={choice}
-            checked={value === choice}
-            onChange={() => setValue(choice)}
+            checked={insideValue === choice}
+            onChange={() => {
+              setInsideValue(choice)
+              if(onChange){
+                onChange(choice)
+              }
+            }}
             className="sr-only"
           />
 
