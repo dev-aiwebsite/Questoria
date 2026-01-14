@@ -29,7 +29,7 @@ export default function QuestionWrapper({
 
 
 
-    return <div className="flex flex-col flex-nowrap justify-center p-mobile relative mt-mobile h-screen">
+    return <div className="flex flex-col flex-nowrap justify-center p-mobile pb-[3rem] relative mt-mobile h-screen">
         <div className="w-full h-fit max-h-screen overflow-auto">
 
             <h2 className="text-2xl font-bold">{question.question}</h2>

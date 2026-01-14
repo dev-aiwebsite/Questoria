@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function HappinessRating() {
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number | null>(null);
 
   const choices = [1, 2, 3, 4, 5];
 
@@ -33,7 +33,7 @@ export default function HappinessRating() {
             height={280}
             alt={`Happiness rating ${choice}`}
             className={cn("object-cover h-auto aspect-square transition-all duration-200",
-              value !== choice && "grayscale brightness-90 contrast-90 opacity-70"
+              value && value !== choice && "grayscale brightness-90 contrast-90 opacity-70"
             )}
             style={{
               objectPosition: `${(4 - index) * 25}% 0%`,

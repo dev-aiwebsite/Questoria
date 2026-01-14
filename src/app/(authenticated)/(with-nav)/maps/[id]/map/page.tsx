@@ -31,19 +31,20 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 p-2 flex gap-4 mt-4">
+      <div className="absolute bottom-0 right-0 p-2 flex flex-col gap-4 mt-4">
+            <button
+          className="px-4 py-2 bg-black/80 rounded hover:bg-accent/80 transition"
+          onClick={zoomIn}
+        >
+            <ZoomIn color="white" strokeWidth={2} size={30} />
+        </button>
         <button
           className="px-4 py-2 bg-black/80 rounded hover:bg-accent/80 transition"
           onClick={zoomOut}
         >
             <ZoomOut color="white" strokeWidth={2} size={30} />
         </button>
-           <button
-          className="px-4 py-2 bg-black/80 rounded hover:bg-accent/80 transition"
-          onClick={zoomIn}
-        >
-            <ZoomIn color="white" strokeWidth={2} size={30} />
-        </button>
+       
       </div>
     </div>
   );
