@@ -70,3 +70,7 @@ body {
   height: calc(100vh - var(--header-height) - var(--nav-height)) !important;
   max-height: calc(100vh - var(--header-height) - var(--nav-height)) !important;
 }
+
+.ribbon-end {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% calc(100% - 2.6rem), 0% 100%);
+}

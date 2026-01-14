@@ -1,81 +1,88 @@
+export const currentUserId = "a9f3k2"
+
 export type CheckpointQuizData = {
-    title: string;
-    description: string;
-    question: string;
-    choices: {
-        id: string;
-        text: string;
-    }[];
-    correct_answer: string;
+  title: string;
+  description: string;
+  question: string;
+  choices: {
+    id: string;
+    text: string;
+  }[];
+  correct_answer: string;
 }
 
 export type checkpointChallenges = ({
-    title: string;
-    description: string;
+  title: string;
+  description: string;
 } | CheckpointQuizData)
 
 export type Map = {
-    id: string;
-    released: boolean;
-    logo: string;
-    featured_image?: string;
-    images: string[];
-    title: string;
-    description: string;
-    ratings: string;
-    ratings_count: string;
+  id: string;
+  released: boolean;
+  logo: string;
+  featured_image?: string;
+  images: string[];
+  title: string;
+  description: string;
+  ratings: string;
+  ratings_count: string;
 }
 
 export const maps = [
-    {
-        id: "234j3h4j3",
-        released: true,
-        logo: "/images/img8.png",
-        featured_image: "https://ucarecdn.com/e68719e6-f039-48d5-aa5c-087a14617335/-/preview/1000x562/",
-        images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
-        title: "Royal Botanic Gardens Victoria",
-        description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
-        ratings: "4.5",
-        ratings_count: "1271",
-    },
-    {
-        id: "234j3h4j4",
-        released: false,
-        logo: "/images/img8.png",
-        featured_image: "/images/img10.jpg",
-        images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
-        title: "Map 2",
-        description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
-        ratings: "4.5",
-        ratings_count: "1271",
-    },
-    {
-        id: "234j3h4j5",
-        released: false,
-        logo: "/images/img8.png",
-        featured_image: "/images/img10.jpg",
-        images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
-        title: "Map 3",
-        description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
-        ratings: "4.5",
-        ratings_count: "1271",
-    },
+  {
+    id: "234j3h4j3",
+    released: true,
+    logo: "/images/img8.png",
+    featured_image: "https://ucarecdn.com/e68719e6-f039-48d5-aa5c-087a14617335/-/preview/1000x562/",
+    images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
+    title: "Royal Botanic Gardens Victoria",
+    description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
+    ratings: "4.5",
+    ratings_count: "1271",
+  },
+  {
+    id: "234j3h4j4",
+    released: false,
+    logo: "/images/img8.png",
+    featured_image: "/images/img10.jpg",
+    images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
+    title: "Map 2",
+    description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
+    ratings: "4.5",
+    ratings_count: "1271",
+  },
+  {
+    id: "234j3h4j5",
+    released: false,
+    logo: "/images/img8.png",
+    featured_image: "/images/img10.jpg",
+    images: ["/images/img6.jpg", "/images/img7.jpg", "/images/img9.jpg"],
+    title: "Map 3",
+    description: "Royal Botanic Gardens Victoria is one of Australia’s most beloved botanical institutions, comprising two major garden sites, Melbourne Gardens and Cranbourne Gardens, each offering distinct plant experiences and landscapes.",
+    ratings: "4.5",
+    ratings_count: "1271",
+  },
 ]
 
 
-export type Checkpoints = {
-    id: string;
-    map_id: string;
-    title: string;
-    subtitle: string;
-    pretext: string;
-    image: string;
-    description: string;
-    challenges: checkpointChallenges[];
-    is_visited: boolean;
-    order: number;
+export type Checkpoint = {
+  id: string;
+  map_id: string;
+  title: string;
+  subtitle: string;
+  pretext: string;
+  image: string;
+  description: string;
+  did_you_know: string;
+  challenges: checkpointChallenges[];
+  is_visited: boolean;
+  order: number;
+  pos: {
+    x: number;
+    y: number;
+  }
 }
-export const checkpoints: Checkpoints[] = [
+export const checkpoints: Checkpoint[] = [
   {
     id: "234jfgfg1",
     map_id: "234j3h4j3",
@@ -83,7 +90,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Starting point",
     pretext: "The quest awaits! Make your way to The Visitor Centre to begin your adventure.",
     image: "/images/maps/map1-checkpoint-1.jpg",
-    description: `<p><strong>Did you know?</strong> The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!</p>
+    description: "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
+    did_you_know: `<p><strong>Did you know?</strong> The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!</p>
 
 <p>Over the decades, legendary botanists like <strong>Ferdinand von Mueller</strong> expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens!</p>
 
@@ -107,6 +115,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 1,
+    pos: {
+      x: 30,
+      y: 65
+    }
   },
   {
     id: "234jfgfb2",
@@ -115,7 +127,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Ironbark Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Ironbark trees have incredibly hard bark that helps protect them from bushfires.</p>`,
+    description: "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
+    did_you_know: `<p><strong>Did you know?</strong> Ironbark trees have incredibly hard bark that helps protect them from bushfires.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Ironbark Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -134,6 +147,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Ironbark Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 2,
+    pos: {
+      x: 34,
+      y: 70
+    }
   },
   {
     id: "234jfgfb3",
@@ -142,7 +159,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Box Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Box trees are often used in formal gardens because they can be trimmed into neat shapes that last for decades.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Box trees are often used in formal gardens because they can be trimmed into neat shapes that last for decades.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Box Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -161,6 +179,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Box Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 3,
+    pos: {
+      x: 26.5,
+      y: 51.2
+    }
   },
   {
     id: "234jfgfg4",
@@ -169,7 +191,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Peppermint Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Australian native peppermint trees have leaves that smell minty and can repel insects.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Australian native peppermint trees have leaves that smell minty and can repel insects.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Peppermint Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -188,6 +211,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Peppermint Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 4,
+    pos: {
+      x: 33,
+      y: 40
+    }
   },
   {
     id: "234jfgfb5",
@@ -196,7 +223,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Bloodwood Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Bloodwood trees are named for their red sap, which was traditionally used by Aboriginal people for medicine and art.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Bloodwood trees are named for their red sap, which was traditionally used by Aboriginal people for medicine and art.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Bloodwood Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -215,6 +243,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Bloodwood Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 5,
+    pos: {
+      x: 26,
+      y: 36
+    }
   },
   {
     id: "234jfgfb6",
@@ -223,7 +255,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Stringbark Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Stringbark trees have long, fibrous bark that peels off in strings, giving the garden its name.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Stringbark trees have long, fibrous bark that peels off in strings, giving the garden its name.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Stringbark Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -242,6 +275,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Stringbark Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 6,
+    pos: {
+      x: 23,
+      y: 31
+    }
   },
   {
     id: "234jfgfb7",
@@ -250,7 +287,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Arid Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Plants in the Arid Garden survive with very little water by storing moisture in their leaves, stems, or roots.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Plants in the Arid Garden survive with very little water by storing moisture in their leaves, stems, or roots.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Arid Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -269,6 +307,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Arid Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 7,
+    pos: {
+      x: 26,
+      y: 23
+    }
   },
   {
     id: "234jfgfb8",
@@ -277,7 +319,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Desert Discovery Camp",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> The Desert Discovery Camp shows plants that thrive in harsh, dry conditions, teaching us how to adapt to extreme climates.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> The Desert Discovery Camp shows plants that thrive in harsh, dry conditions, teaching us how to adapt to extreme climates.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Desert Discovery Camp. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -296,6 +339,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Desert Discovery Camp <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 8,
+    pos: {
+      x: 45,
+      y: 34
+    }
   },
   {
     id: "234jfgfb4",
@@ -304,7 +351,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Forest Clearing",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Forest clearings are important for wildlife, providing sunny spots where plants and insects can thrive.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Forest clearings are important for wildlife, providing sunny spots where plants and insects can thrive.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Forest Clearing. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -323,6 +371,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Forest Clearing <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 9,
+    pos: {
+      x: 46.5,
+      y: 42.5
+    }
   },
   {
     id: "234jfgfb9",
@@ -331,7 +383,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Scribbly Path",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> The Scribbly Path is named for the patterns scribbled into tree bark by moth larvae as they tunnel through.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> The Scribbly Path is named for the patterns scribbled into tree bark by moth larvae as they tunnel through.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Scribbly Path. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -350,6 +403,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Scribbly Path <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 10,
+    pos: {
+      x: 51,
+      y: 49
+    }
   },
   {
     id: "234jfgfb10",
@@ -358,7 +415,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Forest Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> Forest Gardens show layers of vegetation from ground cover to tall canopy trees, mimicking natural forests.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> Forest Gardens show layers of vegetation from ground cover to tall canopy trees, mimicking natural forests.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Forest Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -377,6 +435,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Forest Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 11,
+    pos: {
+      x: 70,
+      y: 46
+    }
   },
   {
     id: "234jfgfb11",
@@ -385,7 +447,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Rift Path",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> The Rift Path winds through rocky terrain, where you can see how plants adapt to thin soils and cracks in rocks.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> The Rift Path winds through rocky terrain, where you can see how plants adapt to thin soils and cracks in rocks.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Rift Path. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -404,6 +467,10 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Rift Path <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 12,
+    pos: {
+      x: 67,
+      y: 37
+    }
   },
   {
     id: "234jfgfb12",
@@ -412,7 +479,8 @@ export const checkpoints: Checkpoints[] = [
     subtitle: "Gondwana Garden",
     pretext: "",
     image: "",
-    description: `<p><strong>Did you know?</strong> The Gondwana Garden features ancient plant lineages that have been around since the supercontinent Gondwana existed millions of years ago.</p>`,
+    description: "",
+    did_you_know: `<p><strong>Did you know?</strong> The Gondwana Garden features ancient plant lineages that have been around since the supercontinent Gondwana existed millions of years ago.</p>`,
     is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Gondwana Garden. <strong>(Earn 1 Quest Gem)</strong>" },
@@ -431,140 +499,144 @@ export const checkpoints: Checkpoints[] = [
       { title: "happiness", description: "Tell us what you feel about Gondwana Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 13,
+    pos: {
+      x: 77,
+      y: 31
+    }
   },
 ];
 
 
 export type OnboardingQuestionsChoices = {
-    id: string;
-    text: string;
+  id: string;
+  text: string;
 }
 export type OnboardingQuestions = {
-    id: string;
-    question: string;
-    description: string;
-    type: "checkbox" | "radio";
-    cta: {
-        idle: string;
-        active: string;
-    }
-    choices: OnboardingQuestionsChoices[];
+  id: string;
+  question: string;
+  description: string;
+  type: "checkbox" | "radio";
+  cta: {
+    idle: string;
+    active: string;
+  }
+  choices: OnboardingQuestionsChoices[];
 }
 
 export const onboardingQuestions: OnboardingQuestions[] = [
-    {
-        id: "question1",
-        question: "Fill in Your Party and Origins Before You Wander",
-        description: "Who joins you in this grand adventure?",
-        type: "radio",
-        cta: {
-            idle: "Choose your party",
-            active: "Continue",
-        },
-        choices: [
-            {
-                id: "q1c1",
-                text: "Just me, the lone wanderer 🧭",
-            },
-            {
-                id: "q1c2",
-                text: "A trusty companion or band of friends (how many?) 🏹",
-            },
-            {
-                id: "q1c3",
-                text: "Kids, family, or a merry crew of little explorers (how many?) 🐾",
-            },
-        ]
+  {
+    id: "question1",
+    question: "Fill in Your Party and Origins Before You Wander",
+    description: "Who joins you in this grand adventure?",
+    type: "radio",
+    cta: {
+      idle: "Choose your party",
+      active: "Continue",
     },
-    {
-        id: "question2",
-        question: "Your adventurer age band (tick all that apply!)",
-        description: "What is your company’s leve of expertise?",
-        type: "checkbox",
-        cta: {
-            idle: "Select age group(s)",
-            active: "Next",
-        },
-        choices: [
-            {
-                id: "q2c1",
-                text: "Tiny traveler: 0–12 🌱",
-            },
-            {
-                id: "q2c2",
-                text: "Young squire: 13–17 ⚔️",
-            },
-            {
-                id: "q2c3",
-                text: "Bold wanderer: 18–24 🌟",
-            },
-            {
-                id: "q2c4",
-                text: "Seasoned explorer: 25–34 🏔️",
-            },
-            {
-                id: "q2c5",
-                text: "Veteran voyager: 35–44 🛶",
-            },
-            {
-                id: "q2c6",
-                text: "Sage adventurer: 45–54 🗺️",
-            },
-            {
-                id: "q2c7",
-                text: "Wise pathfinder: 55–64 🔮",
-            },
-            {
-                id: "q2c8",
-                text: "Legendary quester: 65+ 🏰",
-            },
-        ]
+    choices: [
+      {
+        id: "q1c1",
+        text: "Just me, the lone wanderer 🧭",
+      },
+      {
+        id: "q1c2",
+        text: "A trusty companion or band of friends (how many?) 🏹",
+      },
+      {
+        id: "q1c3",
+        text: "Kids, family, or a merry crew of little explorers (how many?) 🐾",
+      },
+    ]
+  },
+  {
+    id: "question2",
+    question: "Your adventurer age band (tick all that apply!)",
+    description: "What is your company’s leve of expertise?",
+    type: "checkbox",
+    cta: {
+      idle: "Select age group(s)",
+      active: "Next",
     },
-    {
-        id: "question3",
-        question: "From where does your journey begin?",
-        description: "From which land do you hail?",
-        type: "radio",
-        cta: {
-            idle: "Choose a location",
-            active: "Start journey",
-        },
-        choices: [
-            {
-                id: "q3c1",
-                text: "I’m a local",
-            },
-            {
-                id: "q3c2",
-                text: "Melbourne metropolis 🏙️",
-            },
-            {
-                id: "q3c3",
-                text: "Regional Victoria 🏞️",
-            },
-            {
-                id: "q3c4",
-                text: "From across Australia 🌊",
-            },
-            {
-                id: "q3c5",
-                text: "From distant lands afar ✈️",
-            }
-        ]
+    choices: [
+      {
+        id: "q2c1",
+        text: "Tiny traveler: 0–12 🌱",
+      },
+      {
+        id: "q2c2",
+        text: "Young squire: 13–17 ⚔️",
+      },
+      {
+        id: "q2c3",
+        text: "Bold wanderer: 18–24 🌟",
+      },
+      {
+        id: "q2c4",
+        text: "Seasoned explorer: 25–34 🏔️",
+      },
+      {
+        id: "q2c5",
+        text: "Veteran voyager: 35–44 🛶",
+      },
+      {
+        id: "q2c6",
+        text: "Sage adventurer: 45–54 🗺️",
+      },
+      {
+        id: "q2c7",
+        text: "Wise pathfinder: 55–64 🔮",
+      },
+      {
+        id: "q2c8",
+        text: "Legendary quester: 65+ 🏰",
+      },
+    ]
+  },
+  {
+    id: "question3",
+    question: "From where does your journey begin?",
+    description: "From which land do you hail?",
+    type: "radio",
+    cta: {
+      idle: "Choose a location",
+      active: "Start journey",
     },
+    choices: [
+      {
+        id: "q3c1",
+        text: "I’m a local",
+      },
+      {
+        id: "q3c2",
+        text: "Melbourne metropolis 🏙️",
+      },
+      {
+        id: "q3c3",
+        text: "Regional Victoria 🏞️",
+      },
+      {
+        id: "q3c4",
+        text: "From across Australia 🌊",
+      },
+      {
+        id: "q3c5",
+        text: "From distant lands afar ✈️",
+      }
+    ]
+  },
 ]
 
 
 
-export type User=  {
-    id: string;
-    name: string;
-    avatar: string;
-    onboarding: boolean;
-    xp: number;
+export type User = {
+  id: string;
+  name: string;
+  avatar: string;
+  onboarding: boolean;
+  xp: number;
 }
 
-export const users:User[] = [
+export const users: User[] = [
   {
     id: "a9f3k2",
     name: "Liam Carter",
@@ -602,7 +674,7 @@ export const users:User[] = [
   },
   {
     id: "k8y3n5",
-   
+
     name: "Isabella Hughes",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
@@ -637,3 +709,19 @@ export const users:User[] = [
     xp: 8080,
   },
 ];
+
+
+
+
+export const user_checkpoints = [
+  {
+    user_id: "a9f3k2",
+    checkpoint_id: "234jfgfg1",
+    is_visited: false,
+    challenges: [
+      { title: "selfie", value: null },
+      { title: "quiz", value: "c2" },
+      { title: "happiness", value: 5},
+    ],
+  }
+]

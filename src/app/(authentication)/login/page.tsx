@@ -30,13 +30,13 @@ export default function Page() {
                 <div className="justify-center flex gap-4 flex-row font-bold">
                     <Link
                         className="underline flex-1 text-end"
-                        href="#">
+                        href="/forgot-password">
                         Can&apos;t Login?
                     </Link>
                     |
                     <Link
                         className="underline flex-1"
-                        href="#">
+                        href="/signup">
                         Register
                     </Link>
                 </div>

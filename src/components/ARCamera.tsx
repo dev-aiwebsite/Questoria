@@ -22,7 +22,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
     "3": "/frames/frame3.png",
   };
   // const overlaySrc = overlays[stopId] || "/frames/frame1.png";
-  const overlaySrc ="/images/mascott1.png";
+  const overlaySrc ="/images/mascot1.png";
 
   useEffect(() => {
     let mounted = true;

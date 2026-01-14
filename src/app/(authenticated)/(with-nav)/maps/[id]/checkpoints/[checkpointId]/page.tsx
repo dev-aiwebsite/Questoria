@@ -27,7 +27,7 @@ export default function Page() {
                     <div>
                         <div
                             className="text-sm space-y-6"
-                            dangerouslySetInnerHTML={{ __html: checkpointData.description }}
+                            dangerouslySetInnerHTML={{ __html: checkpointData.did_you_know }}
                         />
                     </div>
                     <Link href={`${pathname}/challenges`} className="btn primary w-full">Clear this checkpoint</Link>
