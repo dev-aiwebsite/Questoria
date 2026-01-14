@@ -65,3 +65,8 @@ body {
   line-height: 1;
   display: inline-block;
 }
+
+.height-no-header-nav {
+  height: calc(100vh - var(--header-height) - var(--nav-height)) !important;
+  max-height: calc(100vh - var(--header-height) - var(--nav-height)) !important;
+}
