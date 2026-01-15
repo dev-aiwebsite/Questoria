@@ -11,6 +11,10 @@ import { flushSync } from "react-dom";
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
 
+// Popup size configuration - adjust this to change the base size of the checkpoint popup
+// This is the scale factor at base zoom (1.0). Higher values = larger popup, lower values = smaller popup
+const POPUP_BASE_SCALE = 0.25
+
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   
@@ -309,9 +313,6 @@ export default function Page() {
   }, [])
 
   return (<>
-   {checkpointDialogOpen && selectedCheckpoint != null &&
-        <CheckpointDialog mapId={mapId} onClose={()=> setCheckpointDialogOpen(false) } checkpointData={checkpoints[selectedCheckpoint]} />
-      }
     <div className="relative">
      
       <div 
@@ -355,18 +356,27 @@ export default function Page() {
                const finishedChallenges = userCheckPointChallengesData && Object.values(userCheckPointChallengesData).filter(Boolean)
                const finishedChallengesCount = finishedChallenges?.length ?? 0
               
-              return <div
-                key={c.id}
-                data-checkpoint-flag
-                onClick={()=>{
-                  if (!isDragging) {
-                    setSelectedCheckpoint(index)
-                    setCheckpointDialogOpen(true)
-                  }
-                }}
-                className="isolate w-[calc(40px+1.5%)] aspect-square absolute cursor-pointer -translate-x-1/2 -translate-y-full z-10"
-                style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
-              >
+              const isSelected = selectedCheckpoint === index && checkpointDialogOpen
+              
+              return <div key={c.id}>
+                {/* Flag */}
+                <div
+                  data-checkpoint-flag
+                  onClick={()=>{
+                    if (!isDragging) {
+                      if (selectedCheckpoint === index && checkpointDialogOpen) {
+                        // Close if clicking the same flag
+                        setCheckpointDialogOpen(false)
+                        setSelectedCheckpoint(null)
+                      } else {
+                        setSelectedCheckpoint(index)
+                        setCheckpointDialogOpen(true)
+                      }
+                    }
+                  }}
+                  className="isolate w-[calc(40px+1.5%)] aspect-square absolute cursor-pointer -translate-x-1/2 -translate-y-full z-10"
+                  style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
+                >
                 {!c.is_visited &&  <Image
                   className="w-[22%] h-auto aspect-square absolute left-[48%] top-[28%]"
                   src="/images/IconLock.png"
@@ -398,6 +408,21 @@ export default function Page() {
                   alt={c.title}
                 />
               </div>
+              
+              {/* Checkpoint Info Card - appears beside the flag */}
+              {isSelected && (
+                <CheckpointInfoCard 
+                  mapId={mapId} 
+                  checkpointData={c}
+                  position={{ x: c.pos.x, y: c.pos.y }}
+                  zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
+                  onClose={() => {
+                    setCheckpointDialogOpen(false)
+                    setSelectedCheckpoint(null)
+                  }}
+                />
+              )}
+            </div>
             })}
 
           <div
@@ -438,17 +463,90 @@ export default function Page() {
 }
 
 
-function CheckpointDialog({mapId, checkpointData, onClose }: {mapId:string; checkpointData: Checkpoint; onClose?: ()=> void; }) {
+function CheckpointInfoCard({
+  mapId, 
+  checkpointData, 
+  position,
+  zoomLevel,
+  onClose 
+}: {
+  mapId: string;
+  checkpointData: Checkpoint;
+  position: { x: number; y: number };
+  zoomLevel: number;
+  onClose?: () => void;
+}) {
+  // Position the card to the right of the flag, or left if too close to right edge
+  // Adjust Y_OFFSET to move popup up (negative) or down (positive) relative to flag
+  const Y_OFFSET = -4 // Move popup up by 8% (negative = up, positive = down)
+  const cardPosition = position.x > 70 
+    ? { left: `${position.x - 25}%`, top: `${position.y + Y_OFFSET}%` } // Show on left if near right edge
+    : { left: `${position.x + 3}%`, top: `${position.y + Y_OFFSET}%` } // Show on right normally
 
-  return <div className="flex p-mobile w-screen h-screen backdrop-blur-[2px] bg-black/10 absolute z-[999999] top-0 p-10 pt-30 left-0">
-      <div className="w-100 mx-auto">
-        <p className="whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl py-4 w-full text-center text-2xl">{checkpointData.subtitle}</p>
-        <div className="px-3">
-          <div className="ribbon-end bg-white px-10 pt-6 pb-14">
-            <p className="text-sm mb-5" dangerouslySetInnerHTML={{ __html: checkpointData.description }}></p>
+  // Scale factor based on zoom level (1.0 = base zoom, scales up/down from there)
+  // Clamp zoom level to reasonable bounds for scaling
+  const clampedZoom = Math.max(0.38, Math.min(5.0, zoomLevel))
+  const scale = clampedZoom * POPUP_BASE_SCALE
+
+  // Calculate scaled sizes
+  const headerFontSize = `${scale * 1.5}rem` // Base: 1.5rem (text-2xl ≈ 1.5rem)
+  const bodyFontSize = `${scale * 0.875}rem` // Base: 0.875rem (text-sm)
+  const buttonFontSize = `${scale * 0.875}rem` // Base: 0.875rem
+  const cardWidth = `${scale * 400}px` // Base: ~400px (w-100)
+  const headerPadding = `${scale * 1}rem` // Base: 1rem (py-4)
+  const contentPaddingX = `${scale * 2.5}rem` // Base: 2.5rem (px-10)
+  const contentPaddingY = `${scale * 1.5}rem` // Base: 1.5rem (pt-6)
+  const contentPaddingBottom = `${scale * 5}rem` // Base: 5rem (increased from 3.5rem for more height)
+  const buttonPadding = `${scale * 0.375}rem ${scale * 1}rem` // Base: py-1.5 px-4
+  const backButtonPadding = `${scale * 1}rem` // Base: p-4
+  const descriptionMarginBottom = `${scale * 1.5}rem` // Base: 1.5rem (increased from default for more spacing)
+  const buttonWidth = `${scale * 100}px` // Base: 100px (w-25 is approximately 100px)
+  // Scale the ribbon-end clip-path - the 2.6rem value needs to scale with zoom
+  const ribbonClipPath = `polygon(0% 0%, 100% 0%, 100% 100%, 50% calc(100% - ${scale * 2.6}rem), 0% 100%)`
+
+  return (
+    <div 
+      className="absolute z-20"
+      style={cardPosition}
+    >
+      <div className="mx-auto" style={{ width: cardWidth, maxWidth: '90vw' }}>
+        <p 
+          className="whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl w-full text-center"
+          style={{ 
+            fontSize: headerFontSize,
+            paddingTop: headerPadding,
+            paddingBottom: headerPadding
+          }}
+        >
+          {checkpointData.subtitle}
+        </p>
+        <div style={{ paddingLeft: `${scale * 0.75}rem`, paddingRight: `${scale * 0.75}rem` }}>
+          <div 
+            className="bg-white"
+            style={{
+              paddingLeft: contentPaddingX,
+              paddingRight: contentPaddingX,
+              paddingTop: contentPaddingY,
+              paddingBottom: contentPaddingBottom,
+              clipPath: ribbonClipPath
+            }}
+          >
+            <p 
+              style={{ 
+                fontSize: bodyFontSize,
+                marginBottom: descriptionMarginBottom
+              }}
+              dangerouslySetInnerHTML={{ __html: checkpointData.description }}
+            ></p>
             <Link
-              className="block mx-auto py-1.5 px-4 w-25 text-center rounded-lg bg-app-blue-600 text-white"
+              className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
+              style={{ 
+                fontSize: buttonFontSize,
+                padding: buttonPadding,
+                width: buttonWidth
+              }}
               href={`/maps/${mapId}/checkpoints/${checkpointData.id}`}
+              onClick={onClose}
             >Enter
             </Link>
             <button
@@ -457,10 +555,15 @@ function CheckpointDialog({mapId, checkpointData, onClose }: {mapId:string; chec
                 onClose()
               }
             }}
-            className="underline text-sm mx-auto block p-4">Back</button>
+            className="underline mx-auto block"
+            style={{ 
+              fontSize: bodyFontSize,
+              padding: backButtonPadding
+            }}
+            >Back</button>
           </div>
         </div>
       </div>
-    
-  </div>
+    </div>
+  )
 }
