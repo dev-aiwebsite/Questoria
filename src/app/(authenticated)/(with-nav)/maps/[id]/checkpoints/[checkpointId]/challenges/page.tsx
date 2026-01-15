@@ -1,10 +1,11 @@
 "use client"
 
 
+import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import ARCamera from "@/components/ARCamera";
 import HappinessRating from "@/components/HappinessRating";
 import InputChoices from "@/components/inputChoices";
-import { CheckpointQuizData, checkpoints, currentUserId, user_checkpoints } from "@/lib/dummy";
+import { CheckpointQuizData, checkpoints, currentUserId } from "@/lib/dummy";
 import { isCheckpointQuiz } from "@/lib/helper";
 import { IconCameraAdd } from "@/lib/icons/icons";
 import { CircleCheck } from "lucide-react";
@@ -16,15 +17,16 @@ import { useState } from "react";
 export default function Page() {
     const { id: mapId } = useParams<{ id: string }>();
     const { checkpointId } = useParams<{ checkpointId: string }>();
-    const currentUserCheckpoint = user_checkpoints.filter(uc => uc.user_id === currentUserId)
-    const currentUserChallenges = currentUserCheckpoint.find(c => c.checkpoint_id == checkpointId)?.challenges
+    const {setCheckpoints, checkpoints:user_checkpoints} = useCurrentUserContext()
+    const currentUserCheckpoints = user_checkpoints?.filter(uc => uc.user_id === currentUserId)
+    const currentUserCheckpoint = currentUserCheckpoints?.find(c => c.checkpoint_id === checkpointId)
+    const currentUserChallenges = currentUserCheckpoint?.challenges
     const currentUserChallengesAnswers = currentUserChallenges ? Object.values(currentUserChallenges).filter(Boolean) : []
 
     const [ARImage, setARImage] = useState(currentUserChallenges?.selfie || "")
     const [quizAnswer, setQuizAnswer] = useState(currentUserChallenges?.quiz || "")
     const [happinessVal, setHappinessVal] = useState<number | undefined>(currentUserChallenges?.happiness)
-    // const [isCleared, setIsCleared] = useState(currentUserChallengesAnswers.length >= 3)
-    const [isCleared, setIsCleared] = useState(true)
+    const [isCleared, setIsCleared] = useState(currentUserChallengesAnswers.length >= 3)
     const [openQuiz, setOpenQuiz] = useState(false)
     const [openCamera, setOpenCamera] = useState(false)
 
@@ -44,6 +46,18 @@ export default function Page() {
     function handleSubmit() {
         // check data
         // add logic for saving to database
+        if(currentUserCheckpoints){
+            const currentCheckpointIndex = currentUserCheckpoints.findIndex(c => c.checkpoint_id == checkpointId)
+            if(currentCheckpointIndex !== -1 && user_checkpoints){
+                const newValue = [...user_checkpoints]
+                newValue[currentCheckpointIndex].challenges.selfie = ARImage
+                newValue[currentCheckpointIndex].challenges.quiz = quizAnswer
+                newValue[currentCheckpointIndex].challenges.happiness = happinessVal || 0
+                setCheckpoints(newValue)
+            }
+
+        }
+
         if (!ARImage || !quizAnswer || !happinessVal) {
             setIsCleared(false)
         } else {
@@ -51,6 +65,8 @@ export default function Page() {
         }
 
     }
+
+    
     return (
         <>
             {!challengesData || challengesData.length == 0 ? <>This map has no challenges available.</> :

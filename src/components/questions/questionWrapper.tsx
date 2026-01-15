@@ -24,10 +24,11 @@ export default function QuestionWrapper({
 
     const isAnswered =
         question.type === "radio"
-            ? typeof value === "string"
+            ? typeof value === "string" && value.trim() !== ""
             : Array.isArray(value) && value.length > 0;
 
 
+    console.log(isAnswered)
 
     return <div className="flex flex-col flex-nowrap justify-center p-mobile pb-[3rem] relative mt-mobile h-screen">
         <div className="w-full h-fit max-h-screen overflow-auto">

@@ -410,7 +410,7 @@ export const checkpoints: Checkpoint[] = [
   },
   {
     id: "234jfgfb10",
-    map_id: "234j3h4j3",
+    map_id: "234j3h4x3",
     title: "Forest Garden",
     subtitle: "Forest Garden",
     pretext: "",
@@ -525,7 +525,7 @@ export type OnboardingQuestions = {
 
 export const onboardingQuestions: OnboardingQuestions[] = [
   {
-    id: "question1",
+    id: "nm439s1",
     question: "Fill in Your Party and Origins Before You Wander",
     description: "Who joins you in this grand adventure?",
     type: "radio",
@@ -549,7 +549,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
     ]
   },
   {
-    id: "question2",
+    id: "nm439s2",
     question: "Your adventurer age band (tick all that apply!)",
     description: "What is your company’s leve of expertise?",
     type: "checkbox",
@@ -593,7 +593,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
     ]
   },
   {
-    id: "question3",
+    id: "nm439s3",
     question: "From where does your journey begin?",
     description: "From which land do you hail?",
     type: "radio",
@@ -627,10 +627,11 @@ export const onboardingQuestions: OnboardingQuestions[] = [
 ]
 
 
-
 export type User = {
   id: string;
   name: string;
+  email: string;
+  password: string;
   avatar: string;
   onboarding: boolean;
   xp: number;
@@ -639,7 +640,9 @@ export type User = {
 export const users: User[] = [
   {
     id: "a9f3k2",
-    name: "Liam Carter",
+    name: "John Doe",
+    email: "questoria@gmail.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -647,6 +650,8 @@ export const users: User[] = [
   {
     id: "q7m2x9",
     name: "Sofia Ramirez",
+    email: "sofia.ramirez@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -654,6 +659,8 @@ export const users: User[] = [
   {
     id: "w8c5d1",
     name: "Ethan Brooks",
+    email: "ethan.brooks@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -661,6 +668,8 @@ export const users: User[] = [
   {
     id: "r4t6p0",
     name: "Ava Nguyen",
+    email: "ava.nguyen@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -668,14 +677,17 @@ export const users: User[] = [
   {
     id: "m2z9l7",
     name: "Noah Peterson",
+    email: "noah.peterson@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
   },
   {
     id: "k8y3n5",
-
     name: "Isabella Hughes",
+    email: "isabella.hughes@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -683,6 +695,8 @@ export const users: User[] = [
   {
     id: "f6v1b4",
     name: "Lucas Bennett",
+    email: "lucas.bennett@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -690,6 +704,8 @@ export const users: User[] = [
   {
     id: "h3q7r2",
     name: "Mia Sullivan",
+    email: "mia.sullivan@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -697,6 +713,8 @@ export const users: User[] = [
   {
     id: "p5w8x0",
     name: "Oliver Diaz",
+    email: "oliver.diaz@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
@@ -704,24 +722,59 @@ export const users: User[] = [
   {
     id: "t9k4m6",
     name: "Emma Foster",
+    email: "emma.foster@example.com",
+    password: "Welcome1!",
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
   },
 ];
 
-
-
-
-export const user_checkpoints = [
+export type UserMap = {
+    id: string;
+    user_id: string;
+    map_id: string;
+    onboarding_questions: {
+        nm439s1: string;
+        nm439s2: string;
+        nm439s3: string;
+    };
+}
+export const user_maps:UserMap[] = [
   {
+    id: "6jidlm3",
+    user_id: "a9f3k2",
+    map_id: "234j3h4j3",
+    onboarding_questions: {
+      "nm439s1": "",
+      "nm439s2": "",
+      "nm439s3": "",
+    }
+  }
+]
+
+
+export type UserCheckpoint = {
+    id: string;
+    user_id: string;
+    checkpoint_id: string;
+    is_visited: boolean;
+    challenges: {
+        selfie: string;
+        quiz: string;
+        happiness: number;
+    };
+}
+export const user_checkpoints:UserCheckpoint[] = [
+  {
+    id:"9lpgjma2",
     user_id: "a9f3k2",
     checkpoint_id: "234jfgfg1",
     is_visited: false,
     challenges: {
       "selfie": "",
-      "quiz": "c2",
-      "happiness": 5
+      "quiz": "",
+      "happiness": 0
     } 
   }
 ]
