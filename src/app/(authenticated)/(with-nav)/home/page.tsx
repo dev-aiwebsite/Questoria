@@ -54,7 +54,7 @@ export default function Page() {
             </div>
 
             <div>
-                <Link href="/maps/234j3h4j3/checkpoints">
+                <Link href="/maps/234j3h4j3/map">
                     <h2 className="header2">Continue your journey</h2>
                     <div className="overflow-hidden flex flex-col flex-nowrap app-container bg-app-blue-600">
                         <div className="p-4 flex flex-row">
