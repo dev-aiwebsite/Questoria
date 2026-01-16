@@ -1,13 +1,14 @@
 "use client";
 
-import { Checkpoint, checkpoints, currentUserId, user_checkpoints } from "@/lib/dummy";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { Checkpoint, checkpoints, currentUserId, user_checkpoints, users } from "@/lib/dummy";
+import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
+import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -18,6 +19,27 @@ const POPUP_BASE_SCALE = 0.25
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
+  const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  
+  // Initialize user if not set (for development/testing)
+  useEffect(() => {
+    if (!currentUser) {
+      console.log('🟠 No currentUser found, initializing from currentUserId:', currentUserId);
+      const userData = users.find(u => u.id === currentUserId);
+      if (userData) {
+        console.log('🟠 Setting currentUser to:', userData);
+        setCurrentUser(userData);
+      } else {
+        console.warn('🟠 Could not find user with id:', currentUserId);
+      }
+    }
+  }, [currentUser, setCurrentUser]);
+  
+  // Log currentUser changes
+  useEffect(() => {
+    console.log('🟣 Page component - currentUser changed:', currentUser);
+    console.log('🟣 Page component - currentUser.gems:', currentUser?.gems);
+  }, [currentUser]);
   
   const [mapWidth, setMapWidth] = useState(BASE_MAP_WIDTH)
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
@@ -29,10 +51,14 @@ export default function Page() {
   const [pinchStartDistance, setPinchStartDistance] = useState(0)
   const [pinchStartWidth, setPinchStartWidth] = useState(BASE_MAP_WIDTH)
   const [pinchCenter, setPinchCenter] = useState({ x: 0, y: 0 })
+  const [animatingGems, setAnimatingGems] = useState<Array<{ id: number; x: number; y: number; targetX?: number; targetY?: number }>>([])
   
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const mapWidthRef = useRef(BASE_MAP_WIDTH)
   const imageRef = useRef<HTMLImageElement>(null)
+  const gemCounterRef = useRef<HTMLDivElement>(null)
+  const gemAnimationIdRef = useRef(0)
+  const animatedGemIdsRef = useRef<Set<number>>(new Set())
   
   const zoomIn = () => {
     const newWidth = Math.min(mapWidthRef.current + (mapWidthRef.current * 0.5), BASE_MAP_WIDTH)
@@ -108,6 +134,90 @@ export default function Page() {
   }
   
   const currentUserCheckpoints = user_checkpoints.filter(c => c.user_id === currentUserId)
+
+  // Function to trigger gem animation
+  const triggerGemAnimation = (count: number, sourceX: number, sourceY: number) => {
+    if (!gemCounterRef.current) return;
+
+    const newGems: Array<{ id: number; x: number; y: number; targetX: number; targetY: number }> = [];
+    const counterRect = gemCounterRef.current.getBoundingClientRect();
+    const targetX = counterRect.left + counterRect.width / 2;
+    const targetY = counterRect.top + counterRect.height / 2;
+
+    for (let i = 0; i < count; i++) {
+      gemAnimationIdRef.current += 1;
+      newGems.push({
+        id: gemAnimationIdRef.current,
+        x: sourceX,
+        y: sourceY,
+        targetX,
+        targetY
+      });
+    }
+
+    setAnimatingGems((prev) => [...prev, ...newGems]);
+  };
+
+  // Animate gems when they're added to the state
+  useEffect(() => {
+    if (animatingGems.length === 0) return;
+
+    // Filter to only gems that haven't been animated yet
+    const gemsToAnimate = animatingGems.filter(gem => 
+      gem.targetX !== undefined && 
+      gem.targetY !== undefined && 
+      !animatedGemIdsRef.current.has(gem.id)
+    );
+
+    if (gemsToAnimate.length === 0) return;
+
+    gemsToAnimate.forEach((gem, index) => {
+      // Mark as animated
+      animatedGemIdsRef.current.add(gem.id);
+
+      // Wait for DOM to render
+      setTimeout(() => {
+        const gemElement = document.getElementById(`gem-${gem.id}`);
+        if (!gemElement || gem.targetX === undefined || gem.targetY === undefined) return;
+
+        const startX = gem.x;
+        const startY = gem.y;
+        const endX = gem.targetX;
+        const endY = gem.targetY;
+        const duration = 800;
+        const delay = index * 50;
+
+        setTimeout(() => {
+          const startTime = Date.now();
+          const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Easing function (ease-out cubic)
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+
+            const currentX = startX + (endX - startX) * easeOut;
+            const currentY = startY + (endY - startY) * easeOut;
+            const scale = 1 - progress * 0.5; // Shrink as it moves
+
+            gemElement.style.left = `${currentX}px`;
+            gemElement.style.top = `${currentY}px`;
+            gemElement.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            gemElement.style.opacity = `${1 - progress * 0.3}`;
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // Remove gem from animation list and tracking
+              animatedGemIdsRef.current.delete(gem.id);
+              setAnimatingGems((prev) => prev.filter((g) => g.id !== gem.id));
+            }
+          };
+          animate();
+        }, delay);
+      }, 10); // Small delay to ensure DOM is ready
+    });
+  }, [animatingGems]); // Trigger when animatingGems changes
 
 
   const mascot = {
@@ -316,6 +426,21 @@ export default function Page() {
 
   return (<>
     <div className="relative">
+      {/* Gem Counter - Top Right */}
+      <div 
+        ref={gemCounterRef}
+        className="fixed top-20 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
+      >
+        <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
+        <span className="font-bold text-lg">
+          {(() => {
+            const gemCount = currentUser?.gems || 0;
+            console.log('🟡 Gem Counter render - currentUser:', currentUser);
+            console.log('🟡 Gem Counter render - gemCount:', gemCount);
+            return gemCount;
+          })()}
+        </span>
+      </div>
      
       <div 
         ref={scrollContainerRef}
@@ -357,13 +482,37 @@ export default function Page() {
                const userCheckPointChallengesData = currentUserCheckpoints.find(uc => uc.checkpoint_id === c.id)?.challenges
                const finishedChallenges = userCheckPointChallengesData && Object.values(userCheckPointChallengesData).filter(Boolean)
                const finishedChallengesCount = finishedChallenges?.length ?? 0
-              
+               const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0
+               const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.is_visited || false
+               
               const isSelected = selectedCheckpoint === index && checkpointDialogOpen
               
               return <div key={c.id}>
+                 {/* Gem Count Above Checkpoint */}
+                 {/* {checkpointGems > 0 && (
+                   <div
+                     className="absolute z-10 flex items-center gap-1 bg-white/90 backdrop-blur-sm border-2 border-black rounded-lg px-2 py-1 -translate-x-1/2"
+                     style={{ 
+                       left: `${c.pos.x}%`, 
+                       top: `${c.pos.y}%`,
+                       transform: 'translate(-50%, calc(-100% - 25px))',
+                       width: 'calc(60px + 1.5%)',
+                       fontSize: 'calc(0.75rem + 0.5%)',
+                       padding: 'calc(4px + 0.25%)',
+                       gap: 'calc(4px + 0.25%)',
+                       borderWidth: 'calc(2px + 0.1%)',
+                       borderRadius: 'calc(8px + 0.5%)'
+                     }}
+                   >
+                     <Sparkles className="fill-yellow-500 text-yellow-500" style={{ width: 'calc(16px + 0.5%)', height: 'calc(16px + 0.5%)' }} />
+                     <span className="font-bold text-black">{checkpointGems}</span>
+                   </div>
+                 )} */}
+                
                 {/* Flag */}
                 <div
                   data-checkpoint-flag
+                  data-checkpoint-index={index}
                   onClick={()=>{
                     if (!isDragging) {
                       if (selectedCheckpoint === index && checkpointDialogOpen) {
@@ -379,7 +528,7 @@ export default function Page() {
                   className="isolate w-[calc(40px+1.5%)] aspect-square absolute cursor-pointer -translate-x-1/2 -translate-y-full z-10"
                   style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
                 >
-                {!c.is_visited &&  <Image
+                {!isCheckpointVisited && !c.is_visited &&  <Image
                   className="w-[22%] h-auto aspect-square absolute left-[48%] top-[28%]"
                   src="/images/IconLock.png"
                   width={100}
@@ -387,7 +536,7 @@ export default function Page() {
                   alt="lock"
                 />
                 }
-                {c.is_visited && finishedChallenges && finishedChallengesCount !== 0 && <div className="h-[22%] grid grid-cols-3 absolute left-[48%] top-[60%]">
+                {(isCheckpointVisited || c.is_visited) && finishedChallenges && finishedChallengesCount !== 0 && <div className="h-[22%] grid grid-cols-3 absolute left-[48%] top-[60%]">
                   {finishedChallenges.map((uc,index) => {
                     return  <Image
                     key={c.id + "star" + index}
@@ -404,6 +553,10 @@ export default function Page() {
                 }
                 <Image
                   className="w-full h-full"
+                  style={isCheckpointVisited ? { 
+                    filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
+                    transition: 'filter 0.5s ease-in-out'
+                  } : {}}
                   src="/images/IconFlag.png"
                   width={100}
                   height={100}
@@ -418,6 +571,7 @@ export default function Page() {
                   checkpointData={c}
                   position={{ x: c.pos.x, y: c.pos.y }}
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
+                  checkpointId={c.id}
                   onPlayGame={() => {
                     setIsGameOpen(true)
                   }}
@@ -468,8 +622,70 @@ export default function Page() {
     {isGameOpen && selectedCheckpoint !== null && (
       <MemoryMatchGame
         onWin={(gems) => {
-          // Handle gem rewards if needed
-          // The game will show the navigation button after winning
+          console.log('🟢 onWin called with gems:', gems);
+          console.log('🟢 currentUser before update:', currentUser);
+          const checkpointId = checkpoints[selectedCheckpoint].id;
+          const checkpointIndex = selectedCheckpoint;
+          
+          // Check if checkpoint is already visited - if so, don't award gems
+          const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.is_visited || false;
+          if (isCheckpointVisited) {
+            console.log('🟡 Checkpoint already visited, not awarding gems');
+            setIsGameOpen(false);
+            return;
+          }
+            
+            // Update gems immediately so counter updates
+            console.log('🟢 Calling addGems with:', gems);
+            addGems(gems);
+            console.log('🟢 addGems called, currentUser after:', currentUser);
+            addCheckpointGems(checkpointId, gems);
+            
+            // Close the game immediately
+            setIsGameOpen(false);
+            
+            // Get checkpoint flag position for animation
+            const checkpoint = checkpoints[checkpointIndex];
+            let sourceX = window.innerWidth / 2;
+            let sourceY = window.innerHeight / 2;
+            
+            // Use requestAnimationFrame to ensure state updates are processed
+            requestAnimationFrame(() => {
+              // Try to find the flag element by checkpoint index
+              const flagElement = document.querySelector(`[data-checkpoint-index="${checkpointIndex}"]`);
+              
+              if (flagElement) {
+                const rect = flagElement.getBoundingClientRect();
+                sourceX = rect.left + rect.width / 2;
+                sourceY = rect.top + rect.height / 2;
+              } else if (checkpoint && scrollContainerRef.current && imageRef.current) {
+                // Fallback: calculate from checkpoint position
+                const containerRect = scrollContainerRef.current.getBoundingClientRect();
+                const mapWidth = mapWidthRef.current;
+                const mapHeight = mapWidth * 1.2;
+                const scrollLeft = scrollContainerRef.current.scrollLeft;
+                const scrollTop = scrollContainerRef.current.scrollTop;
+                
+                // Calculate flag position in viewport coordinates
+                // Flag is positioned at checkpoint.pos.x% and checkpoint.pos.y% of the map
+                const flagX = (checkpoint.pos.x / 100) * mapWidth;
+                const flagY = (checkpoint.pos.y / 100) * mapHeight;
+                
+                sourceX = containerRect.left + scrollLeft + flagX;
+                sourceY = containerRect.top + scrollTop + flagY;
+              }
+              
+              // Trigger gem animation from checkpoint flag
+              triggerGemAnimation(gems, sourceX, sourceY);
+              
+              // Calculate animation duration (800ms + delay for last gem)
+              const animationDuration = 800 + (gems - 1) * 50;
+              
+              // Mark checkpoint as visited after animation completes
+              setTimeout(() => {
+                markCheckpointVisited(checkpointId);
+              }, animationDuration);
+            });
         }}
         onClose={() => {
           setIsGameOpen(false)
@@ -478,6 +694,22 @@ export default function Page() {
         mapId={mapId}
       />
     )}
+
+    {/* Animated Gems */}
+    {animatingGems.map((gem) => (
+      <div
+        key={gem.id}
+        id={`gem-${gem.id}`}
+        className="fixed pointer-events-none z-[100]"
+        style={{
+          left: `${gem.x}px`,
+          top: `${gem.y}px`,
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <Sparkles className="fill-yellow-500 text-yellow-500" size={32} />
+      </div>
+    ))}
       </>
   );
 }
@@ -488,6 +720,7 @@ function CheckpointInfoCard({
   checkpointData, 
   position,
   zoomLevel,
+  checkpointId,
   onPlayGame,
   onClose 
 }: {
@@ -495,9 +728,13 @@ function CheckpointInfoCard({
   checkpointData: Checkpoint;
   position: { x: number; y: number };
   zoomLevel: number;
+  checkpointId: string;
   onPlayGame: () => void;
   onClose?: () => void;
 }) {
+  const { checkpoints: userCheckpoints } = useCurrentUserContext();
+  const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.gems_collected || 0;
+  
   // Position the card to the right of the flag, or left if too close to right edge
   // Adjust Y_OFFSET to move popup up (negative) or down (positive) relative to flag
   const Y_OFFSET = -4 // Move popup up by 8% (negative = up, positive = down)
@@ -560,6 +797,15 @@ function CheckpointInfoCard({
               }}
               dangerouslySetInnerHTML={{ __html: checkpointData.description }}
             ></p>
+            {checkpointGems > 0 && (
+              <div 
+                className="flex items-center gap-2 mb-4 justify-center"
+                style={{ fontSize: bodyFontSize }}
+              >
+                <Sparkles className="fill-yellow-500 text-yellow-500" size={20} />
+                <span className="font-bold">Gems Collected: {checkpointGems}</span>
+              </div>
+            )}
             <button
               className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
               style={{ 

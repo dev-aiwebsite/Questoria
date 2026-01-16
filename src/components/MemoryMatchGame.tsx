@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { X, Trophy, Sparkles } from "lucide-react";
-import Link from "next/link";
 
 interface MemoryMatchGameProps {
   onWin: (gems: number) => void;
@@ -105,8 +104,13 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
       if (allMatched) {
         setGameWon(true);
         const gemsAwarded = Math.max(1, Math.floor(tileCount / 2));
+        // Call onWin immediately, then close after a short delay
         setTimeout(() => {
           onWin(gemsAwarded);
+          // Close the game after showing win message briefly
+          setTimeout(() => {
+            onClose();
+          }, 1500);
         }, 500);
       }
     } else {
@@ -126,7 +130,7 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
 
   return (
     <div className="fixed inset-0 z-[999999] bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
+      <div data-game-modal className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="header2">Memory Match Game</h2>
@@ -164,15 +168,6 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
                 {Math.max(1, Math.floor(tileCount / 2))} Gems
               </span>
             </p>
-            {checkpointId && mapId && (
-              <Link
-                href={`/maps/${mapId}/checkpoints/${checkpointId}`}
-                onClick={onClose}
-                className="btn primary inline-block px-6 py-3 text-lg font-bold"
-              >
-                Continue to Checkpoint
-              </Link>
-            )}
           </div>
         )}
 

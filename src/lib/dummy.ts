@@ -775,6 +775,7 @@ export type UserCheckpoint = {
         quiz: string;
         happiness: number;
     };
+    gems_collected?: number;
 }
 export const user_checkpoints:UserCheckpoint[] = [
   {
@@ -786,6 +787,7 @@ export const user_checkpoints:UserCheckpoint[] = [
       "selfie": "",
       "quiz": "",
       "happiness": 0
-    } 
+    },
+    gems_collected: 0
   }
 ]
