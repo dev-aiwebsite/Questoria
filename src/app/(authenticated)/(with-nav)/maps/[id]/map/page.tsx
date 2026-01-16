@@ -223,11 +223,45 @@ export default function Page() {
   const mascot = {
     idle: "/images/mascot1.png",
     walking: "/images/mascot1.png",
-    flying: "/images/mascot1.png"
+    flying: "/images/mascotFlying.png"
 
   };
 
-  const mascotPos = selectedCheckpoint ? checkpoints[selectedCheckpoint].pos : checkpoints[0].pos
+  const targetMascotPos = selectedCheckpoint !== null ? checkpoints[selectedCheckpoint].pos : checkpoints[0].pos
+  const [mascotPos, setMascotPos] = useState(targetMascotPos)
+  const [mascotAnimationPhase, setMascotAnimationPhase] = useState<'idle' | 'jumping-up' | 'flying' | 'jumping-down'>('idle')
+  const mascotElementRef = useRef<HTMLDivElement>(null)
+
+  // Update mascot position with animation sequence when target changes
+  useEffect(() => {
+    // Check if position actually changed
+    if (mascotPos.x !== targetMascotPos.x || mascotPos.y !== targetMascotPos.y) {
+      // Phase 1: Jump up (0.2s)
+      setMascotAnimationPhase('jumping-up')
+      
+      setTimeout(() => {
+        // Phase 2: Switch to flying and start moving (0.5s)
+        setMascotAnimationPhase('flying')
+        setMascotPos(targetMascotPos)
+        
+        setTimeout(() => {
+          // Phase 3: Switch to idle and jump down (0.2s)
+          setMascotAnimationPhase('jumping-down')
+          
+          setTimeout(() => {
+            // Phase 4: Back to idle
+            setMascotAnimationPhase('idle')
+            
+            // Open the popup after animation completes
+            // Total animation time: 200ms + 500ms + 200ms = 900ms
+            if (selectedCheckpoint !== null) {
+              setCheckpointDialogOpen(true)
+            }
+          }, 200) // Jump down duration
+        }, 500) // Movement duration
+      }, 200) // Jump up duration
+    }
+  }, [targetMascotPos.x, targetMascotPos.y, selectedCheckpoint])
 
   // Handle mouse/touch drag to scroll
   const handleStart = (clientX: number, clientY: number) => {
@@ -429,7 +463,7 @@ export default function Page() {
       {/* Gem Counter - Top Right */}
       <div 
         ref={gemCounterRef}
-        className="fixed top-20 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
+        className="fixed top-24 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
       >
         <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
         <span className="font-bold text-lg">
@@ -520,8 +554,10 @@ export default function Page() {
                         setCheckpointDialogOpen(false)
                         setSelectedCheckpoint(null)
                       } else {
+                        // Set checkpoint but don't open dialog yet - wait for animation
+                        setCheckpointDialogOpen(false)
                         setSelectedCheckpoint(index)
-                        setCheckpointDialogOpen(true)
+                        // Dialog will open after animation completes in useEffect
                       }
                     }
                   }}
@@ -585,17 +621,30 @@ export default function Page() {
             })}
 
           <div
-
-            className="w-[calc(40px+0.6%)] aspect-square absolute pointer-events-none -translate-x-full -translate-y-1/4"
-            style={{ left: mascotPos.x + "%", top: mascotPos.y + "%" }}
+            ref={mascotElementRef}
+            className="absolute pointer-events-none"
+            style={{ 
+              left: mascotPos.x + "%", 
+              top: mascotPos.y + "%",
+              transform: `translate(-100%, -25%) ${mascotAnimationPhase === 'jumping-up' ? 'translateY(-20px)' : mascotAnimationPhase === 'jumping-down' ? 'translateY(20px)' : 'translateY(0)'}`,
+              transition: mascotAnimationPhase === 'flying' 
+                ? 'left 0.5s ease-in-out, top 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, aspect-ratio 0.5s ease-in-out'
+                : 'transform 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out, aspect-ratio 0.2s ease-in-out',
+              width: mascotAnimationPhase === 'flying' ? 'calc(50px+0.8%)' : 'calc(40px+0.6%)',
+              height: mascotAnimationPhase === 'flying' ? 'auto' : 'calc(40px+0.6%)',
+              aspectRatio: mascotAnimationPhase === 'flying' ? '433 / 733' : '1 / 1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
           >
             <Image
-              className="w-full h-full"
-              src={mascot.idle}
-              width={40}
-              height={40}
+              className={mascotAnimationPhase === 'flying' ? 'w-full h-auto' : 'w-full h-full'}
+              src={mascotAnimationPhase === 'flying' ? mascot.flying : mascot.idle}
+              width={mascotAnimationPhase === 'flying' ? 50 : 40}
+              height={mascotAnimationPhase === 'flying' ? 50 : 40}
               alt="Mascot"
-
+              style={mascotAnimationPhase === 'flying' ? { objectFit: 'contain' } : {}}
             />
           </div>
         </div>
