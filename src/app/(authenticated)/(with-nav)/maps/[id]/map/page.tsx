@@ -548,6 +548,9 @@ export default function Page() {
                   data-checkpoint-flag
                   data-checkpoint-index={index}
                   onClick={()=>{
+                    // Disable clicking during animation
+                    if (mascotAnimationPhase !== 'idle') return;
+                    
                     if (!isDragging) {
                       if (selectedCheckpoint === index && checkpointDialogOpen) {
                         // Close if clicking the same flag
@@ -561,7 +564,7 @@ export default function Page() {
                       }
                     }
                   }}
-                  className="isolate w-[calc(40px+1.5%)] aspect-square absolute cursor-pointer -translate-x-1/2 -translate-y-full z-10"
+                  className={`isolate w-[calc(40px+1.5%)] aspect-square absolute -translate-x-1/2 -translate-y-full z-10 ${mascotAnimationPhase !== 'idle' ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
                 >
                 {!isCheckpointVisited && !c.is_visited &&  <Image
