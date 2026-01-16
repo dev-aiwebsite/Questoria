@@ -45,6 +45,7 @@ export default function Page() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
   const [isGameOpen, setIsGameOpen] = useState(false)
+  const [showGemsAlreadyCollected, setShowGemsAlreadyCollected] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
   const [scrollStart, setScrollStart] = useState({ x: 0, y: 0 })
