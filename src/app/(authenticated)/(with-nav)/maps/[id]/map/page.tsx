@@ -240,7 +240,7 @@ export default function Page() {
       setMascotAnimationPhase('jumping-up')
       
       setTimeout(() => {
-        // Phase 2: Switch to flying and start moving (0.5s)
+        // Phase 2: Switch to flying and start moving (1.0s)
         setMascotAnimationPhase('flying')
         setMascotPos(targetMascotPos)
         
@@ -253,12 +253,12 @@ export default function Page() {
             setMascotAnimationPhase('idle')
             
             // Open the popup after animation completes
-            // Total animation time: 200ms + 500ms + 200ms = 900ms
+            // Total animation time: 200ms + 1000ms + 200ms = 1400ms
             if (selectedCheckpoint !== null) {
               setCheckpointDialogOpen(true)
             }
           }, 200) // Jump down duration
-        }, 500) // Movement duration
+        }, 1000) // Movement duration
       }, 200) // Jump up duration
     }
   }, [targetMascotPos.x, targetMascotPos.y, selectedCheckpoint])
@@ -631,7 +631,7 @@ export default function Page() {
               top: mascotPos.y + "%",
               transform: `translate(-100%, -25%) ${mascotAnimationPhase === 'jumping-up' ? 'translateY(-20px)' : mascotAnimationPhase === 'jumping-down' ? 'translateY(20px)' : 'translateY(0)'}`,
               transition: mascotAnimationPhase === 'flying' 
-                ? 'left 0.5s ease-in-out, top 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, aspect-ratio 0.5s ease-in-out'
+                ? 'left 1s ease-in-out, top 1s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, aspect-ratio 0.5s ease-in-out'
                 : 'transform 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out, aspect-ratio 0.2s ease-in-out',
               width: mascotAnimationPhase === 'flying' ? 'calc(50px+0.8%)' : 'calc(40px+0.6%)',
               height: mascotAnimationPhase === 'flying' ? 'auto' : 'calc(40px+0.6%)',
