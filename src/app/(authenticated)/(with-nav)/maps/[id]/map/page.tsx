@@ -679,72 +679,95 @@ export default function Page() {
           const checkpointId = checkpoints[selectedCheckpoint].id;
           const checkpointIndex = selectedCheckpoint;
           
-          // Check if checkpoint is already visited - if so, don't award gems
+          // Check if checkpoint is already visited - if so, show message and don't award gems
           const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.is_visited || false;
           if (isCheckpointVisited) {
             console.log('🟡 Checkpoint already visited, not awarding gems');
             setIsGameOpen(false);
+            // Show message that gems are already collected
+            setShowGemsAlreadyCollected(true);
+            // Hide message after 3 seconds
+            setTimeout(() => {
+              setShowGemsAlreadyCollected(false);
+            }, 3000);
             return;
           }
             
-            // Update gems immediately so counter updates
-            console.log('🟢 Calling addGems with:', gems);
-            addGems(gems);
-            console.log('🟢 addGems called, currentUser after:', currentUser);
-            addCheckpointGems(checkpointId, gems);
+          // Update gems immediately so counter updates
+          console.log('🟢 Calling addGems with:', gems);
+          addGems(gems);
+          console.log('🟢 addGems called, currentUser after:', currentUser);
+          addCheckpointGems(checkpointId, gems);
+          
+          // Close the game immediately
+          setIsGameOpen(false);
+          
+          // Get checkpoint flag position for animation
+          const checkpoint = checkpoints[checkpointIndex];
+          let sourceX = window.innerWidth / 2;
+          let sourceY = window.innerHeight / 2;
+          
+          // Use requestAnimationFrame to ensure state updates are processed
+          requestAnimationFrame(() => {
+            // Try to find the flag element by checkpoint index
+            const flagElement = document.querySelector(`[data-checkpoint-index="${checkpointIndex}"]`);
             
-            // Close the game immediately
-            setIsGameOpen(false);
+            if (flagElement) {
+              const rect = flagElement.getBoundingClientRect();
+              sourceX = rect.left + rect.width / 2;
+              sourceY = rect.top + rect.height / 2;
+            } else if (checkpoint && scrollContainerRef.current && imageRef.current) {
+              // Fallback: calculate from checkpoint position
+              const containerRect = scrollContainerRef.current.getBoundingClientRect();
+              const mapWidth = mapWidthRef.current;
+              const mapHeight = mapWidth * 1.2;
+              const scrollLeft = scrollContainerRef.current.scrollLeft;
+              const scrollTop = scrollContainerRef.current.scrollTop;
+              
+              // Calculate flag position in viewport coordinates
+              // Flag is positioned at checkpoint.pos.x% and checkpoint.pos.y% of the map
+              const flagX = (checkpoint.pos.x / 100) * mapWidth;
+              const flagY = (checkpoint.pos.y / 100) * mapHeight;
+              
+              sourceX = containerRect.left + scrollLeft + flagX;
+              sourceY = containerRect.top + scrollTop + flagY;
+            }
             
-            // Get checkpoint flag position for animation
-            const checkpoint = checkpoints[checkpointIndex];
-            let sourceX = window.innerWidth / 2;
-            let sourceY = window.innerHeight / 2;
+            // Trigger gem animation from checkpoint flag
+            triggerGemAnimation(gems, sourceX, sourceY);
             
-            // Use requestAnimationFrame to ensure state updates are processed
-            requestAnimationFrame(() => {
-              // Try to find the flag element by checkpoint index
-              const flagElement = document.querySelector(`[data-checkpoint-index="${checkpointIndex}"]`);
-              
-              if (flagElement) {
-                const rect = flagElement.getBoundingClientRect();
-                sourceX = rect.left + rect.width / 2;
-                sourceY = rect.top + rect.height / 2;
-              } else if (checkpoint && scrollContainerRef.current && imageRef.current) {
-                // Fallback: calculate from checkpoint position
-                const containerRect = scrollContainerRef.current.getBoundingClientRect();
-                const mapWidth = mapWidthRef.current;
-                const mapHeight = mapWidth * 1.2;
-                const scrollLeft = scrollContainerRef.current.scrollLeft;
-                const scrollTop = scrollContainerRef.current.scrollTop;
-                
-                // Calculate flag position in viewport coordinates
-                // Flag is positioned at checkpoint.pos.x% and checkpoint.pos.y% of the map
-                const flagX = (checkpoint.pos.x / 100) * mapWidth;
-                const flagY = (checkpoint.pos.y / 100) * mapHeight;
-                
-                sourceX = containerRect.left + scrollLeft + flagX;
-                sourceY = containerRect.top + scrollTop + flagY;
-              }
-              
-              // Trigger gem animation from checkpoint flag
-              triggerGemAnimation(gems, sourceX, sourceY);
-              
-              // Calculate animation duration (800ms + delay for last gem)
-              const animationDuration = 800 + (gems - 1) * 50;
-              
-              // Mark checkpoint as visited after animation completes
-              setTimeout(() => {
-                markCheckpointVisited(checkpointId);
-              }, animationDuration);
-            });
+            // Calculate animation duration (800ms + delay for last gem)
+            const animationDuration = 800 + (gems - 1) * 50;
+            
+            // Mark checkpoint as visited after animation completes
+            setTimeout(() => {
+              markCheckpointVisited(checkpointId);
+            }, animationDuration);
+          });
         }}
         onClose={() => {
           setIsGameOpen(false)
         }}
         checkpointId={checkpoints[selectedCheckpoint].id}
         mapId={mapId}
+        gridSize={12}
       />
+    )}
+
+    {/* Gems Already Collected Message */}
+    {showGemsAlreadyCollected && (
+      <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl border-3 border-black p-6 max-w-md w-full text-center">
+          <h3 className="text-2xl font-bold mb-4">Gems Already Collected</h3>
+          <p className="text-lg mb-4">You have already collected gems for this checkpoint.</p>
+          <button
+            onClick={() => setShowGemsAlreadyCollected(false)}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            OK
+          </button>
+        </div>
+      </div>
     )}
 
     {/* Animated Gems */}
