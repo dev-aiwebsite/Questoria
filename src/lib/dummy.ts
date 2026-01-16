@@ -635,6 +635,7 @@ export type User = {
   avatar: string;
   onboarding: boolean;
   xp: number;
+  gems: number;
 }
 
 export const users: User[] = [
@@ -646,6 +647,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "q7m2x9",
@@ -655,6 +657,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "w8c5d1",
@@ -664,6 +667,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "r4t6p0",
@@ -673,6 +677,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "m2z9l7",
@@ -682,6 +687,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "k8y3n5",
@@ -691,6 +697,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "f6v1b4",
@@ -700,6 +707,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "h3q7r2",
@@ -709,6 +717,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "p5w8x0",
@@ -718,6 +727,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
   {
     id: "t9k4m6",
@@ -727,6 +737,7 @@ export const users: User[] = [
     avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
     onboarding: true,
     xp: 8080,
+    gems: 0,
   },
 ];
 

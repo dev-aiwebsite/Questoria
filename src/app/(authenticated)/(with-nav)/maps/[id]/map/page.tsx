@@ -7,11 +7,12 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
+import MemoryMatchGame from "@/components/MemoryMatchGame";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
 
-// Popup size configuration - adjust this to change the base size of the checkpoint popup
+
 // This is the scale factor at base zoom (1.0). Higher values = larger popup, lower values = smaller popup
 const POPUP_BASE_SCALE = 0.25
 
@@ -21,6 +22,7 @@ export default function Page() {
   const [mapWidth, setMapWidth] = useState(BASE_MAP_WIDTH)
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
+  const [isGameOpen, setIsGameOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
   const [scrollStart, setScrollStart] = useState({ x: 0, y: 0 })
@@ -416,6 +418,9 @@ export default function Page() {
                   checkpointData={c}
                   position={{ x: c.pos.x, y: c.pos.y }}
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
+                  onPlayGame={() => {
+                    setIsGameOpen(true)
+                  }}
                   onClose={() => {
                     setCheckpointDialogOpen(false)
                     setSelectedCheckpoint(null)
@@ -458,6 +463,21 @@ export default function Page() {
 
       </div>
     </div>
+    
+    {/* Memory Match Game Modal */}
+    {isGameOpen && selectedCheckpoint !== null && (
+      <MemoryMatchGame
+        onWin={(gems) => {
+          // Handle gem rewards if needed
+          // The game will show the navigation button after winning
+        }}
+        onClose={() => {
+          setIsGameOpen(false)
+        }}
+        checkpointId={checkpoints[selectedCheckpoint].id}
+        mapId={mapId}
+      />
+    )}
       </>
   );
 }
@@ -468,12 +488,14 @@ function CheckpointInfoCard({
   checkpointData, 
   position,
   zoomLevel,
+  onPlayGame,
   onClose 
 }: {
   mapId: string;
   checkpointData: Checkpoint;
   position: { x: number; y: number };
   zoomLevel: number;
+  onPlayGame: () => void;
   onClose?: () => void;
 }) {
   // Position the card to the right of the flag, or left if too close to right edge
@@ -538,17 +560,16 @@ function CheckpointInfoCard({
               }}
               dangerouslySetInnerHTML={{ __html: checkpointData.description }}
             ></p>
-            <Link
+            <button
               className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
               style={{ 
                 fontSize: buttonFontSize,
                 padding: buttonPadding,
                 width: buttonWidth
               }}
-              href={`/maps/${mapId}/checkpoints/${checkpointData.id}`}
-              onClick={onClose}
-            >Enter
-            </Link>
+              onClick={onPlayGame}
+            >Play the Game
+            </button>
             <button
             onClick={() => {
               if(onClose){

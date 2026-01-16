@@ -9,7 +9,8 @@ type CurrentUserContextType = {
   maps: UserMap[] | null;
   setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>; 
   checkpoints: UserCheckpoint[] | null;
-  setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>
+  setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
+  addGems: (amount: number) => void;
 };
 
 const CurrentUserContext = createContext<CurrentUserContextType | undefined>(undefined);
@@ -22,6 +23,21 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(null)
+
+    // Wrapper to update gems when user is updated
+    const updateCurrentUser = (user: User | null) => {
+        setCurrentUser(user);
+    };
+
+    // Function to add gems to current user
+    const addGems = (amount: number) => {
+        if (currentUser) {
+            setCurrentUser({
+                ...currentUser,
+                gems: (currentUser.gems || 0) + amount
+            });
+        }
+    };
 
     useEffect(() => {
         if (!currentUser) return
@@ -42,7 +58,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     }, [currentUser])
 
     return (
-        <CurrentUserContext.Provider value={{ maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser }}>
+        <CurrentUserContext.Provider value={{ maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems }}>
             {children}
         </CurrentUserContext.Provider>
     );
