@@ -774,7 +774,7 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            gridSize={8}
+            gridSize={6}
           />
         );
       }

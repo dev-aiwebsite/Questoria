@@ -24,7 +24,7 @@ export default function WordSearchGame({
   onClose,
   checkpointId,
   mapId,
-  gridSize: initialGridSize = 8
+  gridSize: initialGridSize = 6
 }: WordSearchGameProps) {
   const [currentGridSize, setCurrentGridSize] = useState(initialGridSize)
   const [showHowToPlay, setShowHowToPlay] = useState(false)
