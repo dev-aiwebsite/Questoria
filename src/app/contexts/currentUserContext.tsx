@@ -34,7 +34,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 const saved = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    console.log('📦 Loaded currentUser from localStorage:', parsed);
                     return parsed;
                 }
             } catch (e) {
@@ -51,7 +50,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 const saved = localStorage.getItem(STORAGE_KEYS.CHECKPOINTS);
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    console.log('📦 Loaded checkpoints from localStorage:', parsed);
                     return parsed;
                 }
             } catch (e) {
@@ -73,7 +71,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
             if (currentUser) {
                 try {
                     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
-                    console.log('💾 Saved currentUser to localStorage:', currentUser);
                 } catch (e) {
                     console.error('Error saving currentUser to localStorage:', e);
                 }
@@ -88,7 +85,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
         if (typeof window !== 'undefined' && checkpoints) {
             try {
                 localStorage.setItem(STORAGE_KEYS.CHECKPOINTS, JSON.stringify(checkpoints));
-                console.log('💾 Saved checkpoints to localStorage:', checkpoints);
             } catch (e) {
                 console.error('Error saving checkpoints to localStorage:', e);
             }
@@ -103,11 +99,8 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
     // Function to add gems to current user
     const addGems = (amount: number) => {
-        console.log('🔵 addGems called with amount:', amount);
         setCurrentUser((prevUser) => {
-            console.log('🔵 addGems - prevUser:', prevUser);
             if (!prevUser) {
-                console.warn('❌ addGems called but currentUser is null');
                 return prevUser;
             }
             const oldGems = prevUser.gems || 0;
@@ -116,8 +109,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 ...prevUser,
                 gems: newGems
             };
-            console.log('🔵 addGems - updating gems:', oldGems, '->', newGems);
-            console.log('🔵 addGems - updatedUser:', updatedUser);
             // Update ref immediately
             currentUserRef.current = updatedUser;
             return updatedUser;

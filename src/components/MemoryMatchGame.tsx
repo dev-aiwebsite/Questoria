@@ -72,14 +72,12 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
     try {
       if (soundRef.current) {
         soundRef.current.currentTime = 0; // Reset to start
-        soundRef.current.play().catch((error) => {
+        soundRef.current.play().catch(() => {
           // Handle autoplay restrictions - silently fail
-          console.log('Sound playback prevented:', error);
         });
       }
     } catch (error) {
       // Silently handle errors (e.g., file not found)
-      console.log('Sound error:', error);
     }
   };
 

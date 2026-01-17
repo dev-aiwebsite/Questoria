@@ -25,22 +25,12 @@ export default function Page() {
   // Initialize user if not set (for development/testing)
   useEffect(() => {
     if (!currentUser) {
-      console.log('🟠 No currentUser found, initializing from currentUserId:', currentUserId);
       const userData = users.find(u => u.id === currentUserId);
       if (userData) {
-        console.log('🟠 Setting currentUser to:', userData);
         setCurrentUser(userData);
-      } else {
-        console.warn('🟠 Could not find user with id:', currentUserId);
       }
     }
   }, [currentUser, setCurrentUser]);
-  
-  // Log currentUser changes
-  useEffect(() => {
-    console.log('🟣 Page component - currentUser changed:', currentUser);
-    console.log('🟣 Page component - currentUser.gems:', currentUser?.gems);
-  }, [currentUser]);
   
   const [mapWidth, setMapWidth] = useState(BASE_MAP_WIDTH)
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
@@ -470,12 +460,7 @@ export default function Page() {
       >
         <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
         <span className="font-bold text-lg">
-          {(() => {
-            const gemCount = currentUser?.gems || 0;
-            console.log('🟡 Gem Counter render - currentUser:', currentUser);
-            console.log('🟡 Gem Counter render - gemCount:', gemCount);
-            return gemCount;
-          })()}
+          {currentUser?.gems || 0}
         </span>
       </div>
      
@@ -683,13 +668,9 @@ export default function Page() {
       
       // Shared onWin handler for both games
       const handleGameWin = (gems: number) => {
-        console.log('🟢 onWin called with gems:', gems);
-        console.log('🟢 currentUser before update:', currentUser);
-        
         // Check if checkpoint is already visited - if so, show message and don't award gems
         const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.is_visited || false;
         if (isCheckpointVisited) {
-          console.log('🟡 Checkpoint already visited, not awarding gems');
           setIsGameOpen(false);
           // Show message that gems are already collected
           setShowGemsAlreadyCollected(true);
@@ -701,9 +682,7 @@ export default function Page() {
         }
           
         // Update gems immediately so counter updates
-        console.log('🟢 Calling addGems with:', gems);
         addGems(gems);
-        console.log('🟢 addGems called, currentUser after:', currentUser);
         addCheckpointGems(checkpointId, gems);
         
         // Close the game immediately
