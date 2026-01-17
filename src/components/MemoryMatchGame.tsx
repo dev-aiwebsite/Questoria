@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Trophy, Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -38,6 +38,50 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
   const [gameWon, setGameWon] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+
+  // Audio refs for sound effects
+  const flipSoundRef = useRef<HTMLAudioElement | null>(null);
+  const matchSoundRef = useRef<HTMLAudioElement | null>(null);
+  const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
+  const winSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio elements
+  useEffect(() => {
+    flipSoundRef.current = new Audio('/memoryMatch/sounds/flip.mp3');
+    matchSoundRef.current = new Audio('/memoryMatch/sounds/match.mp3');
+    wrongSoundRef.current = new Audio('/memoryMatch/sounds/wrong.mp3');
+    winSoundRef.current = new Audio('/memoryMatch/sounds/win.mp3');
+
+    // Set volume levels (0.0 to 1.0)
+    if (flipSoundRef.current) flipSoundRef.current.volume = 0.5;
+    if (matchSoundRef.current) matchSoundRef.current.volume = 0.6;
+    if (wrongSoundRef.current) wrongSoundRef.current.volume = 0.5;
+    if (winSoundRef.current) winSoundRef.current.volume = 0.7;
+
+    return () => {
+      // Cleanup
+      if (flipSoundRef.current) flipSoundRef.current = null;
+      if (matchSoundRef.current) matchSoundRef.current = null;
+      if (wrongSoundRef.current) wrongSoundRef.current = null;
+      if (winSoundRef.current) winSoundRef.current = null;
+    };
+  }, []);
+
+  // Helper function to play sound
+  const playSound = (soundRef: React.MutableRefObject<HTMLAudioElement | null>) => {
+    try {
+      if (soundRef.current) {
+        soundRef.current.currentTime = 0; // Reset to start
+        soundRef.current.play().catch((error) => {
+          // Handle autoplay restrictions - silently fail
+          console.log('Sound playback prevented:', error);
+        });
+      }
+    } catch (error) {
+      // Silently handle errors (e.g., file not found)
+      console.log('Sound error:', error);
+    }
+  };
 
   // Initialize game
   useEffect(() => {
@@ -152,6 +196,9 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
 
     if (flippedCards.length === 2) return;
 
+    // Play flip sound
+    playSound(flipSoundRef);
+
     const newFlippedCards = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
 
@@ -176,7 +223,9 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
     const secondCard = currentCards[secondId];
 
     if (firstCard.value === secondCard.value) {
-      // Match found
+      // Match found - play match sound
+      playSound(matchSoundRef);
+
       const matchedCards = currentCards.map((c) =>
         c.id === firstId || c.id === secondId
           ? { ...c, isMatched: true, isFlipped: true }
@@ -190,6 +239,8 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
       if (allMatched) {
         setGameWon(true);
         const gemsAwarded = Math.max(1, Math.floor(tileCount / 2));
+        // Play win sound
+        playSound(winSoundRef);
         // Call onWin immediately, then close after a short delay
         setTimeout(() => {
           onWin(gemsAwarded);
@@ -200,7 +251,8 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
         }, 500);
       }
     } else {
-      // No match - flip back
+      // No match - play wrong sound and flip back
+      playSound(wrongSoundRef);
       const resetCards = currentCards.map((c) =>
         flipped.includes(c.id) ? { ...c, isFlipped: false } : c
       );
