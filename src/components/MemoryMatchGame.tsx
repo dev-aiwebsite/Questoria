@@ -272,33 +272,35 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
           />
 
           {/* Header Content */}
-          <div className="relative z-10 flex items-center justify-between h-full px-6" style={{ paddingTop: '20px' }}>
+          <div className="relative z-10 flex items-center justify-between h-full px-2 sm:px-4 md:px-6" style={{ paddingTop: '20px' }}>
             {/* Left: Mascot */}
-            <div className="flex items-end" style={{ height: 'calc(100%)' }}>
+            <div className="flex items-end flex-shrink-0" style={{ height: 'calc(100%)', maxWidth: '30%' }}>
               <Image
                 src="/images/mascot1.png"
                 alt="Mascot"
                 width={143}
                 height={147}
-                className="h-full w-auto object-contain"
+                className="w-auto object-contain"
+                style={{ maxHeight: 'calc(100% - 20px)', maxWidth: '100%' }}
               />
             </div>
 
             {/* Center: Title */}
-            <div className="flex-1 flex items-center justify-center">
-              <h2 className="text-3xl font-bold text-blue-900" style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
+            <div className="flex-1 flex items-center justify-center px-2 min-w-0">
+              <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-900 text-center" style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
                 Memory match game
               </h2>
             </div>
 
             {/* Right: Flag */}
-            <div className="flex items-end" style={{ height: 'calc(100% )' }}>
+            <div className="flex items-end flex-shrink-0" style={{ height: 'calc(100%)', maxWidth: '30%' }}>
               <Image
                 src="/memoryMatch/finish.png"
                 alt="Finish Flag"
                 width={125}
                 height={149}
-                className="h-full w-auto object-contain"
+                className="w-auto object-contain"
+                style={{ maxHeight: 'calc(100% - 20px)', maxWidth: '100%' }}
               />
             </div>
           </div>
