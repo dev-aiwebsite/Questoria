@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
+import WordSearchGame from "@/components/WordSearchGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 
 // Base map width - change this to adjust default zoom level
@@ -45,6 +46,7 @@ export default function Page() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
   const [isGameOpen, setIsGameOpen] = useState(false)
+  const [gameType, setGameType] = useState<'memory' | 'wordsearch'>('memory')
   const [showGemsAlreadyCollected, setShowGemsAlreadyCollected] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
@@ -613,7 +615,10 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    setIsGameOpen(true)
+                    // Randomly select game type
+                    const randomGame = Math.random() < 0.5 ? 'memory' : 'wordsearch';
+                    setGameType(randomGame);
+                    setIsGameOpen(true);
                   }}
                   onClose={() => {
                     setCheckpointDialogOpen(false)
@@ -671,89 +676,109 @@ export default function Page() {
       </div>
     </div>
     
-    {/* Memory Match Game Modal */}
-    {isGameOpen && selectedCheckpoint !== null && (
-      <MemoryMatchGame
-        onWin={(gems) => {
-          console.log('🟢 onWin called with gems:', gems);
-          console.log('🟢 currentUser before update:', currentUser);
-          const checkpointId = checkpoints[selectedCheckpoint].id;
-          const checkpointIndex = selectedCheckpoint;
-          
-          // Check if checkpoint is already visited - if so, show message and don't award gems
-          const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.is_visited || false;
-          if (isCheckpointVisited) {
-            console.log('🟡 Checkpoint already visited, not awarding gems');
-            setIsGameOpen(false);
-            // Show message that gems are already collected
-            setShowGemsAlreadyCollected(true);
-            // Hide message after 3 seconds
-            setTimeout(() => {
-              setShowGemsAlreadyCollected(false);
-            }, 3000);
-            return;
-          }
-            
-          // Update gems immediately so counter updates
-          console.log('🟢 Calling addGems with:', gems);
-          addGems(gems);
-          console.log('🟢 addGems called, currentUser after:', currentUser);
-          addCheckpointGems(checkpointId, gems);
-          
-          // Close the game immediately
+    {/* Game Modal - Randomly selected between Memory Match and Word Search */}
+    {isGameOpen && selectedCheckpoint !== null && (() => {
+      const checkpointId = checkpoints[selectedCheckpoint].id;
+      const checkpointIndex = selectedCheckpoint;
+      
+      // Shared onWin handler for both games
+      const handleGameWin = (gems: number) => {
+        console.log('🟢 onWin called with gems:', gems);
+        console.log('🟢 currentUser before update:', currentUser);
+        
+        // Check if checkpoint is already visited - if so, show message and don't award gems
+        const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.is_visited || false;
+        if (isCheckpointVisited) {
+          console.log('🟡 Checkpoint already visited, not awarding gems');
           setIsGameOpen(false);
+          // Show message that gems are already collected
+          setShowGemsAlreadyCollected(true);
+          // Hide message after 3 seconds
+          setTimeout(() => {
+            setShowGemsAlreadyCollected(false);
+          }, 3000);
+          return;
+        }
           
-          // Get checkpoint flag position for animation
-          const checkpoint = checkpoints[checkpointIndex];
-          let sourceX = window.innerWidth / 2;
-          let sourceY = window.innerHeight / 2;
+        // Update gems immediately so counter updates
+        console.log('🟢 Calling addGems with:', gems);
+        addGems(gems);
+        console.log('🟢 addGems called, currentUser after:', currentUser);
+        addCheckpointGems(checkpointId, gems);
+        
+        // Close the game immediately
+        setIsGameOpen(false);
+        
+        // Get checkpoint flag position for animation
+        const checkpoint = checkpoints[checkpointIndex];
+        let sourceX = window.innerWidth / 2;
+        let sourceY = window.innerHeight / 2;
+        
+        // Use requestAnimationFrame to ensure state updates are processed
+        requestAnimationFrame(() => {
+          // Try to find the flag element by checkpoint index
+          const flagElement = document.querySelector(`[data-checkpoint-index="${checkpointIndex}"]`);
           
-          // Use requestAnimationFrame to ensure state updates are processed
-          requestAnimationFrame(() => {
-            // Try to find the flag element by checkpoint index
-            const flagElement = document.querySelector(`[data-checkpoint-index="${checkpointIndex}"]`);
+          if (flagElement) {
+            const rect = flagElement.getBoundingClientRect();
+            sourceX = rect.left + rect.width / 2;
+            sourceY = rect.top + rect.height / 2;
+          } else if (checkpoint && scrollContainerRef.current && imageRef.current) {
+            // Fallback: calculate from checkpoint position
+            const containerRect = scrollContainerRef.current.getBoundingClientRect();
+            const mapWidth = mapWidthRef.current;
+            const mapHeight = mapWidth * 1.2;
+            const scrollLeft = scrollContainerRef.current.scrollLeft;
+            const scrollTop = scrollContainerRef.current.scrollTop;
             
-            if (flagElement) {
-              const rect = flagElement.getBoundingClientRect();
-              sourceX = rect.left + rect.width / 2;
-              sourceY = rect.top + rect.height / 2;
-            } else if (checkpoint && scrollContainerRef.current && imageRef.current) {
-              // Fallback: calculate from checkpoint position
-              const containerRect = scrollContainerRef.current.getBoundingClientRect();
-              const mapWidth = mapWidthRef.current;
-              const mapHeight = mapWidth * 1.2;
-              const scrollLeft = scrollContainerRef.current.scrollLeft;
-              const scrollTop = scrollContainerRef.current.scrollTop;
-              
-              // Calculate flag position in viewport coordinates
-              // Flag is positioned at checkpoint.pos.x% and checkpoint.pos.y% of the map
-              const flagX = (checkpoint.pos.x / 100) * mapWidth;
-              const flagY = (checkpoint.pos.y / 100) * mapHeight;
-              
-              sourceX = containerRect.left + scrollLeft + flagX;
-              sourceY = containerRect.top + scrollTop + flagY;
-            }
+            // Calculate flag position in viewport coordinates
+            // Flag is positioned at checkpoint.pos.x% and checkpoint.pos.y% of the map
+            const flagX = (checkpoint.pos.x / 100) * mapWidth;
+            const flagY = (checkpoint.pos.y / 100) * mapHeight;
             
-            // Trigger gem animation from checkpoint flag
-            triggerGemAnimation(gems, sourceX, sourceY);
-            
-            // Calculate animation duration (800ms + delay for last gem)
-            const animationDuration = 800 + (gems - 1) * 50;
-            
-            // Mark checkpoint as visited after animation completes
-            setTimeout(() => {
-              markCheckpointVisited(checkpointId);
-            }, animationDuration);
-          });
-        }}
-        onClose={() => {
-          setIsGameOpen(false)
-        }}
-        checkpointId={checkpoints[selectedCheckpoint].id}
-        mapId={mapId}
-        // gridSize={12}
-      />
-    )}
+            sourceX = containerRect.left + scrollLeft + flagX;
+            sourceY = containerRect.top + scrollTop + flagY;
+          }
+          
+          // Trigger gem animation from checkpoint flag
+          triggerGemAnimation(gems, sourceX, sourceY);
+          
+          // Calculate animation duration (800ms + delay for last gem)
+          const animationDuration = 800 + (gems - 1) * 50;
+          
+          // Mark checkpoint as visited after animation completes
+          setTimeout(() => {
+            markCheckpointVisited(checkpointId);
+          }, animationDuration);
+        });
+      };
+
+      // Render the selected game
+      if (gameType === 'memory') {
+        return (
+          <MemoryMatchGame
+            onWin={handleGameWin}
+            onClose={() => {
+              setIsGameOpen(false);
+            }}
+            checkpointId={checkpointId}
+            mapId={mapId}
+          />
+        );
+      } else {
+        return (
+          <WordSearchGame
+            onWin={handleGameWin}
+            onClose={() => {
+              setIsGameOpen(false);
+            }}
+            checkpointId={checkpointId}
+            mapId={mapId}
+            gridSize={8}
+          />
+        );
+      }
+    })()}
 
     {/* Gems Already Collected Message */}
     {showGemsAlreadyCollected && (

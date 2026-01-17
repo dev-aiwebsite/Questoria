@@ -24,9 +24,10 @@ export default function WordSearchGame({
   onClose,
   checkpointId,
   mapId,
-  gridSize: initialGridSize = 12
+  gridSize: initialGridSize = 8
 }: WordSearchGameProps) {
   const [currentGridSize, setCurrentGridSize] = useState(initialGridSize)
+  const [showHowToPlay, setShowHowToPlay] = useState(false)
   const [grid, setGrid] = useState<string[][]>([])
   const [words, setWords] = useState<string[]>([])
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set())
@@ -295,7 +296,7 @@ export default function WordSearchGame({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[999999] bg-black/80 flex items-center justify-center p-4">
       <div 
         className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         data-game-modal
@@ -310,34 +311,6 @@ export default function WordSearchGame({
           </button>
         </div>
 
-        <div className="mb-4 flex items-center gap-4 p-3 bg-gray-50 rounded-lg border-2 border-gray-200">
-          <label className="font-semibold text-sm">Grid Size:</label>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (currentGridSize > 8) {
-                  setCurrentGridSize(currentGridSize - 1)
-                }
-              }}
-              disabled={currentGridSize <= 8}
-              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              -
-            </button>
-            <span className="font-bold text-lg min-w-[3rem] text-center">{currentGridSize}x{currentGridSize}</span>
-            <button
-              onClick={() => {
-                if (currentGridSize < 15) {
-                  setCurrentGridSize(currentGridSize + 1)
-                }
-              }}
-              disabled={currentGridSize >= 15}
-              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              +
-            </button>
-          </div>
-        </div>
 
         <div className="mb-4 flex justify-between items-center">
           <div className="text-sm">
@@ -426,7 +399,43 @@ export default function WordSearchGame({
             <p className="text-green-600">You found all the words!</p>
           </div>
         )}
+
+        {/* Footer: How to play */}
+        <div className="mt-4 pt-4 border-t-2 border-gray-300 text-center">
+          <button
+            onClick={() => setShowHowToPlay(true)}
+            className="text-gray-700 font-semibold hover:text-gray-900 transition-colors cursor-pointer"
+          >
+            How to play?
+          </button>
+        </div>
       </div>
+
+      {/* How to Play Popup */}
+      {showHowToPlay && (
+        <div className="fixed inset-0 z-[9999999] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[80vh] overflow-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-bold">How to Play</h3>
+              <button
+                onClick={() => setShowHowToPlay(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="text-sm text-gray-600 space-y-2">
+              <ul className="list-disc list-inside space-y-1">
+                <li>Click and drag (or tap and swipe) to select letters and form words</li>
+                <li>Words can be horizontal, vertical, diagonal, or backwards</li>
+                <li>Find all the hidden words to win and earn gems</li>
+                <li>Selected words will turn green when found</li>
+                <li>Use the word list at the bottom to track your progress</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
