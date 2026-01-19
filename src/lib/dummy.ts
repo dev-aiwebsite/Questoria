@@ -84,13 +84,14 @@ export type Checkpoint = {
 }
 export const checkpoints: Checkpoint[] = [
   {
-    id: "234jfgfg1",
+    id: "cp_001",
     map_id: "234j3h4j3",
-    title: "Always start here - The Visitor Centre",
+    title: "The Visitor Centre",
     subtitle: "Starting point",
     pretext: "The quest awaits! Make your way to The Visitor Centre to begin your adventure.",
     image: "/images/maps/map1-checkpoint-1.jpg",
-    description: "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
+    description:
+      "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
     did_you_know: `<p><strong>Did you know?</strong> The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!</p>
 
 <p>Over the decades, legendary botanists like <strong>Ferdinand von Mueller</strong> expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens!</p>
@@ -115,19 +116,17 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 1,
-    pos: {
-      x: 30,
-      y: 65
-    }
+    pos: { x: 48, y: 75 }
   },
   {
-    id: "234jfgfb2",
+    id: "cp_002",
     map_id: "234j3h4j3",
-    title: "Ironbark Garden",
-    subtitle: "Ironbark Garden",
+    title: "Ironbank Garden",
+    subtitle: "Ironbank Garden",
     pretext: "",
     image: "",
-    description: "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
+    description:
+      "Step into a garden that feels strong and sturdy, like it’s guarding secret treasures. The plants here are tough and clever, built to survive and thrive.",
     did_you_know: `<p><strong>Did you know?</strong> Ironbark trees have incredibly hard bark that helps protect them from bushfires.</p>`,
     is_visited: false,
     challenges: [
@@ -147,19 +146,17 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Ironbark Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 2,
-    pos: {
-      x: 34,
-      y: 70
-    }
+    pos: { x: 34, y: 70 }
   },
   {
-    id: "234jfgfb3",
+    id: "cp_003",
     map_id: "234j3h4j3",
     title: "Box Garden",
     subtitle: "Box Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "This garden is full of neat shapes and tidy paths that feel like a giant green puzzle. It’s a fun place to spot patterns made by plants.",
     did_you_know: `<p><strong>Did you know?</strong> Box trees are often used in formal gardens because they can be trimmed into neat shapes that last for decades.</p>`,
     is_visited: false,
     challenges: [
@@ -179,19 +176,17 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Box Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 3,
-    pos: {
-      x: 26.5,
-      y: 51.2
-    }
+    pos: { x: 30.5, y: 65.2 }
   },
   {
-    id: "234jfgfg4",
+    id: "cp_004",
     map_id: "234j3h4j3",
     title: "Peppermint Garden",
     subtitle: "Peppermint Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "Take a deep breath—this garden smells fresh and minty! The trees here make the air feel cool and calm.",
     did_you_know: `<p><strong>Did you know?</strong> Australian native peppermint trees have leaves that smell minty and can repel insects.</p>`,
     is_visited: false,
     challenges: [
@@ -211,19 +206,17 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Peppermint Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 4,
-    pos: {
-      x: 33,
-      y: 40
-    }
+    pos: { x: 27, y: 61 }
   },
   {
-    id: "234jfgfb5",
+    id: "cp_005",
     map_id: "234j3h4j3",
     title: "Bloodwood Garden",
     subtitle: "Bloodwood Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "Tall trees with dark, dramatic bark make this garden feel a little mysterious. Look closely and imagine ancient trees whispering stories from long ago.",
     did_you_know: `<p><strong>Did you know?</strong> Bloodwood trees are named for their red sap, which was traditionally used by Aboriginal people for medicine and art.</p>`,
     is_visited: false,
     challenges: [
@@ -243,19 +236,17 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Bloodwood Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 5,
-    pos: {
-      x: 26,
-      y: 36
-    }
+    pos: { x: 28, y: 56.8 }
   },
   {
-    id: "234jfgfb6",
+    id: "cp_006",
     map_id: "234j3h4j3",
-    title: "Stringbark Garden",
-    subtitle: "Stringbark Garden",
+    title: "Stringybark Garden",
+    subtitle: "Stringybark Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "Rough, twisty bark wraps these trees like nature’s armor. It’s a great place to touch, look, and wonder how trees protect themselves.",
     did_you_know: `<p><strong>Did you know?</strong> Stringbark trees have long, fibrous bark that peels off in strings, giving the garden its name.</p>`,
     is_visited: false,
     challenges: [
@@ -275,147 +266,47 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Stringbark Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 6,
-    pos: {
-      x: 23,
-      y: 31
-    }
+    pos: { x: 26.5, y: 51.2 }
   },
   {
-    id: "234jfgfb7",
+    id: "cp_007",
     map_id: "234j3h4j3",
-    title: "Arid Garden",
-    subtitle: "Arid Garden",
+    title: "Dry River Bed",
+    subtitle: "Dry River Bed",
     pretext: "",
     image: "",
-    description: "",
-    did_you_know: `<p><strong>Did you know?</strong> Plants in the Arid Garden survive with very little water by storing moisture in their leaves, stems, or roots.</p>`,
+    description:
+      "This river doesn’t always have water, but it still has lots to explore. Follow the stones and imagine how water rushes through after rain.",
+    did_you_know: `<p><strong>Did you know?</strong> Many plants in dry river beds survive long droughts by storing water in roots and stems.</p>`,
     is_visited: false,
     challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Arid Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Dry River Bed. <strong>(Earn 1 Quest Gem)</strong>" },
       {
         title: "quiz",
         description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "How do arid plants survive?",
+        question: "What helps dry river bed plants survive drought?",
         choices: [
-          { id: "c1", text: "They grow very fast" },
-          { id: "c2", text: "They store water in their leaves, stems, or roots" },
-          { id: "c3", text: "They attract rain" },
-          { id: "c4", text: "They only grow at night" },
-        ],
-        correct_answer: "c2",
-      },
-      { title: "happiness", description: "Tell us what you feel about Arid Garden <strong>(Earn 1 Quest Gem)</strong>" },
-    ],
-    order: 7,
-    pos: {
-      x: 26,
-      y: 23
-    }
-  },
-  {
-    id: "234jfgfb8",
-    map_id: "234j3h4j3",
-    title: "Desert Discovery Camp",
-    subtitle: "Desert Discovery Camp",
-    pretext: "",
-    image: "",
-    description: "",
-    did_you_know: `<p><strong>Did you know?</strong> The Desert Discovery Camp shows plants that thrive in harsh, dry conditions, teaching us how to adapt to extreme climates.</p>`,
-    is_visited: false,
-    challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Desert Discovery Camp. <strong>(Earn 1 Quest Gem)</strong>" },
-      {
-        title: "quiz",
-        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "What is the focus of the Desert Discovery Camp?",
-        choices: [
-          { id: "c1", text: "Tropical rainforest plants" },
-          { id: "c2", text: "Desert-adapted plants" },
-          { id: "c3", text: "Underwater plants" },
-          { id: "c4", text: "Alpine flowers" },
-        ],
-        correct_answer: "c2",
-      },
-      { title: "happiness", description: "Tell us what you feel about Desert Discovery Camp <strong>(Earn 1 Quest Gem)</strong>" },
-    ],
-    order: 8,
-    pos: {
-      x: 45,
-      y: 34
-    }
-  },
-  {
-    id: "234jfgfb4",
-    map_id: "234j3h4j3",
-    title: "Forest Clearing",
-    subtitle: "Forest Clearing",
-    pretext: "",
-    image: "",
-    description: "",
-    did_you_know: `<p><strong>Did you know?</strong> Forest clearings are important for wildlife, providing sunny spots where plants and insects can thrive.</p>`,
-    is_visited: false,
-    challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Forest Clearing. <strong>(Earn 1 Quest Gem)</strong>" },
-      {
-        title: "quiz",
-        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "Why are forest clearings important?",
-        choices: [
-          { id: "c1", text: "They provide sunny spots for plants and insects" },
-          { id: "c2", text: "They prevent trees from growing" },
-          { id: "c3", text: "They are used for camping only" },
-          { id: "c4", text: "They hold water underground" },
+          { id: "c1", text: "They store water in roots and stems" },
+          { id: "c2", text: "They grow only at night" },
+          { id: "c3", text: "They rely on animals" },
+          { id: "c4", text: "They avoid sunlight" },
         ],
         correct_answer: "c1",
       },
-      { title: "happiness", description: "Tell us what you feel about Forest Clearing <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "happiness", description: "Tell us what you feel about Dry River Bed <strong>(Earn 1 Quest Gem)</strong>" },
     ],
-    order: 9,
-    pos: {
-      x: 46.5,
-      y: 42.5
-    }
+    order: 7,
+    pos: { x: 36, y: 47.5 }
   },
   {
-    id: "234jfgfb9",
+    id: "cp_008",
     map_id: "234j3h4j3",
-    title: "Scribbly Path",
-    subtitle: "Scribbly Path",
-    pretext: "",
-    image: "",
-    description: "",
-    did_you_know: `<p><strong>Did you know?</strong> The Scribbly Path is named for the patterns scribbled into tree bark by moth larvae as they tunnel through.</p>`,
-    is_visited: false,
-    challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Scribbly Path. <strong>(Earn 1 Quest Gem)</strong>" },
-      {
-        title: "quiz",
-        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "What creates the “scribbles” on the trees?",
-        choices: [
-          { id: "c1", text: "Birds carving into bark" },
-          { id: "c2", text: "Moth larvae tunneling" },
-          { id: "c3", text: "Falling branches" },
-          { id: "c4", text: "Tree growth patterns" },
-        ],
-        correct_answer: "c2",
-      },
-      { title: "happiness", description: "Tell us what you feel about Scribbly Path <strong>(Earn 1 Quest Gem)</strong>" },
-    ],
-    order: 10,
-    pos: {
-      x: 51,
-      y: 49
-    }
-  },
-  {
-    id: "234jfgfb10",
-    map_id: "234j3h4x3",
     title: "Forest Garden",
     subtitle: "Forest Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "Walk beneath leafy roofs made by tall trees above you. This garden feels like a secret forest full of quiet magic.",
     did_you_know: `<p><strong>Did you know?</strong> Forest Gardens show layers of vegetation from ground cover to tall canopy trees, mimicking natural forests.</p>`,
     is_visited: false,
     challenges: [
@@ -434,52 +325,18 @@ export const checkpoints: Checkpoint[] = [
       },
       { title: "happiness", description: "Tell us what you feel about Forest Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
-    order: 11,
-    pos: {
-      x: 70,
-      y: 46
-    }
+    order: 8,
+    pos: { x: 26, y: 36 }
   },
   {
-    id: "234jfgfb11",
-    map_id: "234j3h4j3",
-    title: "Rift Path",
-    subtitle: "Rift Path",
-    pretext: "",
-    image: "",
-    description: "",
-    did_you_know: `<p><strong>Did you know?</strong> The Rift Path winds through rocky terrain, where you can see how plants adapt to thin soils and cracks in rocks.</p>`,
-    is_visited: false,
-    challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Rift Path. <strong>(Earn 1 Quest Gem)</strong>" },
-      {
-        title: "quiz",
-        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "What is unique about the plants along Rift Path?",
-        choices: [
-          { id: "c1", text: "They float on water" },
-          { id: "c2", text: "They grow in thin soils and cracks" },
-          { id: "c3", text: "They change color seasonally" },
-          { id: "c4", text: "They grow taller than trees" },
-        ],
-        correct_answer: "c2",
-      },
-      { title: "happiness", description: "Tell us what you feel about Rift Path <strong>(Earn 1 Quest Gem)</strong>" },
-    ],
-    order: 12,
-    pos: {
-      x: 67,
-      y: 37
-    }
-  },
-  {
-    id: "234jfgfb12",
+    id: "cp_009",
     map_id: "234j3h4j3",
     title: "Gondwana Garden",
     subtitle: "Gondwana Garden",
     pretext: "",
     image: "",
-    description: "",
+    description:
+      "Travel back in time to when dinosaurs once roamed the Earth. These ancient-looking plants are living fossils from a very old world.",
     did_you_know: `<p><strong>Did you know?</strong> The Gondwana Garden features ancient plant lineages that have been around since the supercontinent Gondwana existed millions of years ago.</p>`,
     is_visited: false,
     challenges: [
@@ -498,13 +355,791 @@ export const checkpoints: Checkpoint[] = [
       },
       { title: "happiness", description: "Tell us what you feel about Gondwana Garden <strong>(Earn 1 Quest Gem)</strong>" },
     ],
-    order: 13,
-    pos: {
-      x: 77,
-      y: 31
-    }
+    order: 9,
+    pos: { x: 23, y: 31 }
   },
+  {
+    id: "cp_010",
+    map_id: "234j3h4j3",
+    title: "Desert Discovery Camp",
+    subtitle: "Desert Discovery Camp",
+    pretext: "",
+    image: "",
+    description:
+      "Welcome to the desert, where plants know how to save every drop of water. Look around to see how life survives in hot, dry places.",
+    did_you_know: `<p><strong>Did you know?</strong> The Desert Discovery Camp shows plants that thrive in harsh, dry conditions, teaching us how to adapt to extreme climates.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Desert Discovery Camp. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the focus of the Desert Discovery Camp?",
+        choices: [
+          { id: "c1", text: "Tropical rainforest plants" },
+          { id: "c2", text: "Desert-adapted plants" },
+          { id: "c3", text: "Underwater plants" },
+          { id: "c4", text: "Alpine flowers" },
+        ],
+        correct_answer: "c2",
+      },
+      { title: "happiness", description: "Tell us what you feel about Desert Discovery Camp <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 10,
+    pos: { x: 37, y: 43 }
+  },
+  {
+    id: "cp_011",
+    map_id: "234j3h4j3",
+    title: "Gondwana Shelter",
+    subtitle: "Gondwana Shelter",
+    pretext: "",
+    image: "",
+    description:
+      "This cozy shelter is a resting spot in the ancient garden. Pause here and imagine the world as it was millions of years ago.",
+    did_you_know: `<p><strong>Did you know?</strong> Gondwana Shelter provides a cool shaded space, designed to feel like a natural ancient refuge.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Gondwana Shelter. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Gondwana Shelter best known for?",
+        choices: [
+          { id: "c1", text: "A sunny lookout" },
+          { id: "c2", text: "A cozy resting spot" },
+          { id: "c3", text: "A water feature" },
+          { id: "c4", text: "A playground" },
+        ],
+        correct_answer: "c2",
+      },
+      { title: "happiness", description: "Tell us what you feel about Gondwana Shelter <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 11,
+    pos: { x: 34, y: 34 }
+  },
+  {
+    id: "cp_012",
+    map_id: "234j3h4j3",
+    title: "Lilypad Bridge",
+    subtitle: "Lilypad Bridge",
+    pretext: "",
+    image: "",
+    description:
+      "Hop across the water like a frog on floating leaves. This bridge feels like a fairy path over a magical pond.",
+    did_you_know: `<p><strong>Did you know?</strong> Lilypad bridges are designed to look like floating leaves and blend into natural water settings.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Lilypad Bridge. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What makes Lilypad Bridge feel magical?",
+        choices: [
+          { id: "c1", text: "It glows at night" },
+          { id: "c2", text: "It looks like floating leaves" },
+          { id: "c3", text: "It is made of glass" },
+          { id: "c4", text: "It has flowers on it" },
+        ],
+        correct_answer: "c2",
+      },
+      { title: "happiness", description: "Tell us what you feel about Lilypad Bridge <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 12,
+    pos: { x: 32, y: 26 }
+  },
+  {
+    id: "cp_013",
+    map_id: "234j3h4j3",
+    title: "Ian Potter Lakeside Precinct Lawn",
+    subtitle: "Ian Potter Lakeside Precinct Lawn",
+    pretext: "",
+    image: "",
+    description:
+      "A wide open grassy space perfect for stretching, resting, or cloud watching. It’s a peaceful spot beside the water.",
+    did_you_know: `<p><strong>Did you know?</strong> Lakeside lawns are designed to provide open space for rest and recreation near water.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of the lawn. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is this lawn best used for?",
+        choices: [
+          { id: "c1", text: "Planting trees" },
+          { id: "c2", text: "Relaxing and cloud watching" },
+          { id: "c3", text: "Playing sports only" },
+          { id: "c4", text: "Growing crops" },
+        ],
+        correct_answer: "c2",
+      },
+      { title: "happiness", description: "Tell us what you feel about Ian Potter Lakeside Precinct Lawn <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 13,
+    pos: { x: 26, y: 23 }
+  },
+  {
+    id: "cp_014",
+    map_id: "234j3h4j3",
+    title: "How to Garden",
+    subtitle: "How to Garden",
+    pretext: "",
+    image: "",
+    description:
+      "This garden shows simple tricks for growing happy plants. It’s like a how-to book made of soil, leaves, and sunshine.",
+    did_you_know: `<p><strong>Did you know?</strong> How to Garden is designed to teach practical gardening tips for home gardens.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of How to Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the main purpose of How to Garden?",
+        choices: [
+          { id: "c1", text: "To show gardening tips" },
+          { id: "c2", text: "To show desert plants" },
+          { id: "c3", text: "To grow tall trees" },
+          { id: "c4", text: "To build a house" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about How to Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 14,
+    pos: { x: 39.8, y: 16.8 }
+  },
+  {
+    id: "cp_015",
+    map_id: "234j3h4j3",
+    title: "Promenade Garden",
+    subtitle: "Promenade Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Stroll along this long, graceful garden path like royalty on a parade. Every step reveals something new to see.",
+    did_you_know: `<p><strong>Did you know?</strong> Promenade Gardens are designed to be long, walkable paths with beautiful views.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Promenade Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What makes Promenade Garden special?",
+        choices: [
+          { id: "c1", text: "It’s a long graceful path" },
+          { id: "c2", text: "It’s a dense forest" },
+          { id: "c3", text: "It’s a desert area" },
+          { id: "c4", text: "It’s a lake" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Promenade Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 15,
+    pos: { x: 39.8, y: 19 }
+  },
+  {
+    id: "cp_016",
+    map_id: "234j3h4j3",
+    title: "Backyard Garden",
+    subtitle: "Backyard Garden",
+    pretext: "",
+    image: "",
+    description:
+      "This garden feels just like home, only bigger and greener. It shows how anyone can grow plants in their own space.",
+    did_you_know: `<p><strong>Did you know?</strong> Backyard Gardens show how everyday plants can thrive in home spaces.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Backyard Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What does Backyard Garden show?",
+        choices: [
+          { id: "c1", text: "How to grow plants at home" },
+          { id: "c2", text: "How to grow desert plants" },
+          { id: "c3", text: "How to build a bridge" },
+          { id: "c4", text: "How to build a house" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Backyard Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 16,
+    pos: { x: 39.8, y: 21.2 }
+  },
+  {
+    id: "cp_017",
+    map_id: "234j3h4j3",
+    title: "Lifestyle Garden",
+    subtitle: "Lifestyle Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Plants and people work together here to make life better. Discover how gardens can be part of everyday living.",
+    did_you_know: `<p><strong>Did you know?</strong> Lifestyle Gardens show how gardens can support daily life and wellbeing.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Lifestyle Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the purpose of Lifestyle Garden?",
+        choices: [
+          { id: "c1", text: "To show gardens in everyday life" },
+          { id: "c2", text: "To show desert survival" },
+          { id: "c3", text: "To show a lake" },
+          { id: "c4", text: "To show mountains" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Lifestyle Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 17,
+    pos: { x: 39.8, y: 23.5 }
+  },
+  {
+    id: "cp_018",
+    map_id: "234j3h4j3",
+    title: "Greening Garden",
+    subtitle: "Greening Garden",
+    pretext: "",
+    image: "",
+    description:
+      "This garden is all about helping the planet feel healthier. The plants here work hard to clean the air and cool the land.",
+    did_you_know: `<p><strong>Did you know?</strong> Greening Gardens help reduce heat and improve air quality in urban spaces.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Greening Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the main purpose of Greening Garden?",
+        choices: [
+          { id: "c1", text: "To clean air and cool the land" },
+          { id: "c2", text: "To grow only flowers" },
+          { id: "c3", text: "To build houses" },
+          { id: "c4", text: "To build roads" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Greening Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 18,
+    pos: { x: 39.8, y: 25.5 }
+  },
+  {
+    id: "cp_019",
+    map_id: "234j3h4j3",
+    title: "Seaside Garden",
+    subtitle: "Seaside Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Feel the coastal vibes as plants that love salty air grow here. It’s like a beach holiday made of leaves and flowers.",
+    did_you_know: `<p><strong>Did you know?</strong> Seaside gardens feature plants that tolerate salt spray and windy conditions.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Seaside Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is special about Seaside Garden plants?",
+        choices: [
+          { id: "c1", text: "They tolerate salty air" },
+          { id: "c2", text: "They only grow underground" },
+          { id: "c3", text: "They only grow in shade" },
+          { id: "c4", text: "They hate wind" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Seaside Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 19,
+    pos: { x: 42.5, y: 28.5 }
+  },
+  {
+    id: "cp_020",
+    map_id: "234j3h4j3",
+    title: "Melaleuca Spits",
+    subtitle: "Melaleuca Spits",
+    pretext: "",
+    image: "",
+    description:
+      "Tall, spiky plants reach out like nature’s fireworks. This garden feels wild, playful, and full of surprises.",
+    did_you_know: `<p><strong>Did you know?</strong> Melaleuca plants are known for their spiky leaves and strong, aromatic oils.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Melaleuca Spits. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is special about Melaleuca plants?",
+        choices: [
+          { id: "c1", text: "They have spiky leaves and aromatic oils" },
+          { id: "c2", text: "They grow only in deserts" },
+          { id: "c3", text: "They are underwater plants" },
+          { id: "c4", text: "They are always red" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Melaleuca Spits <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 20,
+    pos: { x: 63.5, y: 50.8 }
+  },
+  {
+    id: "cp_021",
+    map_id: "234j3h4j3",
+    title: "Weird and Wonderful Garden",
+    subtitle: "Weird and Wonderful Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Nothing looks normal here—and that’s the fun part! Discover strange shapes, curious plants, and amazing surprises.",
+    did_you_know: `<p><strong>Did you know?</strong> Weird and Wonderful Garden features unusual plants with bizarre shapes and textures.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Weird and Wonderful Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What makes this garden unique?",
+        choices: [
+          { id: "c1", text: "It has strange and unusual plants" },
+          { id: "c2", text: "It has only grass" },
+          { id: "c3", text: "It has only flowers" },
+          { id: "c4", text: "It has no plants" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Weird and Wonderful Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 21,
+    pos: { x: 49, y: 37.5 }
+  },
+  {
+    id: "cp_022",
+    map_id: "234j3h4j3",
+    title: "Gibson Hill",
+    subtitle: "Gibson Hill",
+    pretext: "",
+    image: "",
+    description:
+      "Climb up for a big view and a sense of adventure. This hill feels like a lookout in a storybook land.",
+    did_you_know: `<p><strong>Did you know?</strong> Hills like Gibson Hill provide great viewpoints for seeing the whole garden layout.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Gibson Hill. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "Why is Gibson Hill special?",
+        choices: [
+          { id: "c1", text: "It offers a great view" },
+          { id: "c2", text: "It’s a water garden" },
+          { id: "c3", text: "It has no plants" },
+          { id: "c4", text: "It’s underground" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Gibson Hill <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 22,
+    pos: { x: 46.5, y: 42.5 }
+  },
+  {
+    id: "cp_023",
+    map_id: "234j3h4j3",
+    title: "Hawson Hill",
+    subtitle: "Hawson Hill",
+    pretext: "",
+    image: "",
+    description:
+      "A peaceful rise where the garden spreads out below you. It’s a perfect place to pause and feel on top of the world.",
+    did_you_know: `<p><strong>Did you know?</strong> Hills like Hawson Hill provide a quiet place to rest and observe the garden.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Hawson Hill. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Hawson Hill best known for?",
+        choices: [
+          { id: "c1", text: "Peaceful views" },
+          { id: "c2", text: "Desert plants" },
+          { id: "c3", text: "A river" },
+          { id: "c4", text: "A bridge" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Hawson Hill <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 23,
+    pos: { x: 67, y: 37 }
+  },
+  {
+    id: "cp_024",
+    map_id: "234j3h4j3",
+    title: "Arbour Garden",
+    subtitle: "Arbour Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Walk under leafy tunnels that feel like secret doorways. This garden feels cool, shady, and magical.",
+    did_you_know: `<p><strong>Did you know?</strong> Arbour gardens are created using climbing plants over structures to form shaded tunnels.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Arbour Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is an arbour garden known for?",
+        choices: [
+          { id: "c1", text: "Leafy tunnels" },
+          { id: "c2", text: "Sand dunes" },
+          { id: "c3", text: "Cactus only" },
+          { id: "c4", text: "No plants" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Arbour Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 24,
+    pos: { x: 76, y: 31.5 }
+  },
+  {
+    id: "cp_025",
+    map_id: "234j3h4j3",
+    title: "Woodlots",
+    subtitle: "Woodlots",
+    pretext: "",
+    image: "",
+    description:
+      "Small forests filled with sturdy trees and rustling leaves. It’s a great place to listen for birds and bugs.",
+    did_you_know: `<p><strong>Did you know?</strong> Woodlots are small wooded areas that support wildlife and biodiversity.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Woodlots. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is special about woodlots?",
+        choices: [
+          { id: "c1", text: "They support wildlife" },
+          { id: "c2", text: "They are only for flowers" },
+          { id: "c3", text: "They have no trees" },
+          { id: "c4", text: "They are made of sand" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Woodlots <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 25,
+    pos: { x: 79, y: 40 }
+  },
+  {
+    id: "cp_026",
+    map_id: "234j3h4j3",
+    title: "Cultivar Garden",
+    subtitle: "Cultivar Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Meet plants that have been carefully grown by people over time. Each one has a special look or talent.",
+    did_you_know: `<p><strong>Did you know?</strong> Cultivar gardens feature plants selected for special traits like colour, shape, or hardiness.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Cultivar Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What are cultivar plants known for?",
+        choices: [
+          { id: "c1", text: "Special traits selected by people" },
+          { id: "c2", text: "Growing only in deserts" },
+          { id: "c3", text: "Being underwater plants" },
+          { id: "c4", text: "Never blooming" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Cultivar Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 26,
+    pos: { x: 71, y: 43 }
+  },
+  {
+    id: "cp_027",
+    map_id: "234j3h4j3",
+    title: "Research Garden",
+    subtitle: "Research Garden",
+    pretext: "",
+    image: "",
+    description:
+      "This is where plant scientists test ideas and learn new things. It’s a thinking garden full of smart plants.",
+    did_you_know: `<p><strong>Did you know?</strong> Research Gardens help scientists study plant growth, climate response, and biodiversity.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Research Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the purpose of Research Garden?",
+        choices: [
+          { id: "c1", text: "To study plants and learn new things" },
+          { id: "c2", text: "To grow only food crops" },
+          { id: "c3", text: "To host concerts only" },
+          { id: "c4", text: "To build roads" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Research Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 27,
+    pos: { x: 77, y: 43 }
+  },
+  {
+    id: "cp_028",
+    map_id: "234j3h4j3",
+    title: "Amphitheatre",
+    subtitle: "Amphitheatre",
+    pretext: "",
+    image: "",
+    description:
+      "A giant outdoor stage made by nature itself. Imagine stories, music, and performances coming alive here.",
+    did_you_know: `<p><strong>Did you know?</strong> Amphitheatres use natural slopes to create seating areas and great acoustics.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of the Amphitheatre. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is the Amphitheatre best known for?",
+        choices: [
+          { id: "c1", text: "Natural outdoor stage" },
+          { id: "c2", text: "Desert plants" },
+          { id: "c3", text: "A lake" },
+          { id: "c4", text: "A bridge" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Amphitheatre <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 28,
+    pos: { x: 70, y: 46 }
+  },
+  {
+    id: "cp_029",
+    map_id: "234j3h4j3",
+    title: "Rockpool Pavilion",
+    subtitle: "Rockpool Pavilion",
+    pretext: "",
+    image: "",
+    description:
+      "Inspired by rocky pools near the ocean, this spot feels cool and splashy. Look closely and imagine tiny sea creatures nearby.",
+    did_you_know: `<p><strong>Did you know?</strong> Rockpool pavilions mimic coastal rock pools, with plants and textures that reflect seaside life.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Rockpool Pavilion. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What does Rockpool Pavilion mimic?",
+        choices: [
+          { id: "c1", text: "Coastal rock pools" },
+          { id: "c2", text: "Desert dunes" },
+          { id: "c3", text: "Mountain peaks" },
+          { id: "c4", text: "Deep ocean trenches" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Rockpool Pavilion <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 29,
+    pos: { x: 50.7, y: 48.8 }
+  },
+  {
+    id: "cp_030",
+    map_id: "234j3h4j3",
+    title: "Serpentine Path",
+    subtitle: "Serpentine Path",
+    pretext: "",
+    image: "",
+    description:
+      "This path wiggles and winds like a friendly snake. Follow it and see where the adventure takes you.",
+    did_you_know: `<p><strong>Did you know?</strong> Serpentine paths are designed to slow your walk and encourage discovery.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Serpentine Path. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "Why is the Serpentine Path shaped this way?",
+        choices: [
+          { id: "c1", text: "To slow your walk and encourage discovery" },
+          { id: "c2", text: "To make it shorter" },
+          { id: "c3", text: "To be a straight line" },
+          { id: "c4", text: "To avoid plants" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Serpentine Path <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 30,
+    pos: { x: 50.7, y: 48.8 }
+  },
+  {
+    id: "cp_031",
+    map_id: "234j3h4j3",
+    title: "Kids Backyard",
+    subtitle: "Kids Backyard",
+    pretext: "",
+    image: "",
+    description:
+      "A garden made just for play, discovery, and fun. Touch, explore, and imagine all you like here.",
+    did_you_know: `<p><strong>Did you know?</strong> Kids Backyards are designed to be interactive and sensory-friendly for children.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Kids Backyard. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Kids Backyard designed for?",
+        choices: [
+          { id: "c1", text: "Play and discovery" },
+          { id: "c2", text: "Only quiet walking" },
+          { id: "c3", text: "Only adult gardening" },
+          { id: "c4", text: "Only flowers" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Kids Backyard <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 31,
+    pos: { x: 63.5, y: 50.8 }
+  },
+  {
+    id: "cp_032",
+    map_id: "234j3h4j3",
+    title: "Home Garden",
+    subtitle: "Home Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Simple, cozy, and full of everyday plant ideas. This garden shows how small spaces can be full of life.",
+    did_you_know: `<p><strong>Did you know?</strong> Home Gardens are designed to show real-life gardening ideas for small spaces.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Home Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Home Garden best for?",
+        choices: [
+          { id: "c1", text: "Small space gardening ideas" },
+          { id: "c2", text: "Desert plants only" },
+          { id: "c3", text: "Only trees" },
+          { id: "c4", text: "Only flowers" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Home Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 32,
+    pos: { x: 64, y: 55.5 }
+  },
+  {
+    id: "cp_033",
+    map_id: "234j3h4j3",
+    title: "Future Garden",
+    subtitle: "Future Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Step into tomorrow and see how gardens might grow in years to come. New ideas and clever designs live here.",
+    did_you_know: `<p><strong>Did you know?</strong> Future Gardens explore innovative gardening ideas like sustainability and new plant varieties.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Future Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Future Garden about?",
+        choices: [
+          { id: "c1", text: "New and innovative gardening ideas" },
+          { id: "c2", text: "Old-fashioned gardening only" },
+          { id: "c3", text: "Only trees" },
+          { id: "c4", text: "No plants" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Future Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 33,
+    pos: { x: 64, y: 60.5 }
+  },
+  {
+    id: "cp_034",
+    map_id: "234j3h4j3",
+    title: "Water Saving Garden",
+    subtitle: "Water Saving Garden",
+    pretext: "",
+    image: "",
+    description:
+      "This garden is super smart with water. Learn how plants can stay happy using less.",
+    did_you_know: `<p><strong>Did you know?</strong> Water Saving Gardens feature plants that thrive with minimal water.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Water Saving Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What is Water Saving Garden known for?",
+        choices: [
+          { id: "c1", text: "Plants that thrive with less water" },
+          { id: "c2", text: "Plants that need constant water" },
+          { id: "c3", text: "No plants" },
+          { id: "c4", text: "Only flowers" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Water Saving Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 34,
+    pos: { x: 63.5, y: 65 }
+  },
+  {
+    id: "cp_035",
+    map_id: "234j3h4j3",
+    title: "Diversity Garden",
+    subtitle: "Diversity Garden",
+    pretext: "",
+    image: "",
+    description:
+      "Many different plants live together here in harmony. It’s a celebration of how differences make gardens stronger.",
+    did_you_know: `<p><strong>Did you know?</strong> Diversity Gardens show how different plants support each other in ecosystems.</p>`,
+    is_visited: false,
+    challenges: [
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Diversity Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      {
+        title: "quiz",
+        description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
+        question: "What does Diversity Garden celebrate?",
+        choices: [
+          { id: "c1", text: "Different plants living together" },
+          { id: "c2", text: "Only one type of plant" },
+          { id: "c3", text: "No plants" },
+          { id: "c4", text: "Only desert plants" },
+        ],
+        correct_answer: "c1",
+      },
+      { title: "happiness", description: "Tell us what you feel about Diversity Garden <strong>(Earn 1 Quest Gem)</strong>" },
+    ],
+    order: 35,
+    pos: { x: 62, y: 69.5 }
+  }
 ];
+
 
 
 export type OnboardingQuestionsChoices = {
