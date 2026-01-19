@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CurrentUserProvider } from "./contexts/currentUserContext";
+import { AppDataProvider } from "./contexts/appDataContext";
 
 const fontFace = Inter({
   subsets: ["latin"],
@@ -24,9 +25,11 @@ export default function RootLayout({
       <body
         className={`${fontFace.variable} antialiased`}
       >
-        <CurrentUserProvider>
-          {children}
-        </CurrentUserProvider>
+        <AppDataProvider>
+          <CurrentUserProvider>
+            {children}
+          </CurrentUserProvider>
+        </AppDataProvider>
       </body>
     </html>
   );

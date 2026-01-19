@@ -1,18 +1,18 @@
 "use client";
 
-import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react";
 import { User, user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type CurrentUserContextType = {
-  currentUser: User | null;
-  setCurrentUser: (user: User | null) => void;
-  maps: UserMap[] | null;
-  setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>; 
-  checkpoints: UserCheckpoint[] | null;
-  setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
-  addGems: (amount: number) => void;
-  addCheckpointGems: (checkpointId: string, amount: number) => void;
-  markCheckpointVisited: (checkpointId: string) => void;
+    currentUser: User | null;
+    setCurrentUser: (user: User | null) => void;
+    maps: UserMap[] | null;
+    setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
+    checkpoints: UserCheckpoint[] | null;
+    setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
+    addGems: (amount: number) => void;
+    addCheckpointGems: (checkpointId: string, amount: number) => void;
+    markCheckpointVisited: (checkpointId: string) => void;
 };
 
 const CurrentUserContext = createContext<CurrentUserContextType | undefined>(undefined);
@@ -27,7 +27,7 @@ const STORAGE_KEYS = {
 };
 
 export const CurrentUserProvider = ({ children }: Props) => {
-    // Initialize from localStorage
+
     const [currentUser, setCurrentUser] = useState<User | null>(() => {
         if (typeof window !== 'undefined') {
             try {
@@ -42,7 +42,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
         }
         return null;
     });
-    
+
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(() => {
         if (typeof window !== 'undefined') {
@@ -119,7 +119,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const addCheckpointGems = (checkpointId: string, amount: number) => {
         const userId = currentUserRef.current?.id;
         if (!userId) return;
-        
+
         setCheckpoints((prev) => {
             if (!prev) {
                 // If no checkpoints exist, create one
@@ -136,7 +136,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                     gems_collected: amount
                 }];
             }
-            
+
             const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
             if (existingCheckpoint) {
                 // Update existing checkpoint
@@ -171,7 +171,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const markCheckpointVisited = (checkpointId: string) => {
         const userId = currentUserRef.current?.id;
         if (!userId) return;
-        
+
         setCheckpoints((prev) => {
             if (!prev) {
                 // If no checkpoints exist, create one
@@ -188,7 +188,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                     gems_collected: 0
                 }];
             }
-            
+
             const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
             if (existingCheckpoint) {
                 // Update existing checkpoint
@@ -224,7 +224,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
         const currentUserId = currentUser.id
         const checkpointsRes = user_checkpoints.filter(c => c.user_id == currentUserId)
         const mapsRes = user_maps.filter(m => m.user_id == currentUserId)
-           
+
         queueMicrotask(() => {
             if (mapsRes) {
                 setMaps(mapsRes)

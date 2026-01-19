@@ -17,12 +17,12 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
   // Map stopId to overlay frame
   const overlays: Record<string, string> = {
-    "1": "/frames/frame1.png",
+    "1": "/frames/frame-1.png",
     "2": "/frames/frame2.png",
     "3": "/frames/frame3.png",
   };
   // const overlaySrc = overlays[stopId] || "/frames/frame1.png";
-  const overlaySrc ="/images/mascot1.png";
+  const overlaySrc ="/frames/frame-1.png";
 
   useEffect(() => {
     let mounted = true;
@@ -89,7 +89,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
     // Draw overlay
     const overlayImg = overlayRef.current;
-    ctx.drawImage(overlayImg, -120, height - 300, 270, 300);
+    ctx.drawImage(overlayImg, 0, 0, width, height);
 
 
     // Save snapshot
@@ -133,7 +133,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
         {/* Overlay image */}
         <img
-          className="absolute w-[190px] h-[200px] bottom-0 -left-20 pointer-events-none"
+          className="absolute top-0 aspect-[4/3] pointer-events-none"
           ref={overlayRef}
           src={overlaySrc}
           alt="AR Frame"
