@@ -66,7 +66,6 @@ export default function Page() {
 
     }
 
-    
     return (
         <>
             {!challengesData || challengesData.length == 0 ? <>This map has no challenges available.</> :

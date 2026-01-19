@@ -377,8 +377,8 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
                 </div>
                 <p className="text-lg font-bold mb-4">
                   You earned <span className="text-2xl inline-flex items-center gap-1">
-                    <Sparkles className="fill-yellow-500" size={24} />
-                    {Math.max(1, Math.floor(tileCount / 2))} Gems
+                    <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
+                    {Math.max(1, Math.floor(tileCount / 2))} Worms
                   </span>
                 </p>
               </div>
@@ -472,9 +472,9 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
             <div className="text-sm text-gray-600 space-y-2">
               <ul className="list-disc list-inside space-y-1">
                 <li>Click on cards to flip them and find matching pairs</li>
-                <li>Match all pairs to win and earn gems</li>
+                <li>Match all pairs to win and earn worms</li>
                 <li>Adjust the number of tiles before starting a new game</li>
-                <li>More tiles = more gems, but harder difficulty!</li>
+                <li>More tiles = more worms, but harder difficulty!</li>
               </ul>
             </div>
           </div>

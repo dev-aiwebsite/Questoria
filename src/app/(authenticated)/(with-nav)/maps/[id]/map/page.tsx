@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkpoint, checkpoints, currentUserId, user_checkpoints, users } from "@/lib/dummy";
-import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -9,6 +9,8 @@ import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
+import SlidingPuzzleGame from "@/components/SlidingPuzzleGame";
+import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 
 // Base map width - change this to adjust default zoom level
@@ -36,7 +38,7 @@ export default function Page() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
   const [isGameOpen, setIsGameOpen] = useState(false)
-  const [gameType, setGameType] = useState<'memory' | 'wordsearch'>('memory')
+  const [gameType, setGameType] = useState<'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle'>('memory')
   const [showGemsAlreadyCollected, setShowGemsAlreadyCollected] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
@@ -453,12 +455,12 @@ export default function Page() {
 
   return (<>
     <div className="relative">
-      {/* Gem Counter - Top Right */}
+      {/* Worm Counter - Top Right */}
       <div 
         ref={gemCounterRef}
         className="fixed top-24 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
       >
-        <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
+        <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
         <span className="font-bold text-lg">
           {currentUser?.gems || 0}
         </span>
@@ -600,8 +602,9 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    // Randomly select game type
-                    const randomGame = Math.random() < 0.5 ? 'memory' : 'wordsearch';
+                    // Randomly select game type (1/4 chance for each)
+                    const random = Math.random();
+                    const randomGame = random < 0.25 ? 'memory' : random < 0.5 ? 'wordsearch' : random < 0.75 ? 'slidingpuzzle' : 'jigsawpuzzle';
                     setGameType(randomGame);
                     setIsGameOpen(true);
                   }}
@@ -744,7 +747,7 @@ export default function Page() {
             mapId={mapId}
           />
         );
-      } else {
+      } else if (gameType === 'wordsearch') {
         return (
           <WordSearchGame
             onWin={handleGameWin}
@@ -753,18 +756,42 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            gridSize={6}
+            gridSize={8}
+          />
+        );
+      } else if (gameType === 'slidingpuzzle') {
+        return (
+          <SlidingPuzzleGame
+            onWin={handleGameWin}
+            onClose={() => {
+              setIsGameOpen(false);
+            }}
+            checkpointId={checkpointId}
+            mapId={mapId}
+            puzzleSize={3}
+          />
+        );
+      } else {
+        return (
+          <JigsawPuzzleGame
+            onWin={handleGameWin}
+            onClose={() => {
+              setIsGameOpen(false);
+            }}
+            checkpointId={checkpointId}
+            mapId={mapId}
+            puzzleSize={4}
           />
         );
       }
     })()}
 
-    {/* Gems Already Collected Message */}
+    {/* Worms Already Collected Message */}
     {showGemsAlreadyCollected && (
       <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl border-3 border-black p-6 max-w-md w-full text-center">
-          <h3 className="text-2xl font-bold mb-4">Gems Already Collected</h3>
-          <p className="text-lg mb-4">You have already collected gems for this checkpoint.</p>
+          <h3 className="text-2xl font-bold mb-4">Worms Already Collected</h3>
+          <p className="text-lg mb-4">You have already collected worms for this checkpoint.</p>
           <button
             onClick={() => setShowGemsAlreadyCollected(false)}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -775,7 +802,7 @@ export default function Page() {
       </div>
     )}
 
-    {/* Animated Gems */}
+    {/* Animated Worms */}
     {animatingGems.map((gem) => (
       <div
         key={gem.id}
@@ -787,7 +814,7 @@ export default function Page() {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <Sparkles className="fill-yellow-500 text-yellow-500" size={32} />
+        <Image src="/images/worm.png" alt="Worm" width={40} height={40} className="object-contain" />
       </div>
     ))}
       </>
@@ -882,8 +909,8 @@ function CheckpointInfoCard({
                 className="flex items-center gap-2 mb-4 justify-center"
                 style={{ fontSize: bodyFontSize }}
               >
-                <Sparkles className="fill-yellow-500 text-yellow-500" size={20} />
-                <span className="font-bold">Gems Collected: {checkpointGems}</span>
+                <Image src="/images/worm.png" alt="Worm" width={28} height={28} className="object-contain" />
+                <span className="font-bold">Worms Collected: {checkpointGems}</span>
               </div>
             )}
             <button

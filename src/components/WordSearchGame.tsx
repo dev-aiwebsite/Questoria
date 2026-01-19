@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { X } from "lucide-react"
+import { X, Trophy } from "lucide-react"
+import Image from "next/image"
 
 interface WordSearchGameProps {
   onWin: (gems: number) => void
@@ -24,7 +25,7 @@ export default function WordSearchGame({
   onClose,
   checkpointId,
   mapId,
-  gridSize: initialGridSize = 6
+  gridSize: initialGridSize = 8
 }: WordSearchGameProps) {
   const [currentGridSize, setCurrentGridSize] = useState(initialGridSize)
   const [showHowToPlay, setShowHowToPlay] = useState(false)
@@ -37,12 +38,122 @@ export default function WordSearchGame({
   const [moves, setMoves] = useState(0)
   const [wordCellMap, setWordCellMap] = useState<Map<string, Set<string>>>(new Map())
   const [foundWordCells, setFoundWordCells] = useState<Set<string>>(new Set())
+  const [lastActionTime, setLastActionTime] = useState<number>(Date.now())
+  const [bouncingCells, setBouncingCells] = useState<Set<string>>(new Set())
   const gridRef = useRef<HTMLDivElement>(null)
+  const hintTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const hintStopTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   // Generate word search grid
   useEffect(() => {
     generateGrid()
   }, [currentGridSize])
+
+  // Initialize CSS for bounce animation
+  useEffect(() => {
+    if (!document.getElementById('word-search-bounce-styles')) {
+      const style = document.createElement('style')
+      style.id = 'word-search-bounce-styles'
+      style.textContent = `
+        @keyframes wordSearchBounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          25% {
+            transform: translateY(-8px);
+          }
+          50% {
+            transform: translateY(0);
+          }
+          75% {
+            transform: translateY(-4px);
+          }
+        }
+        .word-search-bounce {
+          animation: wordSearchBounce 0.6s ease-in-out infinite;
+        }
+      `
+      document.head.appendChild(style)
+    }
+  }, [])
+
+  // Hint timer: bounce letters of one random remaining word after 10 seconds of inactivity
+  // Continues showing hints every 10 seconds if user hasn't interacted
+  useEffect(() => {
+    // Clear existing timers
+    if (hintTimerRef.current) {
+      clearTimeout(hintTimerRef.current)
+      hintTimerRef.current = null
+    }
+    if (hintStopTimerRef.current) {
+      clearTimeout(hintStopTimerRef.current)
+      hintStopTimerRef.current = null
+    }
+    
+    // Stop any current bouncing when user interacts
+    setBouncingCells(new Set())
+
+    // Don't show hints if game is won
+    if (foundWords.size === words.length || words.length === 0) {
+      return
+    }
+
+    // Function to show a hint
+    const showHint = () => {
+      // Get all remaining (not found) words - double check they're not found
+      const remainingWords = words.filter(word => !foundWords.has(word))
+      
+      if (remainingWords.length === 0) {
+        setBouncingCells(new Set())
+        return
+      }
+
+      // Pick one random remaining word
+      const randomWord = remainingWords[Math.floor(Math.random() * remainingWords.length)]
+      const wordCells = wordCellMap.get(randomWord)
+      
+      // Double check this word is still not found
+      if (wordCells && !foundWords.has(randomWord)) {
+        setBouncingCells(new Set(wordCells))
+
+        // Stop bouncing after 3 seconds, then wait 10 seconds for next hint
+        hintStopTimerRef.current = setTimeout(() => {
+          setBouncingCells(new Set())
+          
+          // Check if user still hasn't interacted and game isn't won
+          // Also verify there are still remaining words
+          const stillRemainingWords = words.filter(word => !foundWords.has(word))
+          if (stillRemainingWords.length > 0) {
+            hintTimerRef.current = setTimeout(() => {
+              showHint()
+            }, 10000)
+          }
+        }, 3000)
+      }
+    }
+
+    // Set up initial timer to show first hint after 10 seconds
+    hintTimerRef.current = setTimeout(() => {
+      showHint()
+    }, 10000)
+
+    return () => {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current)
+        hintTimerRef.current = null
+      }
+      if (hintStopTimerRef.current) {
+        clearTimeout(hintStopTimerRef.current)
+        hintStopTimerRef.current = null
+      }
+    }
+  }, [lastActionTime, foundWords, words, wordCellMap])
+
+  // Function to update last action time (resets the hint timer)
+  const updateLastActionTime = () => {
+    setLastActionTime(Date.now())
+    setBouncingCells(new Set()) // Stop bouncing when user interacts
+  }
 
   const generateGrid = () => {
     // Select 8-10 random nature words
@@ -153,6 +264,7 @@ export default function WordSearchGame({
   const getCellKey = (row: number, col: number) => `${row}-${col}`
 
   const handleMouseDown = (row: number, col: number) => {
+    updateLastActionTime()
     setIsSelecting(true)
     setStartCell({ row, col })
     setSelectedCells(new Set([getCellKey(row, col)]))
@@ -161,6 +273,7 @@ export default function WordSearchGame({
   const handleMouseEnter = (row: number, col: number) => {
     if (!isSelecting || !startCell) return
     
+    updateLastActionTime()
     const cells = getCellsBetween(startCell, { row, col })
     setSelectedCells(new Set(cells.map(c => getCellKey(c.row, c.col))))
   }
@@ -168,6 +281,7 @@ export default function WordSearchGame({
   const handleMouseUp = () => {
     if (!isSelecting) return
     
+    updateLastActionTime()
     setIsSelecting(false)
     checkSelectedWord()
     setStartCell(null)
@@ -236,6 +350,7 @@ export default function WordSearchGame({
     for (const hiddenWord of words) {
       if (word === hiddenWord || reversedWord === hiddenWord) {
         if (!foundWords.has(hiddenWord)) {
+          updateLastActionTime() // Reset timer when word is found
           const newFoundWords = new Set([...foundWords, hiddenWord])
           setFoundWords(newFoundWords)
           
@@ -267,6 +382,7 @@ export default function WordSearchGame({
 
   const handleTouchStart = (e: React.TouchEvent, row: number, col: number) => {
     e.preventDefault()
+    updateLastActionTime()
     handleMouseDown(row, col)
   }
 
@@ -274,6 +390,7 @@ export default function WordSearchGame({
     e.preventDefault()
     if (!isSelecting || !gridRef.current) return
     
+    updateLastActionTime()
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     if (!element) return
@@ -292,122 +409,280 @@ export default function WordSearchGame({
   }
 
   const resetGame = () => {
+    updateLastActionTime()
     generateGrid()
   }
 
+  // Animate clouds from right to left using CSS animations
+  useEffect(() => {
+    // Add CSS keyframes for cloud animation if not already present
+    if (!document.getElementById('cloud-animation-styles')) {
+      const style = document.createElement('style');
+      style.id = 'cloud-animation-styles';
+      style.textContent = `
+        @keyframes cloudMove {
+          0% {
+            transform: translateX(calc(100vw + 500px));
+          }
+          100% {
+            transform: translateX(calc(-100vw - 500px));
+          }
+        }
+        .cloud-animation {
+          animation: cloudMove 20s linear infinite;
+        }
+        .cloud-animation:nth-of-type(1) {
+          animation-duration: 20s;
+          animation-delay: 0s;
+        }
+        .cloud-animation:nth-of-type(2) {
+          animation-duration: 25s;
+          animation-delay: 5s;
+        }
+        .cloud-animation:nth-of-type(3) {
+          animation-duration: 22s;
+          animation-delay: 10s;
+        }
+        .cloud-animation:nth-of-type(4) {
+          animation-duration: 20s;
+          animation-delay: -10s;
+        }
+        .cloud-animation:nth-of-type(5) {
+          animation-duration: 25s;
+          animation-delay: -5s;
+        }
+        .cloud-animation:nth-of-type(6) {
+          animation-duration: 22s;
+          animation-delay: -15s;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   return (
     <div className="fixed inset-0 z-[999999] bg-black/80 flex items-center justify-center p-4">
-      <div 
-        className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        data-game-modal
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Nature Word Search</h2>
+      <div data-game-modal className="border-3 border-black max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col" style={{ backgroundColor: '#669f90' }}>
+        {/* Blue Sky Header with Animated Clouds */}
+        <div className="relative h-32 overflow-visible border-b-3 border-black" style={{ backgroundColor: '#5ab2e0' }}>
+          {/* Animated Clouds - Multiple sets for continuous coverage */}
+          {/* First set - starts from right */}
+          <Image
+            src="/memoryMatch/cloud 1.png"
+            alt="Cloud 1"
+            width={66}
+            height={50}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '10px', right: '-140px' }}
+          />
+          <Image
+            src="/memoryMatch/cloud 2.png"
+            alt="Cloud 2"
+            width={66}
+            height={50}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '20px', right: '-130px' }}
+          />
+          <Image
+            src="/memoryMatch/cloud 3.png"
+            alt="Cloud 3"
+            width={123}
+            height={93}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '5px', right: '-150px' }}
+          />
+          {/* Second set - pre-positioned randomly across screen to be visible immediately */}
+          <Image
+            src="/memoryMatch/cloud 1.png"
+            alt="Cloud 1"
+            width={66}
+            height={50}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '15px', left: '30%' }}
+          />
+          <Image
+            src="/memoryMatch/cloud 2.png"
+            alt="Cloud 2"
+            width={66}
+            height={50}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '25px', left: '70%' }}
+          />
+          <Image
+            src="/memoryMatch/cloud 3.png"
+            alt="Cloud 3"
+            width={123}
+            height={93}
+            className="cloud-animation absolute opacity-90"
+            style={{ top: '8px', left: '50%' }}
+          />
+
+          {/* Header Content */}
+          <div className="relative z-10 flex items-center justify-between h-full px-2 sm:px-4 md:px-6" style={{ paddingTop: '20px' }}>
+            {/* Left: Mascot */}
+            <div className="flex items-end flex-shrink-0" style={{ height: 'calc(100%)', maxWidth: '30%' }}>
+              <Image
+                src="/images/mascot1.png"
+                alt="Mascot"
+                width={143}
+                height={147}
+                className="w-auto object-contain"
+                style={{ maxHeight: 'calc(100% - 20px)', maxWidth: '100%' }}
+              />
+            </div>
+
+            {/* Center: Title */}
+            <div className="flex-1 flex items-center justify-center px-2 min-w-0">
+              <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-900 text-center" style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
+                Nature Word Search
+              </h2>
+            </div>
+
+            {/* Right: Flag */}
+            <div className="flex items-end flex-shrink-0" style={{ height: 'calc(100%)', maxWidth: '30%' }}>
+              <Image
+                src="/memoryMatch/finish.png"
+                alt="Finish Flag"
+                width={125}
+                height={149}
+                className="w-auto object-contain"
+                style={{ maxHeight: 'calc(100% - 20px)', maxWidth: '100%' }}
+              />
+            </div>
+          </div>
+
+          {/* Close Button */}
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="absolute top-2 right-2 p-2 hover:bg-white/20 rounded-full transition z-20"
           >
-            <X size={24} />
+            <X size={24} className="text-white" />
           </button>
         </div>
 
-
-        <div className="mb-4 flex justify-between items-center">
-          <div className="text-sm">
-            <p>Find {words.length} hidden words</p>
-            <p>Found: {foundWords.size} / {words.length}</p>
-            <p>Moves: {moves}</p>
-          </div>
-          <button
-            onClick={resetGame}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Reset Game
-          </button>
-        </div>
-
-        <div 
-          ref={gridRef}
-          className="grid gap-1 mb-4 select-none"
-          style={{ 
-            gridTemplateColumns: `repeat(${currentGridSize}, minmax(0, 1fr))`,
-            touchAction: 'none'
-          }}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-        >
-          {grid.map((row, rowIndex) =>
-            row.map((letter, colIndex) => {
-              const cellKey = getCellKey(rowIndex, colIndex)
-              const isSelected = selectedCells.has(cellKey)
-              const isFound = foundWordCells.has(cellKey)
-              
-              return (
-                <div
-                  key={cellKey}
-                  data-cell
-                  data-row={rowIndex}
-                  data-col={colIndex}
-                  className={`
-                    aspect-square flex items-center justify-center
-                    border-2 border-gray-300 rounded
-                    font-bold text-lg
-                    cursor-pointer
-                    transition-colors
-                    ${isSelected ? 'bg-yellow-300 border-yellow-500' : ''}
-                    ${isFound ? 'bg-green-200' : 'bg-white hover:bg-gray-100'}
-                  `}
-                  onMouseDown={(e) => {
-                    e.preventDefault()
-                    handleMouseDown(rowIndex, colIndex)
-                  }}
-                  onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
-                  onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                >
-                  {letter}
+        {/* Game Content */}
+        <div className="flex-1 overflow-auto">
+          {/* Container */}
+          <div className="p-4" style={{ backgroundColor: '#669f90' }}>
+            {/* Game Won Message */}
+            {foundWords.size === words.length && words.length > 0 && (
+              <div className="bg-white border-2 border-black p-4 mb-4 text-center" style={{ borderRadius: '23px' }}>
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Trophy className="fill-black" size={32} />
+                  <h3 className="text-2xl font-bold">Congratulations! You Won!</h3>
                 </div>
-              )
-            })
-          )}
-        </div>
+                <p className="text-lg font-bold mb-4">
+                  You earned <span className="text-2xl inline-flex items-center gap-1">
+                    <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
+                    {Math.max(5, words.length)} Worms
+                  </span>
+                </p>
+              </div>
+            )}
 
-        <div className="mb-4">
-          <h3 className="font-bold mb-2">Words to find:</h3>
-          <div className="flex flex-wrap gap-2">
-            {words.map((word) => (
-              <span
-                key={word}
-                className={`
-                  px-3 py-1 rounded-lg border-2
-                  ${foundWords.has(word) 
-                    ? 'bg-green-200 border-green-500 line-through' 
-                    : 'bg-gray-100 border-gray-300'
-                  }
-                `}
+            {/* Container for Controls */}
+            <div className="border-2 border-black p-4 mb-4" style={{ backgroundColor: '#d9d9d9', borderRadius: '23px' }}>
+              {/* Game Controls */}
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <span className="font-bold">Moves : {moves}</span>
+                </div>
+                <button
+                  onClick={resetGame}
+                  className="text-black font-bold px-4 py-2 border-2 border-black transition-colors hover:opacity-90"
+                  style={{ backgroundColor: '#f6ca4f', borderRadius: '23px' }}
+                >
+                  Reset game
+                </button>
+              </div>
+            </div>
+
+            {/* Game Board Container */}
+            <div className="bg-white border-2 border-black p-4 mb-4" style={{ borderRadius: '23px' }}>
+              {/* Word Search Grid */}
+              <div 
+                ref={gridRef}
+                className="grid gap-1 select-none"
+                style={{ 
+                  gridTemplateColumns: `repeat(${currentGridSize}, minmax(0, 1fr))`,
+                  touchAction: 'none'
+                }}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
               >
-                {word}
-              </span>
-            ))}
-          </div>
-        </div>
+                {grid.map((row, rowIndex) =>
+                  row.map((letter, colIndex) => {
+                    const cellKey = getCellKey(rowIndex, colIndex)
+                    const isSelected = selectedCells.has(cellKey)
+                    const isFound = foundWordCells.has(cellKey)
+                    const isBouncing = bouncingCells.has(cellKey)
+                    
+                    return (
+                      <div
+                        key={cellKey}
+                        data-cell
+                        data-row={rowIndex}
+                        data-col={colIndex}
+                        className={`
+                          aspect-square flex items-center justify-center
+                          border-2 border-gray-300
+                          font-bold text-lg
+                          cursor-pointer
+                          transition-colors
+                          ${isSelected ? 'bg-yellow-300 border-yellow-500' : ''}
+                          ${isFound ? 'bg-green-200' : 'bg-white hover:bg-gray-100'}
+                          ${isBouncing ? 'word-search-bounce' : ''}
+                        `}
+                        style={{ borderRadius: '23px' }}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          handleMouseDown(rowIndex, colIndex)
+                        }}
+                        onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                        onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                      >
+                        {letter}
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+            </div>
 
-        {foundWords.size === words.length && (
-          <div className="text-center p-4 bg-green-100 rounded-lg border-2 border-green-500">
-            <p className="text-xl font-bold text-green-700 mb-2">Congratulations!</p>
-            <p className="text-green-600">You found all the words!</p>
-          </div>
-        )}
+            {/* Words to Find Container */}
+            <div className="bg-white border-2 border-black p-4 mb-4" style={{ borderRadius: '23px' }}>
+              <h3 className="font-bold mb-2">Words to find:</h3>
+              <div className="flex flex-wrap gap-2">
+                {words.map((word) => (
+                  <span
+                    key={word}
+                    className={`
+                      px-3 py-1 border-2
+                      ${foundWords.has(word) 
+                        ? 'bg-green-200 border-green-500 line-through' 
+                        : 'bg-gray-100 border-gray-300'
+                      }
+                    `}
+                    style={{ borderRadius: '5px' }}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-        {/* Footer: How to play */}
-        <div className="mt-4 pt-4 border-t-2 border-gray-300 text-center">
-          <button
-            onClick={() => setShowHowToPlay(true)}
-            className="text-gray-700 font-semibold hover:text-gray-900 transition-colors cursor-pointer"
-          >
-            How to play?
-          </button>
+            {/* Footer: How to play */}
+            <div className="bg-white border-2 border-black p-4 text-center" style={{ borderRadius: '23px' }}>
+              <button
+                onClick={() => setShowHowToPlay(true)}
+                className="text-gray-700 font-semibold hover:text-gray-900 transition-colors cursor-pointer"
+              >
+                How to play?
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -428,7 +703,7 @@ export default function WordSearchGame({
               <ul className="list-disc list-inside space-y-1">
                 <li>Click and drag (or tap and swipe) to select letters and form words</li>
                 <li>Words can be horizontal, vertical, diagonal, or backwards</li>
-                <li>Find all the hidden words to win and earn gems</li>
+                <li>Find all the hidden words to win and earn worms</li>
                 <li>Selected words will turn green when found</li>
                 <li>Use the word list at the bottom to track your progress</li>
               </ul>
