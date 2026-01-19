@@ -9,6 +9,7 @@ interface MemoryMatchGameProps {
   onClose: () => void;
   checkpointId?: string;
   mapId?: string;
+  tileCount?: number; // Optional tile count, defaults to 8 if not provided
 }
 
 type Card = {
@@ -30,8 +31,8 @@ const plantImages = [
   "/memoryMatch/plants/Layer 8.png",
 ];
 
-export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }: MemoryMatchGameProps) {
-  const [tileCount, setTileCount] = useState(8); // Default 8 tiles (4 pairs)
+export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, tileCount: initialTileCount = 8 }: MemoryMatchGameProps) {
+  const [tileCount, setTileCount] = useState(initialTileCount); // Use prop or default to 8 tiles
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -80,6 +81,11 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
       // Silently handle errors (e.g., file not found)
     }
   };
+
+  // Update tileCount when prop changes
+  useEffect(() => {
+    setTileCount(initialTileCount);
+  }, [initialTileCount]);
 
   // Initialize game
   useEffect(() => {
@@ -236,7 +242,7 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
       const allMatched = matchedCards.every((c) => c.isMatched);
       if (allMatched) {
         setGameWon(true);
-        const gemsAwarded = Math.max(1, Math.floor(tileCount / 2));
+        const gemsAwarded = 1; // Always award 1 worm
         // Play win sound
         playSound(winSoundRef);
         // Call onWin immediately, then close after a short delay
@@ -378,7 +384,7 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId }:
                 <p className="text-lg font-bold mb-4">
                   You earned <span className="text-2xl inline-flex items-center gap-1">
                     <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
-                    {Math.max(1, Math.floor(tileCount / 2))} Worms
+                    1 Worm
                   </span>
                 </p>
               </div>

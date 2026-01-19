@@ -244,7 +244,7 @@ export default function JigsawPuzzleGame({
       // Play win sound
       playSound(winSoundRef)
       // Award gems based on puzzle size
-      const gemsAwarded = puzzleSize === 4 ? 6 : puzzleSize === 3 ? 5 : 8
+      const gemsAwarded = 1 // Always award 1 worm
       setTimeout(() => {
         onWin(gemsAwarded)
         setTimeout(() => {
@@ -445,7 +445,7 @@ export default function JigsawPuzzleGame({
                 <p className="text-lg font-bold mb-4">
                   You earned <span className="text-2xl inline-flex items-center gap-1">
                     <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
-                    {puzzleSize === 4 ? 6 : puzzleSize === 3 ? 5 : 8} Worms
+                    1 Worm
                   </span>
                 </p>
               </div>

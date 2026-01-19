@@ -602,10 +602,70 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    // Randomly select game type (1/4 chance for each)
-                    const random = Math.random();
-                    const randomGame = random < 0.25 ? 'memory' : random < 0.5 ? 'wordsearch' : random < 0.75 ? 'slidingpuzzle' : 'jigsawpuzzle';
-                    setGameType(randomGame);
+                    // Determine game type based on checkpoint ID
+                    const checkpointId = c.id;
+                    
+                    // Memory Match Game (12 checkpoints)
+                    const memoryMatchCheckpoints = [
+                      'cp_001',  // The Visitor Centre
+                      'cp_004',  // Peppermint Garden
+                      'cp_007',  // Dry River Bed
+                      'cp_010',  // Desert Discovery Camp
+                      'cp_013',  // Ian Potter Lakeside Precinct Lawn
+                      'cp_016',  // Backyard Garden
+                      'cp_019',  // Seaside Garden
+                      'cp_022',  // Gibson Hill
+                      'cp_025',  // Woodlots
+                      'cp_028',  // Amphitheatre
+                      'cp_031',  // Kids Backyard
+                      'cp_034'   // Water Saving Garden
+                    ];
+                    
+                    // Jigsaw Puzzle Game (12 checkpoints)
+                    const jigsawPuzzleCheckpoints = [
+                      'cp_002',  // Ironbank Garden
+                      'cp_005',  // Bloodwood Garden
+                      'cp_008',  // Forest Garden
+                      'cp_011',  // Gondwana Shelter
+                      'cp_014',  // How to Garden
+                      'cp_017',  // Lifestyle Garden
+                      'cp_020',  // Melaleuca Spits
+                      'cp_023',  // Hawson Hill
+                      'cp_026',  // Cultivar Garden
+                      'cp_029',  // Rockpool Pavilion
+                      'cp_032',  // Home Garden
+                      'cp_035'   // Diversity Garden
+                    ];
+                    
+                    // Word Search Game (11 checkpoints)
+                    const wordSearchCheckpoints = [
+                      'cp_003',  // Box Garden
+                      'cp_006',  // Stringybark Garden
+                      'cp_009',  // Gondwana Garden
+                      'cp_012',  // Lilypad Bridge
+                      'cp_015',  // Promenade Garden
+                      'cp_018',  // Greening Garden
+                      'cp_021',  // Weird and Wonderful Garden
+                      'cp_024',  // Arbour Garden
+                      'cp_027',  // Research Garden
+                      'cp_030',  // Serpentine Path
+                      'cp_033'   // Future Garden
+                    ];
+                    
+                    let selectedGame: 'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle';
+                    
+                    if (memoryMatchCheckpoints.includes(checkpointId)) {
+                      selectedGame = 'memory';
+                    } else if (jigsawPuzzleCheckpoints.includes(checkpointId)) {
+                      selectedGame = 'jigsawpuzzle';
+                    } else if (wordSearchCheckpoints.includes(checkpointId)) {
+                      selectedGame = 'wordsearch';
+                    } else {
+                      // Fallback to memory match (shouldn't happen)
+                      selectedGame = 'memory';
+                    }
+                    
+                    setGameType(selectedGame);
                     setIsGameOpen(true);
                   }}
                   onClose={() => {
@@ -668,6 +728,33 @@ export default function Page() {
     {isGameOpen && selectedCheckpoint !== null && (() => {
       const checkpointId = checkpoints[selectedCheckpoint].id;
       const checkpointIndex = selectedCheckpoint;
+      const checkpointOrder = checkpoints[selectedCheckpoint].order;
+      
+      // Calculate difficulty based on checkpoint order (1-35)
+      // Split into 4 difficulty levels
+      const getDifficultyLevel = (order: number) => {
+        if (order <= 9) return 1;      // Checkpoints 1-9: Easy
+        if (order <= 18) return 2;     // Checkpoints 10-18: Medium
+        if (order <= 27) return 3;     // Checkpoints 19-27: Hard
+        return 4;                      // Checkpoints 28-35: Very Hard
+      };
+      
+      const difficultyLevel = getDifficultyLevel(checkpointOrder);
+      
+      // Memory Match: 4 → 8 → 12 → 16 tiles
+      const getMemoryMatchTiles = (level: number) => {
+        return [4, 8, 12, 16][level - 1] || 4;
+      };
+      
+      // Word Search: 6x6 → 7x7 → 8x8 → 9x9
+      const getWordSearchGridSize = (level: number) => {
+        return [6, 7, 8, 9][level - 1] || 6;
+      };
+      
+      // Jigsaw Puzzle: 3x3 → 4x4 → 5x5 → 6x6
+      const getJigsawPuzzleSize = (level: number) => {
+        return [3, 4, 5, 6][level - 1] || 3;
+      };
       
       // Shared onWin handler for both games
       const handleGameWin = (gems: number) => {
@@ -745,6 +832,7 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
+            tileCount={getMemoryMatchTiles(difficultyLevel)}
           />
         );
       } else if (gameType === 'wordsearch') {
@@ -756,7 +844,7 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            gridSize={8}
+            gridSize={getWordSearchGridSize(difficultyLevel)}
           />
         );
       } else if (gameType === 'slidingpuzzle') {
@@ -780,7 +868,7 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            puzzleSize={4}
+            puzzleSize={getJigsawPuzzleSize(difficultyLevel)}
           />
         );
       }
