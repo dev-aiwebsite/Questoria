@@ -1,16 +1,18 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { ReactNode } from "react";
 
 
 type PopupProps= {
   triggerClassName?:string;
-  triggerText?: string;
+  closeText?: ReactNode;
+  triggerText?: ReactNode;
   open?: boolean;
   onClose?: (v:boolean) => void;
   isTriggerHidden?:boolean;
 }
-export default function TermsOfUsePopup({isTriggerHidden, onClose, open =false, triggerClassName, triggerText = "Privacy Policy" }:PopupProps) {
+export default function PrivacyPolicyPopup({closeText = 'I have read and fully understand.', isTriggerHidden, onClose, open =false, triggerClassName, triggerText = "Privacy Policy" }:PopupProps) {
 
   return (
     <>
@@ -246,12 +248,12 @@ export default function TermsOfUsePopup({isTriggerHidden, onClose, open =false, 
               </div>
 
               {/* Close Button */}
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-6 gap-2">
                 <button
                   onClick={() =>  onClose?.(false)}
-                  className="btn primary text-xs"
+                  className="btn primary text-xs !flex gap-2 items-center justify-center"
                 >
-                  I have read and fully understand.
+                  {closeText}
                 </button>
               </div>
             </motion.div>
