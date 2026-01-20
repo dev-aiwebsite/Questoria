@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Bayon, Inter } from "next/font/google";
 import "./globals.css";
 import { CurrentUserProvider } from "./contexts/currentUserContext";
 import { AppDataProvider } from "./contexts/appDataContext";
 
-const fontFace = Inter({
+
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
-
+const bayon = Bayon({
+  subsets: ["latin"],
+  variable: "--font-bayon",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: "Questoria",
   description: "mvp",
 };
+
 
 export default function RootLayout({
   children,
@@ -23,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontFace.variable} antialiased`}
+        className={`${inter.variable} ${bayon.variable} antialiased`}
       >
         <AppDataProvider>
           <CurrentUserProvider>

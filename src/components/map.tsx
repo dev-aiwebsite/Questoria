@@ -10,6 +10,12 @@ import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { cn } from "@/lib/helper";
+
+type MapProps = {
+    mapId:string;
+    className?:string;
+}
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -18,8 +24,7 @@ const BASE_MAP_WIDTH = 1000
 // This is the scale factor at base zoom (1.0). Higher values = larger popup, lower values = smaller popup
 const POPUP_BASE_SCALE = 0.25
 
-export default function Page() {
-  const { id:mapId } = useParams<{ id: string }>();
+export default function Map({mapId,className}:MapProps) {
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
   
   // Initialize user if not set (for development/testing)
@@ -466,7 +471,7 @@ export default function Page() {
      
       <div 
         ref={scrollContainerRef}
-        className={`block border-3 border-black w-screen overflow-auto height-no-header-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+        className={cn('block border-3 border-black w-screen overflow-hidden flex', isDragging ? 'cursor-grabbing select-none' : 'cursor-grab', className)}
         style={{ 
           touchAction: 'none',
           willChange: 'scroll-position',
@@ -555,7 +560,6 @@ export default function Page() {
                   className={`isolate w-[calc(40px+1.5%)] aspect-square absolute -translate-x-1/2 -translate-y-full z-10 ${mascotAnimationPhase !== 'idle' ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
                 >
-                <span className="bg-white text-sm whitespace-nowrap">{c.title}</span>
                 {!isCheckpointVisited && !c.is_visited &&  <Image
                   className="w-[22%] h-auto aspect-square absolute left-[48%] top-[28%]"
                   src="/images/IconLock.png"
