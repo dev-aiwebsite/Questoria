@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkpoint, checkpoints, currentUserId, user_checkpoints, users } from "@/lib/dummy";
+import { Checkpoint, checkpoints, currentUserId, user_checkpoints } from "@/lib/dummy";
 import { ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import WordSearchGame from "@/components/WordSearchGame";
 import SlidingPuzzleGame from "@/components/SlidingPuzzleGame";
 import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { useAppData } from "@/app/contexts/appDataContext";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -23,6 +24,7 @@ const POPUP_BASE_SCALE = 0.25
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const {users} = useAppData()
   
   // Initialize user if not set (for development/testing)
   useEffect(() => {

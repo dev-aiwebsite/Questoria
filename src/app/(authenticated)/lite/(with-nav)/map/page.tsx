@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkpoint, checkpoints, currentUserId, user_checkpoints, users } from "@/lib/dummy";
+import { Checkpoint, checkpoints, currentUserId, user_checkpoints } from "@/lib/dummy";
 import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
+import { useAppData } from "@/app/contexts/appDataContext";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -23,6 +24,7 @@ export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
+  const {users} = useAppData()
 
   useEffect(()=>{
     setIsMounted(true)
