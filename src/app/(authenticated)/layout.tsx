@@ -2,18 +2,42 @@
 
 import { ReactNode, useEffect } from "react";
 import { useCurrentUserContext } from "../contexts/currentUserContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import PageLoader from "@/components/pageLoader";
 
-export default function Layout({children}:{children:ReactNode}) {
- const router = useRouter();
-   const { currentUser } = useCurrentUserContext();
- 
-   useEffect(() => {
-     if (!currentUser) {
-       router.push("/login");
-     }
-   }, [currentUser, router]);
- 
-   // Show loading state while redirecting
-   return <div className="bg-primary">{children}</div>;
+const protectedRoutes = ['/lite']
+
+export default function Layout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const pathName = usePathname()
+  const { currentUser, userOnboarding, isFetching } = useCurrentUserContext();
+
+  console.log(isFetching, 'isFetching from layout')
+  
+  useEffect(() => {
+    if(pathName.startsWith('/lite') || protectedRoutes.includes(pathName)){
+        if (!currentUser) {
+          router.push("/login");
+          return
+        }
+
+       if (currentUser && userOnboarding) {
+          router.push("/lite/map");
+          return
+        } else {
+           router.push("/lite/start");
+          return
+        }
+    }
+
+   
+  }, [currentUser, router]);
+
+  return <>
+    {isFetching ?
+      <PageLoader /> :
+      <div className="bg-primary">{children}</div>
+
+    }</>
+
 }

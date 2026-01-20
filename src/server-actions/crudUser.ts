@@ -11,6 +11,7 @@ type Result<T> = {
 
 export type User = {
   id: string;
+  username:string;
   firstname: string | null;
   lastname: string | null;
   email: string | null;
@@ -31,13 +32,14 @@ export async function createUser(data: UserForm): Promise<Result<User>> {
     const result = await pool.query(
       `
       INSERT INTO public.users
-        (id, firstname, lastname, email, password, avatar, xp, gems, onboarding)
+        (id, username, firstname, lastname, email, password, avatar, xp, gems, onboarding)
       VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *;
       `,
       [
         id,
+        data.username ?? "",
         data.firstname ?? null,
         data.lastname ?? null,
         data.email ?? null,

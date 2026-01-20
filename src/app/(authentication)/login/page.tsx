@@ -2,31 +2,28 @@
 import { useAppData } from "@/app/contexts/appDataContext";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
+import { getUserOnboardingAnswerByUserId } from "@/server-actions/crudUserOnboarding";
 import { OctagonX } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
-    const router = useRouter()
     const [userEmail, setUserEmail] = useState("")
     const [userPass, setUserPass] = useState("")
     const [error, setError] = useState("")
-    const {currentUser, setCurrentUser} = useCurrentUserContext()
+    const {setCurrentUser, setUserOnboarding} = useCurrentUserContext()
     const {users} = useAppData()
-    useEffect(()=>{
-        if(currentUser){
-            router.push("/home")
-        }
-    },[currentUser])
     
-    function login() {
+
+    
+    async function login() {
         if (!userEmail || !userPass) {
             setError('Invalid credentials')
             return
         }
-        const userData = users.find(u => u.email == userEmail)
+        const userData = users.find(u => userEmail === u.email || userEmail === u.username);
+
 
         if (!userData) {
             setError('Invalid credentials')
@@ -37,8 +34,14 @@ export default function Page() {
             setError('Invalid credentials')
             return
         }
+
+        const {data} = await getUserOnboardingAnswerByUserId(userData.id)
+        if(data){
+            setUserOnboarding(data)
+        }
         setCurrentUser(userData)
         setError("")
+        return
     }
 
     return (
@@ -66,7 +69,7 @@ export default function Page() {
                     </div>
                 }
                     <input
-                        className="w-full" type="email" placeholder="Email address..."
+                        className="w-full" type="text" placeholder="Username or Email address"
                         onChange={(e) => setUserEmail(e.target.value)}
                         value={userEmail}
                     />
