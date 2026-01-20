@@ -2,6 +2,7 @@
 import { useAppData } from "@/app/contexts/appDataContext";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
+import PageLoader from "@/components/pageLoader";
 import { getUserOnboardingAnswerByUserId } from "@/server-actions/crudUserOnboarding";
 import { OctagonX } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +15,7 @@ export default function Page() {
     const [error, setError] = useState("")
     const {setCurrentUser, setUserOnboarding} = useCurrentUserContext()
     const {users} = useAppData()
+    const [isSuccess, stIsSuccess] = useState(false)
     
 
     
@@ -34,17 +36,21 @@ export default function Page() {
             setError('Invalid credentials')
             return
         }
-
-        const {data} = await getUserOnboardingAnswerByUserId(userData.id)
-        if(data){
-            setUserOnboarding(data)
-        }
+        
+             
+        
         setCurrentUser(userData)
+        const {data} = await getUserOnboardingAnswerByUserId(userData.id)
+            console.log(data, 'getUserOnboardingAnswerByUserId')
+            if(data){
+                setUserOnboarding(data)
+            }
+        stIsSuccess(true)
         setError("")
         return
     }
 
-    return (
+    return (<>{isSuccess ? <PageLoader /> : 
         <div className="relative isolate flex flex-col bg-primary h-screen overflow-hidden">
             <div className="mt-10 -z-2">
                 <LogoWithClouds />
@@ -101,5 +107,7 @@ export default function Page() {
                 </div>
             </div>
         </div>
+        }
+    </>
     );
 }

@@ -11,10 +11,11 @@ export default function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathName = usePathname()
   const { currentUser, userOnboarding, isFetching } = useCurrentUserContext();
-
-  console.log(isFetching, 'isFetching from layout')
+  
   
   useEffect(() => {
+    if(isFetching) return
+
     if(pathName.startsWith('/lite') || protectedRoutes.includes(pathName)){
         if (!currentUser) {
           router.push("/login");
@@ -24,6 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
        if (currentUser && userOnboarding) {
           router.push("/lite/map");
           return
+          
         } else {
            router.push("/lite/start");
           return
@@ -31,7 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
 
    
-  }, [currentUser, router]);
+  }, [isFetching, currentUser, router, userOnboarding]);
 
   return <>
     {isFetching ?

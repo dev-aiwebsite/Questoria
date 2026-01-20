@@ -152,7 +152,7 @@ export const IconLogoText  = ({strokeWidth=1, width = 79, height = 17, className
     width={width}
     height={height}
     strokeWidth={strokeWidth}
-    viewBox="0 79 17"
+    viewBox="79 17"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
    

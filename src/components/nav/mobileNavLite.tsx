@@ -2,11 +2,10 @@
 import { IconBack, IconLogoText } from "@/lib/icons/icons";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import MobileLogoDropdown from "../mobileLogoDropdown";
 
 export default function MobileNavLite() {
-    const pathname = usePathname()
     const router = useRouter()
     return (
         <div className="pb-4 z-[500] h-nav-h bg-white border-2 border-black grid grid-cols-3 pt-3">
