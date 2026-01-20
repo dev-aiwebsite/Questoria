@@ -1,3 +1,5 @@
+import { User } from "@/server-actions/crudUser";
+
 export const currentUserId = "a9f3k2"
 
 export type CheckpointQuizData = {
@@ -1262,22 +1264,10 @@ export const onboardingQuestions: OnboardingQuestions[] = [
 ]
 
 
-export type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-  avatar: string;
-  onboarding: boolean;
-  xp: number;
-  gems: number;
-  created_at: string;
-}
-
 export const users: User[] = [
   {
     "id": "a9f3k2",
+    "username": "questoria@gmail.com",
     "firstname": "John",
     "lastname": "Doe",
     "email": "questoria@gmail.com",
@@ -1290,6 +1280,7 @@ export const users: User[] = [
   },
   {
     "id": "q7m2x9",
+    "username": "sofia.ramirez@example.com",
     "firstname": "Sofia",
     "lastname": "Ramirez",
     "email": "sofia.ramirez@example.com",
@@ -1302,6 +1293,7 @@ export const users: User[] = [
   },
   {
     "id": "w8c5d1",
+    "username": "ethan.brooks@example.com",
     "firstname": "Ethan",
     "lastname": "Brooks",
     "email": "ethan.brooks@example.com",
@@ -1314,6 +1306,7 @@ export const users: User[] = [
   },
   {
     "id": "r4t6p0",
+    "username": "ava.nguyen@example.com",
     "firstname": "Ava",
     "lastname": "Nguyen",
     "email": "ava.nguyen@example.com",
@@ -1326,6 +1319,7 @@ export const users: User[] = [
   },
   {
     "id": "m2z9l7",
+    "username": "noah.peterson@example.com",
     "firstname": "Noah",
     "lastname": "Peterson",
     "email": "noah.peterson@example.com",
@@ -1338,6 +1332,7 @@ export const users: User[] = [
   },
   {
     "id": "k8y3n5",
+    "username": "isabella.hughes@example.com",
     "firstname": "Isabella",
     "lastname": "Hughes",
     "email": "isabella.hughes@example.com",
@@ -1350,6 +1345,7 @@ export const users: User[] = [
   },
   {
     "id": "f6v1b4",
+    "username": "lucas.bennett@example.com",
     "firstname": "Lucas",
     "lastname": "Bennett",
     "email": "lucas.bennett@example.com",
@@ -1362,6 +1358,7 @@ export const users: User[] = [
   },
   {
     "id": "h3q7r2",
+    "username": "mia.sullivan@example.com",
     "firstname": "Mia",
     "lastname": "Sullivan",
     "email": "mia.sullivan@example.com",
@@ -1374,6 +1371,7 @@ export const users: User[] = [
   },
   {
     "id": "p5w8x0",
+    "username": "oliver.diaz@example.com",
     "firstname": "Oliver",
     "lastname": "Diaz",
     "email": "oliver.diaz@example.com",
@@ -1386,6 +1384,7 @@ export const users: User[] = [
   },
   {
     "id": "t9k4m6",
+    "username": "emma.foster@example.com",
     "firstname": "Emma",
     "lastname": "Foster",
     "email": "emma.foster@example.com",
