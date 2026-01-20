@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   console.log(isFetching, 'isFetching from layout')
   useEffect(() => {
-    
+    if(isFetching) return
         if(!currentUser){
           return
         }

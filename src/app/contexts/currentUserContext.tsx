@@ -2,7 +2,7 @@
 
 import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
 import { getUserById, User } from "@/server-actions/crudUser";
-import { UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
+import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type CurrentUserContextType = {
@@ -63,6 +63,12 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
         async function fetchData(){
             setIsFetching(true)
+
+            if(currentUser){
+                setIsFetching(false)
+                return
+            }
+
             const loggedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
             const parsedLoggedUser = loggedUser ? JSON.parse(loggedUser)as User : null 
             if(!parsedLoggedUser){
@@ -71,11 +77,14 @@ export const CurrentUserProvider = ({ children }: Props) => {
             }
 
             try {
-                    const {data} = await getUserById(parsedLoggedUser.id)
-                    if(data){
-                        setCurrentUser(data)
+                    const getUserRes = await getUserById(parsedLoggedUser.id)
+                    if(getUserRes.data){
+                        setCurrentUser(getUserRes.data)
                     }
-                    console.log(data, 'currentUser')
+                    const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(parsedLoggedUser.id)
+                    if(getUserOnboardingRes.data){
+                        setUserOnboarding(getUserOnboardingRes.data)
+                    }
             } catch (error) {
                 console.log(error)
             } finally {

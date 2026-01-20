@@ -1,11 +1,9 @@
 "use client";
 
-import { div } from "framer-motion/client";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
   stopId?: string;
-  oncCaptureImage?: (v: string) => void;
   onClose: (v: string | null) => void;
 }
 
@@ -13,16 +11,19 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
-  // Map stopId to overlay frame
   const overlays: Record<string, string> = {
     "1": "/frames/frame-1.png",
-    "2": "/frames/frame2.png",
-    "3": "/frames/frame3.png",
+    "2": "/frames/frame-2.png",
+    "3": "/frames/frame-3.png",
   };
-  // const overlaySrc = overlays[stopId] || "/frames/frame1.png";
-  const overlaySrc ="/frames/frame-1.png";
+
+  const overlaySrc = overlays[stopId] ?? "/frames/frame-1.png";
+
+  /* ---------------- Camera setup ---------------- */
 
   useEffect(() => {
     let mounted = true;
@@ -31,24 +32,25 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
       if (!videoRef.current) return;
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment",
+          },
+        });
+
         if (!mounted || !videoRef.current) return;
 
         videoRef.current.srcObject = stream;
+        videoRef.current.playsInline = true;
+        videoRef.current.muted = true;
 
-        // Wait for metadata to load before playing
         await new Promise<void>((resolve) => {
           videoRef.current!.onloadedmetadata = () => resolve();
         });
 
         await videoRef.current.play();
-      } catch (err: unknown) {
-        if (err instanceof DOMException && err.name === "AbortError") {
-          console.warn("Camera play() was interrupted, retrying...");
-          setTimeout(() => startCamera(), 500);
-        } else {
-          console.error("Camera access denied or unavailable", err);
-        }
+      } catch (err) {
+        console.error("Camera error:", err);
       }
     }
 
@@ -59,160 +61,119 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
       if (videoRef.current?.srcObject) {
         (videoRef.current.srcObject as MediaStream)
           .getTracks()
-          .forEach((track) => track.stop());
+          .forEach((t) => t.stop());
       }
     };
   }, []);
 
+  /* ---------------- Capture ---------------- */
 
   const capture = () => {
-    if (!videoRef.current || !canvasRef.current || !overlayRef.current) return;
+    if (
+      !videoRef.current ||
+      !canvasRef.current ||
+      !overlayRef.current ||
+      !containerRef.current
+    )
+      return;
 
-    const video = videoRef.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Maintain aspect ratio
-    const width = video.videoWidth;
-    const height = video.videoHeight;
+    const width = containerRef.current.clientWidth;
+    const height = containerRef.current.clientHeight;
 
     canvas.width = width;
     canvas.height = height;
 
-    // Mirror video
+    // Mirror camera
     ctx.save();
     ctx.translate(width, 0);
     ctx.scale(-1, 1);
-    ctx.drawImage(video, 0, 0, width, height);
+    ctx.drawImage(videoRef.current, 0, 0, width, height);
     ctx.restore();
 
-    // Draw overlay
-    const overlayImg = overlayRef.current;
-    ctx.drawImage(overlayImg, 0, 0, width, height);
+    // Overlay
+    ctx.drawImage(overlayRef.current, 0, 0, width, height);
 
-
-    // Save snapshot
-    const dataUrl = canvas.toDataURL("image/png");
-    setCapturedImage(dataUrl);
-
-    // Auto download
-    // const link = document.createElement("a");
-    // link.href = dataUrl;
-    // link.download = `stop-${stopId}-ar-postcard.png`;
-    //   link.click();
+    setCapturedImage(canvas.toDataURL("image/png"));
   };
 
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
       (videoRef.current.srcObject as MediaStream)
         .getTracks()
-        .forEach(track => track.stop());
+        .forEach((t) => t.stop());
       videoRef.current.srcObject = null;
     }
   };
 
   const handleClose = () => {
     stopCamera();
-    onClose?.(capturedImage);
+    onClose(capturedImage);
   };
 
+  /* ---------------- UI ---------------- */
 
   return (
-    <div className="flex flex-col flex-nowrap gap-0 h-screen w-screen absolute z-[999999] bg-black">
-      <div className="h-[200px]">
+    <div className="fixed inset-0 z-[999999] bg-black flex flex-col">
+      <div className="flex-1 flex items-center justify-center px-4">
+        <div
+          ref={containerRef}
+          className="relative w-full max-w-md aspect-[4/3] overflow-hidden bg-black"
+        >
+          {/* Camera */}
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover scale-x-[-1]"
+            playsInline
+            muted
+            autoPlay
+          />
+
+          {/* Overlay */}
+          <img
+            ref={overlayRef}
+            src={overlaySrc}
+            alt="AR Frame"
+            className="absolute inset-0 w-full h-full pointer-events-none"
+          />
+        </div>
       </div>
-      <div
-        className="relative w-full h-fit aspect-4/3 my-0 mx-auto overflow-hidden bg-white"
-      >
-        {/* Camera feed */}
-        <video
-          className="w-full h-full object-cover scale-x-[-1]"
-          ref={videoRef}
-        />
 
-        {/* Overlay image */}
-        <img
-          className="absolute top-0 aspect-[4/3] pointer-events-none"
-          ref={overlayRef}
-          src={overlaySrc}
-          alt="AR Frame"
-        />
-      </div>
-
-      {/* Floating animation keyframes */}
-      <style>
-        {`
-          @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-          }
-        `}
-      </style>
-
-      <div
-        className="flex mt-auto p-mobile gap-2 flex-row flex-nowrap items-center justify-center">
-        {/* Capture button only if no image is captured */}
-        {!capturedImage && (
+      {/* Controls */}
+      {!capturedImage && (
+        <div className="p-6 flex justify-center">
           <button
             onClick={capture}
-            className="rounded-full bg-accent aspect-square w-20 h-20 border-5 border-gray-600"
-          >
+            className="w-20 h-20 rounded-full bg-accent border-4 border-white"
+          />
+        </div>
+      )}
 
-          </button>
-        )}
+      {/* Canvas */}
+      <canvas ref={canvasRef} className="hidden" />
 
-      </div>
-
-
-      {/* Hidden canvas */}
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-
-      {/* Display captured image */}
+      {/* Preview */}
       {capturedImage && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.8)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
+        <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center gap-4">
           <img
             src={capturedImage}
+            className="max-w-[90%] max-h-[70%]"
             alt="Captured"
-            style={{ maxWidth: "90%", maxHeight: "70%" }}
           />
-          <div className="p-2 grid grid-cols-2 gap-2 items-center justify-center">
-            {/* Retake button only if there is a captured image */}
-            {capturedImage && (
-              <button
-              className="btn !bg-red-400"
-                onClick={() => setCapturedImage(null)}
-              >
-                Retake
-              </button>
-            )}
 
-            {/* Satisfied button only if there is a captured image */}
-            {capturedImage && (
-              <button
-              className="btn !bg-accent"
-                onClick={() => {
-                  handleClose(); // stop camera & close overlay
-                }}
-                
-              >
-                Satisfied
-              </button>
-            )}
+          <div className="flex gap-4">
+            <button
+              className="btn bg-red-500"
+              onClick={() => setCapturedImage(null)}
+            >
+              Retake
+            </button>
+            <button className="btn bg-accent" onClick={handleClose}>
+              Satisfied
+            </button>
           </div>
         </div>
       )}
