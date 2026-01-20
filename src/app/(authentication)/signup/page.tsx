@@ -80,7 +80,6 @@ export default function Page() {
 
             async function register() {
                 const res = await registerUser(formData);
-                console.log(res)
                 if (res) {
                     setCurrentUser(res);
                 }

@@ -98,6 +98,29 @@ export async function getUserOnboardingAnswerById(
     };
   }
 }
+export async function getUserOnboardingAnswerByUserId(
+  user_id: string
+): Promise<Result<UserOnboardingAnswer>> {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM public.user_onboarding_answer WHERE user_id = $1`,
+      [user_id]
+    );
+
+    if (!result.rows[0]) return { success: false, message: `Answer ${user_id} not found` };
+
+    return {
+      success: true,
+      message: "User onboarding answer fetched successfully",
+      data: result.rows[0] as UserOnboardingAnswer,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
 
 export async function updateUserOnboardingAnswer(
   id: string,

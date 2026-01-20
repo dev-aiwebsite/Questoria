@@ -1,7 +1,7 @@
 "use client";
 
 import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
-import { User } from "@/server-actions/crudUser";
+import { getUserById, User } from "@/server-actions/crudUser";
 import { UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
@@ -17,6 +17,7 @@ type CurrentUserContextType = {
     markCheckpointVisited: (checkpointId: string) => void;
     userOnboarding: UserOnboardingAnswer | null;
     setUserOnboarding: React.Dispatch<React.SetStateAction<UserOnboardingAnswer | null>>;
+    isFetching: boolean;
 };
 
 const CurrentUserContext = createContext<CurrentUserContextType | undefined>(undefined);
@@ -32,35 +33,9 @@ const STORAGE_KEYS = {
 };
 
 export const CurrentUserProvider = ({ children }: Props) => {
-
-    const [currentUser, setCurrentUser] = useState<User | null>(() => {
-        if (typeof window !== 'undefined') {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    return parsed;
-                }
-            } catch (e) {
-                console.error('Error loading currentUser from localStorage:', e);
-            }
-        }
-        return null;
-    });
-    const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(() => {
-        if (typeof window !== 'undefined') {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEYS.ONBOARDINGANSWERS);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    return parsed;
-                }
-            } catch (e) {
-                console.error('Error loading onboarding answers from localStorage:', e);
-            }
-        }
-        return null;
-    })
+    const [isFetching, setIsFetching] = useState(true)
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(null)
 
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(() => {
@@ -84,6 +59,35 @@ export const CurrentUserProvider = ({ children }: Props) => {
         currentUserRef.current = currentUser;
     }, [currentUser])
 
+    useEffect(()=>{
+
+        async function fetchData(){
+            setIsFetching(true)
+            const loggedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+            const parsedLoggedUser = loggedUser ? JSON.parse(loggedUser)as User : null 
+            if(!parsedLoggedUser){
+                setIsFetching(false)
+                return
+            }
+
+            try {
+                    const {data} = await getUserById(parsedLoggedUser.id)
+                    if(data){
+                        setCurrentUser(data)
+                    }
+                    console.log(data, 'currentUser')
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setIsFetching(false)
+                console.log(isFetching, 'setting to false')
+
+            }
+        }
+        fetchData()
+
+    },[])
+
     // Save currentUser to localStorage whenever it changes
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -99,19 +103,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
         }
     }, [currentUser]);
     // Save currentUser onboarding answer to localStorage whenever it changes
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            if (userOnboarding) {
-                try {
-                    localStorage.setItem(STORAGE_KEYS.ONBOARDINGANSWERS, JSON.stringify(userOnboarding));
-                } catch (e) {
-                    console.error('Error saving currentUser to localStorage:', e);
-                }
-            } else {
-                localStorage.removeItem(STORAGE_KEYS.ONBOARDINGANSWERS);
-            }
-        }
-    }, [userOnboarding]);
 
     // Save checkpoints to localStorage whenever they change
     useEffect(() => {
@@ -297,7 +288,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     }, [currentUser])
 
     return (
-        <CurrentUserContext.Provider value={{userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems, addCheckpointGems, markCheckpointVisited }}>
+        <CurrentUserContext.Provider value={{isFetching, userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems, addCheckpointGems, markCheckpointVisited }}>
             {children}
         </CurrentUserContext.Provider>
     );

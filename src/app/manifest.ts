@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
  
 export default function manifest(): MetadataRoute.Manifest {
   return {
-  "name": "Questoria MVP",
-  "short_name": "Questoria",
+  "name": "Questoria",
+  "short_name": "App",
   "icons": [
     {
       "src": "icons/icon-48x48.png",
@@ -56,9 +56,9 @@ export default function manifest(): MetadataRoute.Manifest {
       "type": "image/png"
     }
   ],
-  "start_url": "/login",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#58b3e2",
+  "background_color": "#ffffff",
   "theme_color": "#000000"
 }
 }
