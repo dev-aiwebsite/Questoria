@@ -1,5 +1,6 @@
 "use client";
 
+import { SwitchCamera } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
@@ -14,6 +15,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isFrontCamera, setIsFrontCamera] = useState(false);
 
   const overlays: Record<string, string> = {
     "1": "/frames/frame-1.png",
@@ -23,50 +25,46 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
   const overlaySrc = overlays[stopId] ?? "/frames/frame-1.png";
 
-  /* ---------------- Camera setup ---------------- */
+  const stopCamera = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream)
+        .getTracks()
+        .forEach((t) => t.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
 
-  useEffect(() => {
-    let mounted = true;
+  const startCamera = async () => {
+    stopCamera();
 
-    async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: isFrontCamera ? "user" : "environment",
+        },
+      });
+
       if (!videoRef.current) return;
 
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "environment",
-          },
-        });
+      videoRef.current.srcObject = stream;
+      videoRef.current.playsInline = true;
+      videoRef.current.muted = true;
 
-        if (!mounted || !videoRef.current) return;
+      await new Promise<void>((resolve) => {
+        videoRef.current!.onloadedmetadata = () => resolve();
+      });
 
-        videoRef.current.srcObject = stream;
-        videoRef.current.playsInline = true;
-        videoRef.current.muted = true;
-
-        await new Promise<void>((resolve) => {
-          videoRef.current!.onloadedmetadata = () => resolve();
-        });
-
-        await videoRef.current.play();
-      } catch (err) {
-        console.error("Camera error:", err);
-      }
+      await videoRef.current.play();
+    } catch (err) {
+      console.error("Camera error:", err);
     }
+  };
 
+  useEffect(() => {
     startCamera();
 
-    return () => {
-      mounted = false;
-      if (videoRef.current?.srcObject) {
-        (videoRef.current.srcObject as MediaStream)
-          .getTracks()
-          .forEach((t) => t.stop());
-      }
-    };
-  }, []);
-
-  /* ---------------- Capture ---------------- */
+    return () => stopCamera();
+  }, [isFrontCamera]);
 
   const capture = () => {
     if (
@@ -87,12 +85,16 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
     canvas.width = width;
     canvas.height = height;
 
-    // Mirror camera
-    ctx.save();
-    ctx.translate(width, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(videoRef.current, 0, 0, width, height);
-    ctx.restore();
+    // Mirror ONLY for front camera
+    if (isFrontCamera) {
+      ctx.save();
+      ctx.translate(width, 0);
+      // ctx.scale(-1, 1);
+      ctx.drawImage(videoRef.current, 0, 0, width, height);
+      ctx.restore();
+    } else {
+      ctx.drawImage(videoRef.current, 0, 0, width, height);
+    }
 
     // Overlay
     ctx.drawImage(overlayRef.current, 0, 0, width, height);
@@ -100,21 +102,10 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
     setCapturedImage(canvas.toDataURL("image/png"));
   };
 
-  const stopCamera = () => {
-    if (videoRef.current?.srcObject) {
-      (videoRef.current.srcObject as MediaStream)
-        .getTracks()
-        .forEach((t) => t.stop());
-      videoRef.current.srcObject = null;
-    }
-  };
-
   const handleClose = () => {
     stopCamera();
     onClose(capturedImage);
   };
-
-  /* ---------------- UI ---------------- */
 
   return (
     <div className="fixed inset-0 z-[999999] bg-black flex flex-col">
@@ -126,7 +117,10 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
           {/* Camera */}
           <video
             ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover scale-x-[-1]"
+            className={`absolute inset-0 w-full h-full object-cover ${
+  isFrontCamera ? "scale-x-[-1]" : ""
+}`}
+
             playsInline
             muted
             autoPlay
@@ -144,11 +138,21 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
       {/* Controls */}
       {!capturedImage && (
-        <div className="p-6 flex justify-center">
+        <div className="relative p-6 flex justify-center gap-6">
+
           <button
             onClick={capture}
             className="w-20 h-20 rounded-full bg-accent border-4 border-white"
           />
+
+           <button
+            onClick={() => setIsFrontCamera((prev) => !prev)}
+            className="absolute right-10 top-1/2 -translate-y-1/2 btn !bg-transparent text-white px-4 py-2 rounded flex items-center gap-2"
+          >
+            <SwitchCamera className="w-5 h-5" />
+
+            {isFrontCamera ? "Front" : "Back"}
+          </button>
         </div>
       )}
 
