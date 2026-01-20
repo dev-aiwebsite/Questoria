@@ -134,7 +134,7 @@ export default function Page() {
 
                         </div>
                     </div>
-                        : <div className="p-mobile height-no-header-nav flex w-full h-full flex-col items-center justify-between">
+                        : <div className="p-mobile height-with-header-nav flex w-full h-full flex-col items-center justify-between">
                             <div></div>
                             <div>
                                 <h2 className="header2 text-center">Checkpoint Cleared!</h2>

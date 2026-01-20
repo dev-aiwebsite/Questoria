@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function Clouds({children, className}:{children?:React.ReactNode, className?:string;}) {
     return (
-        <div className={cn("-z-2 relative h-[360px] w-screen", className && className)}>
+        <div className={cn("-z-2 relative h-[360px] w-screen", className)}>
             <div className="relative h-full w-full">
                 <motion.div
                     className="absolute top-0 left-0 w-[75%]"

@@ -1,18 +1,22 @@
 "use client";
 
-import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react";
-import { User, user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
+import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
+import { User } from "@/server-actions/crudUser";
+import { UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type CurrentUserContextType = {
-  currentUser: User | null;
-  setCurrentUser: (user: User | null) => void;
-  maps: UserMap[] | null;
-  setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>; 
-  checkpoints: UserCheckpoint[] | null;
-  setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
-  addGems: (amount: number) => void;
-  addCheckpointGems: (checkpointId: string, amount: number) => void;
-  markCheckpointVisited: (checkpointId: string) => void;
+    currentUser: User | null;
+    setCurrentUser: (user: User | null) => void;
+    maps: UserMap[] | null;
+    setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
+    checkpoints: UserCheckpoint[] | null;
+    setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
+    addGems: (amount: number) => void;
+    addCheckpointGems: (checkpointId: string, amount: number) => void;
+    markCheckpointVisited: (checkpointId: string) => void;
+    userOnboarding: UserOnboardingAnswer | null;
+    setUserOnboarding: React.Dispatch<React.SetStateAction<UserOnboardingAnswer | null>>;
 };
 
 const CurrentUserContext = createContext<CurrentUserContextType | undefined>(undefined);
@@ -23,11 +27,12 @@ type Props = {
 
 const STORAGE_KEYS = {
     CURRENT_USER: 'questoria_currentUser',
-    CHECKPOINTS: 'questoria_checkpoints'
+    CHECKPOINTS: 'questoria_checkpoints',
+    ONBOARDINGANSWERS: "questoria_onboarding_answers"
 };
 
 export const CurrentUserProvider = ({ children }: Props) => {
-    // Initialize from localStorage
+
     const [currentUser, setCurrentUser] = useState<User | null>(() => {
         if (typeof window !== 'undefined') {
             try {
@@ -42,7 +47,21 @@ export const CurrentUserProvider = ({ children }: Props) => {
         }
         return null;
     });
-    
+    const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEYS.ONBOARDINGANSWERS);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    return parsed;
+                }
+            } catch (e) {
+                console.error('Error loading onboarding answers from localStorage:', e);
+            }
+        }
+        return null;
+    })
+
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(() => {
         if (typeof window !== 'undefined') {
@@ -79,6 +98,20 @@ export const CurrentUserProvider = ({ children }: Props) => {
             }
         }
     }, [currentUser]);
+    // Save currentUser onboarding answer to localStorage whenever it changes
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (userOnboarding) {
+                try {
+                    localStorage.setItem(STORAGE_KEYS.ONBOARDINGANSWERS, JSON.stringify(userOnboarding));
+                } catch (e) {
+                    console.error('Error saving currentUser to localStorage:', e);
+                }
+            } else {
+                localStorage.removeItem(STORAGE_KEYS.ONBOARDINGANSWERS);
+            }
+        }
+    }, [userOnboarding]);
 
     // Save checkpoints to localStorage whenever they change
     useEffect(() => {
@@ -119,7 +152,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const addCheckpointGems = (checkpointId: string, amount: number) => {
         const userId = currentUserRef.current?.id;
         if (!userId) return;
-        
+
         setCheckpoints((prev) => {
             if (!prev) {
                 // If no checkpoints exist, create one
@@ -136,7 +169,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                     gems_collected: amount
                 }];
             }
-            
+
             const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
             if (existingCheckpoint) {
                 // Update existing checkpoint
@@ -171,7 +204,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const markCheckpointVisited = (checkpointId: string) => {
         const userId = currentUserRef.current?.id;
         if (!userId) return;
-        
+
         setCheckpoints((prev) => {
             if (!prev) {
                 // If no checkpoints exist, create one
@@ -188,7 +221,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                     gems_collected: 0
                 }];
             }
-            
+
             const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
             if (existingCheckpoint) {
                 // Update existing checkpoint
@@ -224,7 +257,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
         const currentUserId = currentUser.id
         const checkpointsRes = user_checkpoints.filter(c => c.user_id == currentUserId)
         const mapsRes = user_maps.filter(m => m.user_id == currentUserId)
-           
+
         queueMicrotask(() => {
             if (mapsRes) {
                 setMaps(mapsRes)
@@ -264,7 +297,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
     }, [currentUser])
 
     return (
-        <CurrentUserContext.Provider value={{ maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems, addCheckpointGems, markCheckpointVisited }}>
+        <CurrentUserContext.Provider value={{userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems, addCheckpointGems, markCheckpointVisited }}>
             {children}
         </CurrentUserContext.Provider>
     );

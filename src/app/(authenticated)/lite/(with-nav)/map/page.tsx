@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkpoint, checkpoints, currentUserId, user_checkpoints, users } from "@/lib/dummy";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -9,9 +9,8 @@ import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
-import SlidingPuzzleGame from "@/components/SlidingPuzzleGame";
-import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import PageLoader from "@/components/pageLoader";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -23,7 +22,11 @@ const POPUP_BASE_SCALE = 0.25
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
-  
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(()=>{
+    setIsMounted(true)
+  },[])
   // Initialize user if not set (for development/testing)
   useEffect(() => {
     if (!currentUser) {
@@ -38,7 +41,7 @@ export default function Page() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
   const [isGameOpen, setIsGameOpen] = useState(false)
-  const [gameType, setGameType] = useState<'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle'>('memory')
+  const [gameType, setGameType] = useState<'memory' | 'wordsearch'>('memory')
   const [showGemsAlreadyCollected, setShowGemsAlreadyCollected] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
@@ -453,14 +456,16 @@ export default function Page() {
     }
   }, [])
 
-  return (<>
+  return (
+  <>{!isMounted ? <PageLoader/> : 
+  <>
     <div className="relative">
-      {/* Worm Counter - Top Right */}
+      {/* Gem Counter - Top Right */}
       <div 
         ref={gemCounterRef}
         className="fixed top-24 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
       >
-        <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
+        <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
         <span className="font-bold text-lg">
           {currentUser?.gems || 0}
         </span>
@@ -468,7 +473,7 @@ export default function Page() {
      
       <div 
         ref={scrollContainerRef}
-        className={`block border-3 border-black w-screen overflow-auto height-with-header-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+        className={`block border-3 border-black w-screen overflow-auto height-with-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
         style={{ 
           touchAction: 'none',
           willChange: 'scroll-position',
@@ -602,70 +607,9 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    // Determine game type based on checkpoint ID
-                    const checkpointId = c.id;
-                    
-                    // Memory Match Game (12 checkpoints)
-                    const memoryMatchCheckpoints = [
-                      'cp_001',  // The Visitor Centre
-                      'cp_004',  // Peppermint Garden
-                      'cp_007',  // Dry River Bed
-                      'cp_010',  // Desert Discovery Camp
-                      'cp_013',  // Ian Potter Lakeside Precinct Lawn
-                      'cp_016',  // Backyard Garden
-                      'cp_019',  // Seaside Garden
-                      'cp_022',  // Gibson Hill
-                      'cp_025',  // Woodlots
-                      'cp_028',  // Amphitheatre
-                      'cp_031',  // Kids Backyard
-                      'cp_034'   // Water Saving Garden
-                    ];
-                    
-                    // Jigsaw Puzzle Game (12 checkpoints)
-                    const jigsawPuzzleCheckpoints = [
-                      'cp_002',  // Ironbank Garden
-                      'cp_005',  // Bloodwood Garden
-                      'cp_008',  // Forest Garden
-                      'cp_011',  // Gondwana Shelter
-                      'cp_014',  // How to Garden
-                      'cp_017',  // Lifestyle Garden
-                      'cp_020',  // Melaleuca Spits
-                      'cp_023',  // Hawson Hill
-                      'cp_026',  // Cultivar Garden
-                      'cp_029',  // Rockpool Pavilion
-                      'cp_032',  // Home Garden
-                      'cp_035'   // Diversity Garden
-                    ];
-                    
-                    // Word Search Game (11 checkpoints)
-                    const wordSearchCheckpoints = [
-                      'cp_003',  // Box Garden
-                      'cp_006',  // Stringybark Garden
-                      'cp_009',  // Gondwana Garden
-                      'cp_012',  // Lilypad Bridge
-                      'cp_015',  // Promenade Garden
-                      'cp_018',  // Greening Garden
-                      'cp_021',  // Weird and Wonderful Garden
-                      'cp_024',  // Arbour Garden
-                      'cp_027',  // Research Garden
-                      'cp_030',  // Serpentine Path
-                      'cp_033'   // Future Garden
-                    ];
-                    
-                    let selectedGame: 'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle';
-                    
-                    if (memoryMatchCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'memory';
-                    } else if (jigsawPuzzleCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'jigsawpuzzle';
-                    } else if (wordSearchCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'wordsearch';
-                    } else {
-                      // Fallback to memory match (shouldn't happen)
-                      selectedGame = 'memory';
-                    }
-                    
-                    setGameType(selectedGame);
+                    // Randomly select game type
+                    const randomGame = Math.random() < 0.5 ? 'memory' : 'wordsearch';
+                    setGameType(randomGame);
                     setIsGameOpen(true);
                   }}
                   onClose={() => {
@@ -728,33 +672,6 @@ export default function Page() {
     {isGameOpen && selectedCheckpoint !== null && (() => {
       const checkpointId = checkpoints[selectedCheckpoint].id;
       const checkpointIndex = selectedCheckpoint;
-      const checkpointOrder = checkpoints[selectedCheckpoint].order;
-      
-      // Calculate difficulty based on checkpoint order (1-35)
-      // Split into 4 difficulty levels
-      const getDifficultyLevel = (order: number) => {
-        if (order <= 9) return 1;      // Checkpoints 1-9: Easy
-        if (order <= 18) return 2;     // Checkpoints 10-18: Medium
-        if (order <= 27) return 3;     // Checkpoints 19-27: Hard
-        return 4;                      // Checkpoints 28-35: Very Hard
-      };
-      
-      const difficultyLevel = getDifficultyLevel(checkpointOrder);
-      
-      // Memory Match: 4 → 8 → 12 → 16 tiles
-      const getMemoryMatchTiles = (level: number) => {
-        return [4, 8, 12, 16][level - 1] || 4;
-      };
-      
-      // Word Search: 6x6 → 7x7 → 8x8 → 9x9
-      const getWordSearchGridSize = (level: number) => {
-        return [6, 7, 8, 9][level - 1] || 6;
-      };
-      
-      // Jigsaw Puzzle: 3x3 → 4x4 → 5x5 → 6x6
-      const getJigsawPuzzleSize = (level: number) => {
-        return [3, 4, 5, 6][level - 1] || 3;
-      };
       
       // Shared onWin handler for both games
       const handleGameWin = (gems: number) => {
@@ -832,10 +749,9 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            tileCount={getMemoryMatchTiles(difficultyLevel)}
           />
         );
-      } else if (gameType === 'wordsearch') {
+      } else {
         return (
           <WordSearchGame
             onWin={handleGameWin}
@@ -844,42 +760,18 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            gridSize={getWordSearchGridSize(difficultyLevel)}
-          />
-        );
-      } else if (gameType === 'slidingpuzzle') {
-        return (
-          <SlidingPuzzleGame
-            onWin={handleGameWin}
-            onClose={() => {
-              setIsGameOpen(false);
-            }}
-            checkpointId={checkpointId}
-            mapId={mapId}
-            puzzleSize={3}
-          />
-        );
-      } else {
-        return (
-          <JigsawPuzzleGame
-            onWin={handleGameWin}
-            onClose={() => {
-              setIsGameOpen(false);
-            }}
-            checkpointId={checkpointId}
-            mapId={mapId}
-            puzzleSize={getJigsawPuzzleSize(difficultyLevel)}
+            gridSize={6}
           />
         );
       }
     })()}
 
-    {/* Worms Already Collected Message */}
+    {/* Gems Already Collected Message */}
     {showGemsAlreadyCollected && (
       <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl border-3 border-black p-6 max-w-md w-full text-center">
-          <h3 className="text-2xl font-bold mb-4">Worms Already Collected</h3>
-          <p className="text-lg mb-4">You have already collected worms for this checkpoint.</p>
+          <h3 className="text-2xl font-bold mb-4">Gems Already Collected</h3>
+          <p className="text-lg mb-4">You have already collected gems for this checkpoint.</p>
           <button
             onClick={() => setShowGemsAlreadyCollected(false)}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -890,7 +782,7 @@ export default function Page() {
       </div>
     )}
 
-    {/* Animated Worms */}
+    {/* Animated Gems */}
     {animatingGems.map((gem) => (
       <div
         key={gem.id}
@@ -902,10 +794,12 @@ export default function Page() {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <Image src="/images/worm.png" alt="Worm" width={40} height={40} className="object-contain" />
+        <Sparkles className="fill-yellow-500 text-yellow-500" size={32} />
       </div>
     ))}
       </>
+      }
+  </>
   );
 }
 
@@ -997,8 +891,8 @@ function CheckpointInfoCard({
                 className="flex items-center gap-2 mb-4 justify-center"
                 style={{ fontSize: bodyFontSize }}
               >
-                <Image src="/images/worm.png" alt="Worm" width={28} height={28} className="object-contain" />
-                <span className="font-bold">Worms Collected: {checkpointGems}</span>
+                <Sparkles className="fill-yellow-500 text-yellow-500" size={20} />
+                <span className="font-bold">Gems Collected: {checkpointGems}</span>
               </div>
             )}
             <button

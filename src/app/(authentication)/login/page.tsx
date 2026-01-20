@@ -1,7 +1,7 @@
 "use client"
+import { useAppData } from "@/app/contexts/appDataContext";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
-import { users } from "@/lib/dummy";
 import { OctagonX } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function Page() {
     const [userPass, setUserPass] = useState("")
     const [error, setError] = useState("")
     const {currentUser, setCurrentUser} = useCurrentUserContext()
-
+    const {users} = useAppData()
     useEffect(()=>{
         if(currentUser){
             router.push("/home")

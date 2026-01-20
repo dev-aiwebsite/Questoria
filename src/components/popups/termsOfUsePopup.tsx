@@ -153,10 +153,10 @@ export default function TermsOfUsePopup({closeText = 'I have read and fully unde
               </div>
 
               {/* Close Button */}
-              <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 gap-2">
                 <button
                   onClick={() =>  onClose?.(false)}
-                  className="btn primary text-xs !flex gap-2 items-center justify-center leading-[0]"
+                  className="btn primary text-xs !flex gap-2 items-center justify-center"
                 >
                   {closeText}
                 </button>

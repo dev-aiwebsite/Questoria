@@ -1161,8 +1161,8 @@ export type OnboardingQuestions = {
 export const onboardingQuestions: OnboardingQuestions[] = [
   {
     id: "nm439s1",
-    question: "Fill in Your Party and Origins Before You Wander",
-    description: "Who joins you in this grand adventure?",
+    question: "Who's adventuring today?",
+    description: "So we can shape your future quests!",
     type: "radio",
     cta: {
       idle: "Choose your party",
@@ -1264,117 +1264,139 @@ export const onboardingQuestions: OnboardingQuestions[] = [
 
 export type User = {
   id: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   avatar: string;
   onboarding: boolean;
   xp: number;
   gems: number;
+  created_at: string;
 }
 
 export const users: User[] = [
   {
-    id: "a9f3k2",
-    name: "John Doe",
-    email: "questoria@gmail.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "a9f3k2",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "questoria@gmail.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "q7m2x9",
-    name: "Sofia Ramirez",
-    email: "sofia.ramirez@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "q7m2x9",
+    "firstname": "Sofia",
+    "lastname": "Ramirez",
+    "email": "sofia.ramirez@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "w8c5d1",
-    name: "Ethan Brooks",
-    email: "ethan.brooks@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "w8c5d1",
+    "firstname": "Ethan",
+    "lastname": "Brooks",
+    "email": "ethan.brooks@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "r4t6p0",
-    name: "Ava Nguyen",
-    email: "ava.nguyen@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "r4t6p0",
+    "firstname": "Ava",
+    "lastname": "Nguyen",
+    "email": "ava.nguyen@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "m2z9l7",
-    name: "Noah Peterson",
-    email: "noah.peterson@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "m2z9l7",
+    "firstname": "Noah",
+    "lastname": "Peterson",
+    "email": "noah.peterson@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "k8y3n5",
-    name: "Isabella Hughes",
-    email: "isabella.hughes@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "k8y3n5",
+    "firstname": "Isabella",
+    "lastname": "Hughes",
+    "email": "isabella.hughes@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "f6v1b4",
-    name: "Lucas Bennett",
-    email: "lucas.bennett@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "f6v1b4",
+    "firstname": "Lucas",
+    "lastname": "Bennett",
+    "email": "lucas.bennett@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "h3q7r2",
-    name: "Mia Sullivan",
-    email: "mia.sullivan@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "h3q7r2",
+    "firstname": "Mia",
+    "lastname": "Sullivan",
+    "email": "mia.sullivan@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "p5w8x0",
-    name: "Oliver Diaz",
-    email: "oliver.diaz@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
+    "id": "p5w8x0",
+    "firstname": "Oliver",
+    "lastname": "Diaz",
+    "email": "oliver.diaz@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
   },
   {
-    id: "t9k4m6",
-    name: "Emma Foster",
-    email: "emma.foster@example.com",
-    password: "Welcome1!",
-    avatar: "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
-    onboarding: true,
-    xp: 8080,
-    gems: 0,
-  },
-];
+    "id": "t9k4m6",
+    "firstname": "Emma",
+    "lastname": "Foster",
+    "email": "emma.foster@example.com",
+    "password": "Welcome1!",
+    "avatar": "https://ucarecdn.com/dece9b56-f8b8-4bda-aeeb-1bf2614c1f73/-/preview/286x479/",
+    "xp": 8080,
+    "gems": 0,
+    "onboarding": true,
+    "created_at": "2026-01-19 14:54:06.195804+00"
+  }
+]
 
 export type UserMap = {
     id: string;

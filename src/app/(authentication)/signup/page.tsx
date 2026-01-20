@@ -1,12 +1,17 @@
 "use client";
 
+import { useAppData } from "@/app/contexts/appDataContext";
+import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
 import PrivacyPolicyPopup from "@/components/popups/privacyPolicyPopup";
 import TermsOfUsePopup from "@/components/popups/termsOfUsePopup";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
+    const { registerUser } = useAppData();
+    const { setCurrentUser } = useCurrentUserContext();
+
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
@@ -15,8 +20,26 @@ export default function Page() {
 
     const [nextStep, setNextStep] = useState<"privacy" | "terms" | null>(null);
 
-    function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-        e.preventDefault();
+    // Form state
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    async function handleSubmit() {
+
+        // Basic validation
+        if (!firstname || !lastname || !username || !email || !password || !confirmPassword) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
 
         // if both already agreed -> proceed
         if (agreePrivacy && agreeTerms) {
@@ -39,6 +62,33 @@ export default function Page() {
         }
     }
 
+    useEffect(() => {
+        if (agreePrivacy && agreeTerms) {
+            console.log("Proceed with registration");
+
+            const formData = {
+                firstname,
+                lastname,
+                username,
+                email,
+                password,
+                avatar: "",
+                gems: 0,
+                xp: 0,
+                onboarding: false
+            };
+
+            async function register() {
+                const res = await registerUser(formData);
+                console.log(res)
+                if (res) {
+                    setCurrentUser(res);
+                }
+            }
+            register()
+
+        }
+    }, [agreeTerms, agreePrivacy])
     return (
         <>
             <PrivacyPolicyPopup
@@ -50,7 +100,6 @@ export default function Page() {
                         I have read and accept the Privacy Policy
                     </>
                 }
-
                 onClose={() => {
                     setIsPrivacyOpen(false);
                     setAgreePrivacy(true);
@@ -88,21 +137,70 @@ export default function Page() {
                     <LogoWithClouds />
                 </div>
 
-                <div className="mt-auto mb-10 space-y-4 mx-auto w-[380px] max-w-[95vw]">
+                <form onSubmit={(e) => {
+                    e.preventDefault()
+                    handleSubmit()
+                }} className="mt-auto mb-10 space-y-4 mx-auto w-[380px] max-w-[95vw]">
                     <h2 className="header2 !mb-6">Enter Your Details</h2>
 
                     <div className="grid grid-cols-2 gap-4 w-full">
-                        <input className="flex-1" type="text" name="reg_fname" placeholder="Firstname" />
-                        <input className="flex-1" type="text" name="reg_lname" placeholder="Lastname" />
+                        <input
+                            className="flex-1"
+                            type="text"
+                            name="reg_firstname"
+                            placeholder="Firstname"
+                            value={firstname}
+                            onChange={(e) => setFirstname(e.target.value)}
+                            required
+                        />
+                        <input
+                            className="flex-1"
+                            type="text"
+                            name="reg_lastname"
+                            placeholder="Lastname"
+                            value={lastname}
+                            onChange={(e) => setLastname(e.target.value)}
+                            required
+                        />
                     </div>
 
-                    <input className="w-full" type="text" name="reg_username" placeholder="Username" />
-                    <input className="w-full" type="email" name="reg_email" placeholder="Email" />
-                    <input className="w-full" type="password" placeholder="Password" />
-                    <input className="w-full" type="password" placeholder="Confirm Password" />
+                    <input
+                        className="w-full"
+                        type="text"
+                        name="reg_username"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                    <input
+                        className="w-full"
+                        type="email"
+                        name="reg_email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <input
+                        className="w-full"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <input
+                        className="w-full"
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
 
                     <button
-                        onClick={(e) => handleSubmit(e)}
+                        type="submit"
                         className="text-xl btn primary font-bold w-full mt-4"
                     >
                         Register
@@ -113,7 +211,7 @@ export default function Page() {
                             Already have an account?
                         </Link>
                     </div>
-                </div>
+                </form>
             </div>
         </>
     );
