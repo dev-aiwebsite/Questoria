@@ -9,8 +9,8 @@ export default function Layout({children}:{children:ReactNode}) {
    const { currentUser } = useCurrentUserContext();
  
    useEffect(() => {
-     if (!currentUser) {
-       router.push("/login");
+     if (currentUser) {
+       router.push("/lite");
      }
    }, [currentUser, router]);
  

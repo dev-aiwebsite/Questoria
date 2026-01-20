@@ -466,7 +466,7 @@ export default function Page() {
      
       <div 
         ref={scrollContainerRef}
-        className={`block border-3 border-black w-screen overflow-auto height-no-header-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+        className={`block border-3 border-black w-screen overflow-auto height-with-header-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
         style={{ 
           touchAction: 'none',
           willChange: 'scroll-position',
@@ -555,7 +555,6 @@ export default function Page() {
                   className={`isolate w-[calc(40px+1.5%)] aspect-square absolute -translate-x-1/2 -translate-y-full z-10 ${mascotAnimationPhase !== 'idle' ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
                 >
-                <span className="bg-white text-sm whitespace-nowrap">{c.title}</span>
                 {!isCheckpointVisited && !c.is_visited &&  <Image
                   className="w-[22%] h-auto aspect-square absolute left-[48%] top-[28%]"
                   src="/images/IconLock.png"
