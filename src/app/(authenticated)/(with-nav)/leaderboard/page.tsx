@@ -1,6 +1,7 @@
 "use client";
 
 import { useAppData } from "@/app/contexts/appDataContext";
+import { User } from "@/server-actions/crudUser";
 import Image from "next/image";
 
 export default function Page() {
@@ -62,12 +63,13 @@ function LeaderboardItem({ number, user }: { number: number; user: User }) {
       <span>{number}.</span>
       <Image
         className="rounded-full aspect-square object-cover h-auto border-1 border-white"
-        src={user.avatar}
+        src={user.avatar ?? ""}
         width={45}
         height={45}
         alt=""
       />
-      <span>{user.name}</span>
+      <span>{user.firstname} </span>
+      <span>{user.lastname} </span>
       <span className="ml-auto">{user.xp}XP</span>
     </div>
   );

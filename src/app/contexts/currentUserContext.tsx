@@ -1,6 +1,7 @@
 "use client";
 
-import { User, user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
+import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
+import { User } from "@/server-actions/crudUser";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type CurrentUserContextType = {
