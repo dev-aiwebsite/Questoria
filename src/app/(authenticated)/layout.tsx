@@ -15,5 +15,5 @@ export default function Layout({children}:{children:ReactNode}) {
    }, [currentUser, router]);
  
    // Show loading state while redirecting
-   return <>{children}</>;
+   return <div className="bg-primary">{children}</div>;
 }

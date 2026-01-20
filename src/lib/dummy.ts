@@ -1161,8 +1161,8 @@ export type OnboardingQuestions = {
 export const onboardingQuestions: OnboardingQuestions[] = [
   {
     id: "nm439s1",
-    question: "Fill in Your Party and Origins Before You Wander",
-    description: "Who joins you in this grand adventure?",
+    question: "Who's adventuring today?",
+    description: "So we can shape your future quests!",
     type: "radio",
     cta: {
       idle: "Choose your party",
