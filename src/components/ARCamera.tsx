@@ -89,7 +89,7 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
     if (isFrontCamera) {
       ctx.save();
       ctx.translate(width, 0);
-      // ctx.scale(-1, 1);
+      ctx.scale(-1, 1);
       ctx.drawImage(videoRef.current, 0, 0, width, height);
       ctx.restore();
     } else {
@@ -149,9 +149,9 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
             onClick={() => setIsFrontCamera((prev) => !prev)}
             className="absolute right-10 top-1/2 -translate-y-1/2 btn !bg-transparent text-white px-4 py-2 rounded flex items-center gap-2"
           >
-            <SwitchCamera className="w-5 h-5" />
+            <SwitchCamera  strokeWidth={1} className="w-8 h-8" />
 
-            {isFrontCamera ? "Front" : "Back"}
+            
           </button>
         </div>
       )}
