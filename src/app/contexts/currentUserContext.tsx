@@ -43,6 +43,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
         }
         return null;
     });
+    
 
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(() => {

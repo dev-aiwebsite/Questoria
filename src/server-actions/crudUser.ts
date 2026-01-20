@@ -22,8 +22,9 @@ export type User = {
   created_at: string;
 };
 
+export type UserForm = Omit<User, "id" | "created_at">;
 
-export async function createUser(data: Omit<User, "id" | "created_at">): Promise<Result<User>> {
+export async function createUser(data: UserForm): Promise<Result<User>> {
   try {
     const id = nanoid(10);
 

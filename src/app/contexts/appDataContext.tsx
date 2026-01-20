@@ -1,13 +1,14 @@
 "use client";
 
-import { getUsers, User } from "@/server-actions/crudUser";
+import { createUser, getUsers, User, UserForm } from "@/server-actions/crudUser";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 
 type AppDataContextType = {
 isFetching: boolean;
-  users: User[];
-  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+users: User[];
+setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+registerUser: (formData:UserForm) => Promise<User | undefined>;
 };
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
@@ -30,8 +31,17 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
         fetchData()
     }, [])
 
+    async function registerUser(formData:UserForm){
+      const {data} = await createUser(formData)
+      if(data){
+        setUsers([...users,data])
+      }
+
+        return data
+    }
+
   return (
-    <AppDataContext.Provider value={{isFetching, users, setUsers }}>
+    <AppDataContext.Provider value={{registerUser, isFetching, users, setUsers }}>
       {children}
     </AppDataContext.Provider>
   );

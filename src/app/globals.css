@@ -84,3 +84,33 @@ body {
 [data-radix-popper-content-wrapper] {
   z-index: 9999999999 !important;
 }
+
+@keyframes compass-search {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(360deg); }   /* Searching */
+  55%  { transform: rotate(360deg); }   /* Pause */
+  75%  { transform: rotate(720deg); }   /* Searching again */
+  100% { transform: rotate(720deg); }   /* Pause */
+}
+
+.compass-search {
+  animation: compass-search 4s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%   { opacity: 0; transform: translateY(0px); }
+  50%  { opacity: 1; transform: translateY(-4px); }
+  100% { opacity: 0; transform: translateY(0px); }
+}
+
+.loading-dot {
+  animation: dot-pulse 1s infinite ease-in-out;
+}
+
+.loading-dot.delay-1 {
+  animation-delay: 0.2s;
+}
+
+.loading-dot.delay-2 {
+  animation-delay: 0.4s;
+}

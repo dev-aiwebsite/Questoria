@@ -1,7 +1,10 @@
+"use client"
+
 import Clouds from "@/components/clouds";
 import Link from "next/link";
 
 export default function Page() {
+
     return (
         <div className="relative isolate flex flex-col bg-primary h-screen overflow-hidden">
             <div className="absolute top-0 mt-10 -z-2">
@@ -16,16 +19,13 @@ export default function Page() {
                 <p>Take your time. Wander. See what you find.</p>
 
                 <Link
-                className="btn primary mt-10"
-                href={"/lite/map"}
+                    className="btn primary mt-10"
+                    href={"/lite/map"}
                 >
-                Enter Map
+                    Enter Map
                 </Link>
-
             </div>
-
-
-
         </div>
     );
+
 }
