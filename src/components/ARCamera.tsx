@@ -65,42 +65,79 @@ export default function ARCamera({ stopId = "1", onClose }: Props) {
 
     return () => stopCamera();
   }, [isFrontCamera]);
-
+  
   const capture = () => {
-    if (
-      !videoRef.current ||
-      !canvasRef.current ||
-      !overlayRef.current ||
-      !containerRef.current
-    )
-      return;
+  const video = videoRef.current;
+  const canvas = canvasRef.current;
+  const overlay = overlayRef.current;
+  
+  if (!video || !canvas || !overlay) return;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
 
-    const width = containerRef.current.clientWidth;
-    const height = containerRef.current.clientHeight;
+  // 1. Use the REAL internal resolution of the camera hardware
+  const vWidth = video.videoWidth;
+  const vHeight = video.videoHeight;
 
-    canvas.width = width;
-    canvas.height = height;
+  // 2. Set canvas to match the hardware exactly
+  canvas.width = vWidth;
+  canvas.height = vHeight;
 
-    // Mirror ONLY for front camera
-    if (isFrontCamera) {
-      ctx.save();
-      ctx.translate(width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(videoRef.current, 0, 0, width, height);
-      ctx.restore();
-    } else {
-      ctx.drawImage(videoRef.current, 0, 0, width, height);
-    }
+  // 3. Handle Mirroring for Front Camera
+  if (isFrontCamera) {
+    ctx.save();
+    ctx.translate(vWidth, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0, vWidth, vHeight);
+    ctx.restore();
+  } else {
+    ctx.drawImage(video, 0, 0, vWidth, vHeight);
+  }
 
-    // Overlay
-    ctx.drawImage(overlayRef.current, 0, 0, width, height);
+  // 4. Draw Overlay
+  // This ensures the frame scales perfectly to the hardware resolution
+  ctx.drawImage(overlay, 0, 0, vWidth, vHeight);
 
-    setCapturedImage(canvas.toDataURL("image/png"));
-  };
+  const dataUrl = canvas.toDataURL("image/png");
+  setCapturedImage(dataUrl);
+};
+
+  // const capture = () => {
+  //   if (
+  //     !videoRef.current ||
+  //     !canvasRef.current ||
+  //     !overlayRef.current ||
+  //     !containerRef.current
+  //   )
+  //     return;
+
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext("2d");
+  //   if (!ctx) return;
+
+  //   const width = containerRef.current.clientWidth;
+  //   const height = containerRef.current.clientHeight;
+
+  //   canvas.width = width;
+  //   canvas.height = height;
+
+  //   // Mirror ONLY for front camera
+  //   if (isFrontCamera) {
+  //     ctx.save();
+  //     ctx.translate(width, 0);
+  //     ctx.scale(-1, 1);
+  //     ctx.drawImage(videoRef.current, 0, 0, width, height);
+  //     ctx.restore();
+  //   } else {
+  //     ctx.drawImage(videoRef.current, 0, 0, width, height);
+  //   }
+
+  //   // Overlay
+  //   ctx.drawImage(overlayRef.current, 0, 0, width, height);
+
+  //   setCapturedImage(canvas.toDataURL("image/png"));
+  // };
 
   const handleClose = () => {
     stopCamera();
