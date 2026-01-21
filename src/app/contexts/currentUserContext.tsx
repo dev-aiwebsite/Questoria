@@ -137,7 +137,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 return prevUser;
             }
             const oldGems = prevUser.gems || 0;
-            const newGems = oldGems + amount;
+            const newGems = +oldGems + +amount;
             const updatedUser = {
                 ...prevUser,
                 gems: newGems
