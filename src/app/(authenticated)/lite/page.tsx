@@ -1,6 +1,7 @@
 "use client"
 
 import Clouds from "@/components/clouds";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Page() {
@@ -16,12 +17,20 @@ export default function Page() {
                     <p>
                         <strong>A game made for curious explorers.</strong>
                     </p>
-
+                   
                     <p>
                         Our first quest lives at <strong>Royal Botanic Gardens, Cranbourne</strong>.
                         <br />
                         Full of winding paths, hidden details, and moments worth stopping for.
                     </p>
+
+                     <Image
+                     className="mx-auto -translate-x-[10%]"
+                    src="/images/mascot-with-basket.png"
+                    alt=""
+                    width={200}
+                    height={200}
+                    />
 
                     <p>
                         <strong>Meet your guide, a Southern Brown Bandicoot</strong>
@@ -34,6 +43,14 @@ export default function Page() {
                         <br />
                         Each find adds to your progress and helps your bandicoot along the way.
                     </p>
+
+                     <Image
+                     className="block !my-12 mx-auto border-3 border-black rounded-xl w-full"
+                    src="/images/bandicott.png"
+                    alt=""
+                    width={200}
+                    height={200}
+                    />
 
                     <p>
                         <strong>Did you know?</strong>

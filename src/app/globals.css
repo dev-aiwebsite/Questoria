@@ -81,7 +81,54 @@ body {
 }
 
 .ribbon-end {
-      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% calc(100% - 2.6rem), 0% 100%);
+      /* clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% calc(100% - 2.6rem), 0% 100%); */
+}
+
+.scrollpaper {
+  position: relative;
+  /* Middle Body Texture */
+  background-image: url('/images/vertical-scroll-paper-body.webp');
+  background-repeat: repeat-y; /* Tiles vertically */
+  background-size: 100% auto;  /* Fits width, repeats height */
+  
+  /* Creates space for the top/bottom caps so content doesn't overlap them.
+     20.7% is derived from 148px / 715px */
+  padding-top: 20.7%; 
+  padding-bottom: 20.7%;
+  
+  box-sizing: border-box;
+  width: 100%; 
+}
+
+/* Shared styles for Top and Bottom Caps */
+.scrollpaper::before,
+.scrollpaper::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  
+  /* "The Crop": These lines force the height to be exactly 20.7% of the width,
+     maintaining the 148px/715px aspect ratio responsively. */
+  height: 0;
+  padding-bottom: 20.7%;
+  
+  background-image: url('/images/vertical-scroll-paper.webp');
+  background-size: 100% auto; /* Fits the width, lets height flow */
+  background-repeat: no-repeat;
+  z-index: 1; /* Ensures caps sit on top of the body background */
+}
+
+/* Top Cap - Shows the top 148px of the image */
+.scrollpaper::before {
+  top: 0;
+  background-position: 0 0; /* Aligns to top edge */
+}
+
+/* Bottom Cap - Shows the bottom 148px of the image */
+.scrollpaper::after {
+  bottom: 0;
+  background-position: 0 100%; /* Aligns to bottom edge */
 }
 
 [data-radix-popper-content-wrapper] {
@@ -121,4 +168,32 @@ body {
 
 .background-scroll {
   background-image: url('/images/vertical-scroll-paper.webp')
+}
+
+.worm {
+    height: 30px;
+    width: 60px;
+    background-image: url("/images/bugs-insects.png");
+    background-size: 400%;
+    background-position: 100% 45%;
+}
+
+.social {
+    background-image: url("/images/IconSocials.png");
+    background-size: 200%;
+    height: auto;
+    aspect-ratio: 1/1;
+
+}
+.social.fb {
+    background-position: 100% 0%;
+}
+.social.insta {
+    background-position: 0% 0%;
+}
+.social.tiktok {
+    background-position: 100% 100%;
+}
+.social.linkedin {
+    background-position: 0% 100%;
 }

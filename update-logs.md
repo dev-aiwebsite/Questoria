@@ -1,25 +1,29 @@
-### Lite version updates
-## Onboarding
-fixed
-- Question header font
-- Question subheader font
-- question order
-- progress count to dynamically get question count
+### 🚀 Lite Version Updates
+**Date:** 23 January 2026
 
-## Welcome Page
-fixed
-- skipping welcome page
-- added container "box" to be more readable
-- update text content
-- make sure no underline on garden name
+#### 🧩 Onboarding
+- **Fixed:** Question header font styling.
+- **Fixed:** Question subheader font styling.
+- **Fixed:** Logic for question ordering.
+- **Fixed:** Progress count (now dynamically calculates total question count).
 
- todo 
-- We also we need a little image of the bandicoot holding a food basket of worms/bugs etc we also need to update the copy to reflect what the game is trying to achieve and explain what the mascot is (note this might break up the page design wise)
+#### 👋 Welcome Page
+- **Fixed:** Issue with skipping the welcome page.
+- **Fixed:** Added container "box" to improve text readability.
+- **Fixed:** Updated general text content.
+- **Fixed:** Removed text underline from the Garden Name.
+- [x] Add image of the Bandicoot holding a food basket (worms/bugs).
+- [x] Update copy to reflect game goals and explain the mascot.
+  - *Note: Check if adding the image/copy breaks the current page design layout.*
 
-## Map page:
-fixed
-- Back button doesn’t work to go back to the “welcome page”
 
-## Camera
-issue
-- Camera distortion issue raised
+#### 🗺️ Map Page
+- **Fixed:** Back button functionality (now correctly navigates back to Welcome Page).
+- **Fixed:** Header text font.
+
+
+#### 📸 Camera
+- **Fixed:** Camera distortion and aspect ratio issues (implemented smart crop).
+
+### Complete page
+- Added complete page
