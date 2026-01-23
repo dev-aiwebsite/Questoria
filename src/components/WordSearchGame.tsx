@@ -10,9 +10,10 @@ interface WordSearchGameProps {
   checkpointId: string
   mapId: string
   gridSize?: number // User controls this, default to 12
+  customWords?: string[] // Optional custom word list for this checkpoint
 }
 
-// Nature-related words that can be used
+// Nature-related words that can be used (fallback)
 const NATURE_WORDS = [
   'PLANT', 'TREE', 'FLOWER', 'LEAF', 'ROOT', 'STEM', 'BARK', 'BRANCH',
   'GARDEN', 'FOREST', 'MEADOW', 'PARK', 'NATURE', 'WILDLIFE', 'BIRD', 'BEE',
@@ -20,12 +21,35 @@ const NATURE_WORDS = [
   'SEED', 'SPROUT', 'BLOOM', 'PETAL', 'POLLEN', 'NECTAR', 'HABITAT', 'ECOSYSTEM'
 ]
 
+// Checkpoint-specific word lists (only for Word Search checkpoints)
+// Words longer than 7 characters are excluded for 7x7 grid compatibility
+const CHECKPOINT_WORDS: Record<string, string[]> = {
+  // cp_003 - Box Garden: BOX(3✅), EUCALYPT(8❌), GRAMPIANS(9❌), UNDERSTOREY(11❌), WILDFLOWER(10❌), CANOPY(6✅), ROCKY(5✅), SHRUB(5✅)
+  'cp_003': ['BOX', 'CANOPY', 'ROCKY', 'SHRUB'],
+  
+  // cp_005 - Forest Garden: FOREST(6✅), WOODLAND(8❌), EUCALYPT(8❌), CANOPY(6✅), SHADE(5✅), HABITAT(7✅)
+  'cp_005': ['FOREST', 'CANOPY', 'SHADE', 'HABITAT'],
+  
+  // cp_007 - Desert Discovery Camp: DESERT(6✅), SAND(4✅), ROCK(4✅), SUN(3✅), HEAT(4✅), PLANT(5✅), SEED(4✅), LEAF(4✅), BUG(3✅), LIZARD(6✅), TOUGH(5✅), SURVIVE(7✅)
+  'cp_007': ['DESERT', 'SAND', 'ROCK', 'SUN', 'HEAT', 'PLANT', 'SEED', 'LEAF', 'BUG', 'LIZARD', 'TOUGH', 'SURVIVE'],
+  
+  // cp_008 - Ian Potter Lakeside Precinct Lawn: LAKE(4✅), WATER(5✅), REFLECTION(10❌), LILYPAD(7✅), GRASS(5✅), SHORE(5✅), SKY(3✅), CLOUD(5✅), BREEZE(6✅), DUCK(4✅), PELICAN(7✅), PICNIC(6✅)
+  'cp_008': ['LAKE', 'WATER', 'LILYPAD', 'GRASS', 'SHORE', 'SKY', 'CLOUD', 'BREEZE', 'DUCK', 'PELICAN', 'PICNIC'],
+  
+  // cp_010 - Serpentine Path: SERPENTINE(10❌), CURVE(5✅), PATH(4✅), WINDING(7✅), ARID(4✅), SAND(4✅), STONE(5✅), JOURNEY(7✅), FLOW(4✅), LINE(4✅), TRACK(5✅), TURN(4✅)
+  'cp_010': ['CURVE', 'PATH', 'WINDING', 'ARID', 'SAND', 'STONE', 'JOURNEY', 'FLOW', 'LINE', 'TRACK', 'TURN'],
+  
+  // cp_013 - Future Garden: FUTURE(6✅), GROWTH(6✅), HEIGHT(6✅), SCALE(5✅), PLANNING(8❌), PATIENCE(8❌), AUSTRALIAN(9❌)
+  'cp_013': ['FUTURE', 'GROWTH', 'HEIGHT', 'SCALE'],
+}
+
 export default function WordSearchGame({
   onWin,
   onClose,
   checkpointId,
   mapId,
-  gridSize: initialGridSize = 8
+  gridSize: initialGridSize = 8,
+  customWords
 }: WordSearchGameProps) {
   const [currentGridSize, setCurrentGridSize] = useState(initialGridSize)
   const [showHowToPlay, setShowHowToPlay] = useState(false)
@@ -156,11 +180,26 @@ export default function WordSearchGame({
   }
 
   const generateGrid = () => {
-    // Select 8-10 random nature words
-    const selectedWords = [...NATURE_WORDS]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, Math.min(10, Math.floor(currentGridSize * 0.8)))
+    // Use custom words if provided, otherwise use checkpoint-specific words, otherwise fallback to nature words
+    let wordPool: string[] = []
+    if (customWords && customWords.length > 0) {
+      wordPool = customWords
+    } else if (CHECKPOINT_WORDS[checkpointId]) {
+      wordPool = CHECKPOINT_WORDS[checkpointId]
+    } else {
+      wordPool = NATURE_WORDS
+    }
+    
+    // Filter words to fit in grid (max length = gridSize)
+    const maxLength = currentGridSize
+    const filteredWords = wordPool
       .map(w => w.toUpperCase())
+      .filter(w => w.length <= maxLength)
+    
+    // Select words (up to gridSize * 0.8, but at least 3)
+    const selectedWords = [...filteredWords]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.max(3, Math.min(filteredWords.length, Math.floor(currentGridSize * 0.8))))
 
     setWords(selectedWords)
     setFoundWords(new Set())
