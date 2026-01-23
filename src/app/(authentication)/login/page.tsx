@@ -18,7 +18,7 @@ export default function Page() {
     const [isSuccess, stIsSuccess] = useState(false)
     
 
-    
+    console.log(users, 'users')
     async function login() {
         if (!userEmail || !userPass) {
             setError('Invalid credentials')
