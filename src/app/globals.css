@@ -50,11 +50,14 @@ body {
     @apply block bg-accent hover:brightness-125 transition text-center font-bold;
   }
 
+  .header1 {
+    @apply text-3xl font-serif;
+  }
   .header2 {
     @apply text-xl mb-2 font-serif;
   }
   .header3 {
-    @apply text-lg mb-2 font-serif;
+    @apply text-lg font-bold mb-2;
   }
 
   .app-container {
@@ -113,4 +116,9 @@ body {
 
 .loading-dot.delay-2 {
   animation-delay: 0.4s;
+}
+
+
+.background-scroll {
+  background-image: url('/images/vertical-scroll-paper.webp')
 }
