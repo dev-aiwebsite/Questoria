@@ -19,7 +19,7 @@ type Card = {
   isMatched: boolean;
 };
 
-// Plant images array
+// Plant images array (fallback)
 const plantImages = [
   "/memoryMatch/plants/Layer 1.png",
   "/memoryMatch/plants/Layer 2.png",
@@ -31,8 +31,139 @@ const plantImages = [
   "/memoryMatch/plants/Layer 8.png",
 ];
 
-export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, tileCount: initialTileCount = 8 }: MemoryMatchGameProps) {
-  const [tileCount, setTileCount] = useState(initialTileCount); // Use prop or default to 8 tiles
+// Checkpoint-specific image configurations
+// Maps checkpoint ID to number of images and image paths
+// Note: Image folders use old checkpoint IDs (cp_021, cp_031, cp_032, cp_035)
+// but active checkpoints use new IDs (cp_009, cp_011, cp_012, cp_015)
+// We map both to the same image folders
+const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
+  'cp_002': {
+    count: 4,
+    paths: [
+      '/images/MemoryMatch/cp_002/1.png',
+      '/images/MemoryMatch/cp_002/2.png',
+      '/images/MemoryMatch/cp_002/3.png',
+      '/images/MemoryMatch/cp_002/4.png',
+    ]
+  },
+  // Weird and Wonderful Garden - old ID (cp_021) and new ID (cp_009) both map to cp_021 folder
+  'cp_021': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_021/1.png',
+      '/images/MemoryMatch/cp_021/2.png',
+      '/images/MemoryMatch/cp_021/3.png',
+      '/images/MemoryMatch/cp_021/4.png',
+      '/images/MemoryMatch/cp_021/5.png',
+      '/images/MemoryMatch/cp_021/6.png',
+    ]
+  },
+  'cp_009': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_021/1.png',
+      '/images/MemoryMatch/cp_021/2.png',
+      '/images/MemoryMatch/cp_021/3.png',
+      '/images/MemoryMatch/cp_021/4.png',
+      '/images/MemoryMatch/cp_021/5.png',
+      '/images/MemoryMatch/cp_021/6.png',
+    ]
+  },
+  // Kids Backyard - old ID (cp_031) and new ID (cp_011) both map to cp_031 folder
+  'cp_031': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_031/1.png',
+      '/images/MemoryMatch/cp_031/2.png',
+      '/images/MemoryMatch/cp_031/3.png',
+      '/images/MemoryMatch/cp_031/4.png',
+      '/images/MemoryMatch/cp_031/5.png',
+      '/images/MemoryMatch/cp_031/6.png',
+    ]
+  },
+  'cp_011': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_031/1.png',
+      '/images/MemoryMatch/cp_031/2.png',
+      '/images/MemoryMatch/cp_031/3.png',
+      '/images/MemoryMatch/cp_031/4.png',
+      '/images/MemoryMatch/cp_031/5.png',
+      '/images/MemoryMatch/cp_031/6.png',
+    ]
+  },
+  // Home Garden - old ID (cp_032) and new ID (cp_012) both map to cp_032 folder
+  'cp_032': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_032/1.png',
+      '/images/MemoryMatch/cp_032/2.png',
+      '/images/MemoryMatch/cp_032/3.png',
+      '/images/MemoryMatch/cp_032/4.png',
+      '/images/MemoryMatch/cp_032/5.png',
+      '/images/MemoryMatch/cp_032/6.png',
+    ]
+  },
+  'cp_012': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_032/1.png',
+      '/images/MemoryMatch/cp_032/2.png',
+      '/images/MemoryMatch/cp_032/3.png',
+      '/images/MemoryMatch/cp_032/4.png',
+      '/images/MemoryMatch/cp_032/5.png',
+      '/images/MemoryMatch/cp_032/6.png',
+    ]
+  },
+  // Diversity Garden - old ID (cp_035) and new ID (cp_015) both map to cp_035 folder
+  'cp_035': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_035/1.png',
+      '/images/MemoryMatch/cp_035/2.png',
+      '/images/MemoryMatch/cp_035/3.png',
+      '/images/MemoryMatch/cp_035/4.png',
+      '/images/MemoryMatch/cp_035/5.png',
+      '/images/MemoryMatch/cp_035/6.png',
+    ]
+  },
+  'cp_015': {
+    count: 6,
+    paths: [
+      '/images/MemoryMatch/cp_035/1.png',
+      '/images/MemoryMatch/cp_035/2.png',
+      '/images/MemoryMatch/cp_035/3.png',
+      '/images/MemoryMatch/cp_035/4.png',
+      '/images/MemoryMatch/cp_035/5.png',
+      '/images/MemoryMatch/cp_035/6.png',
+    ]
+  },
+};
+
+// Helper function to get images for a checkpoint
+function getCheckpointImages(checkpointId?: string): { images: string[]; tileCount: number } {
+  if (checkpointId && CHECKPOINT_IMAGES[checkpointId]) {
+    const config = CHECKPOINT_IMAGES[checkpointId];
+    return {
+      images: config.paths,
+      tileCount: config.count * 2 // Each image appears twice (pairs)
+    };
+  }
+  // Fallback to plant images
+  return {
+    images: plantImages,
+    tileCount: 8 // Default
+  };
+}
+
+export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, tileCount: initialTileCount }: MemoryMatchGameProps) {
+  // Get checkpoint-specific images and tile count
+  const { images: checkpointImages, tileCount: checkpointTileCount } = getCheckpointImages(checkpointId);
+  // If checkpoint has specific images, use its tile count; otherwise use prop or default
+  const defaultTileCount = checkpointId && CHECKPOINT_IMAGES[checkpointId] 
+    ? checkpointTileCount 
+    : (initialTileCount || 8);
+  const [tileCount, setTileCount] = useState(defaultTileCount);
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -82,10 +213,16 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
     }
   };
 
-  // Update tileCount when prop changes
+  // Update tileCount when prop or checkpoint changes
   useEffect(() => {
-    setTileCount(initialTileCount);
-  }, [initialTileCount]);
+    const { tileCount: newTileCount } = getCheckpointImages(checkpointId);
+    // If checkpoint has specific images, use its tile count; otherwise use prop or default
+    if (checkpointId && CHECKPOINT_IMAGES[checkpointId]) {
+      setTileCount(newTileCount);
+    } else {
+      setTileCount(initialTileCount || 8);
+    }
+  }, [initialTileCount, checkpointId]);
 
   // Initialize game
   useEffect(() => {
@@ -155,21 +292,21 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
     const pairs = tileCount / 2;
     const values: string[] = [];
     
-    // Generate pairs using plant images
-    // Use available plant images (up to 8 pairs max)
-    const availablePlants = plantImages.slice(0, Math.min(pairs, plantImages.length));
+    // Use checkpoint-specific images if available, otherwise use plant images
+    const { images: availableImages } = getCheckpointImages(checkpointId);
+    const imagesToUse = availableImages.slice(0, Math.min(pairs, availableImages.length));
     
     // Generate pairs
-    for (let i = 0; i < availablePlants.length; i++) {
-      values.push(availablePlants[i], availablePlants[i]);
+    for (let i = 0; i < imagesToUse.length; i++) {
+      values.push(imagesToUse[i], imagesToUse[i]);
     }
     
-    // If we need more pairs than available plants, repeat some plants
-    if (pairs > availablePlants.length) {
-      const remainingPairs = pairs - availablePlants.length;
+    // If we need more pairs than available images, repeat some images
+    if (pairs > imagesToUse.length) {
+      const remainingPairs = pairs - imagesToUse.length;
       for (let i = 0; i < remainingPairs; i++) {
-        const plantIndex = i % availablePlants.length;
-        values.push(availablePlants[plantIndex], availablePlants[plantIndex]);
+        const imageIndex = i % imagesToUse.length;
+        values.push(imagesToUse[imageIndex], imagesToUse[imageIndex]);
       }
     }
 
@@ -420,13 +557,17 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
                      onClick={() => handleCardClick(card.id)}
                      disabled={isProcessing || gameWon}
                      className={`
-                       aspect-square border-2 border-black
+                       aspect-square border-2
                        transition-all duration-300 transform
                        ${card.isMatched
-                         ? "bg-green-400 cursor-default"
-                         : card.isFlipped
+                         ? "border-green-500 cursor-default"
+                         : "border-black"
+                       }
+                       ${card.isFlipped && !card.isMatched
                          ? "bg-blue-200 cursor-pointer hover:scale-105"
-                         : "bg-white cursor-pointer hover:scale-105 hover:bg-gray-100"
+                         : !card.isMatched
+                         ? "bg-white cursor-pointer hover:scale-105 hover:bg-gray-100"
+                         : ""
                        }
                        ${isProcessing ? "pointer-events-none" : ""}
                        flex items-center justify-center overflow-hidden
@@ -439,7 +580,8 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
                          alt="Plant"
                          width={100}
                          height={100}
-                         className="w-full h-full object-contain p-2"
+                         className="w-full h-full object-cover"
+                         style={{ borderRadius: '23px' }}
                        />
                      ) : (
                        <span className="text-gray-400 text-4xl">?</span>

@@ -27,12 +27,11 @@ const CONTENT_SCALE = 10.5
 
 // Game assignment configuration
 const memoryMatchCheckpoints = [
-  'cp_002',  // Ironbark Garden & Eucalypt Walk
+  'cp_002',  // Ironbark Garden & Eucalypt Walk (4 images)
   'cp_009',  // Weird and Wonderful Garden
   'cp_011',  // Kids Backyard
   'cp_012',  // Home Garden
-  'cp_015',  // Diversity Garden
-  'cp_017'   // Arid Garden
+  'cp_015'   // Diversity Garden
 ];
 
 const jigsawPuzzleCheckpoints = [
@@ -40,7 +39,8 @@ const jigsawPuzzleCheckpoints = [
   'cp_004',  // Stringybark Garden
   'cp_006',  // Dry River Bed
   'cp_014',  // Rockpool Waterway
-  'cp_016'   // Research Garden
+  'cp_016',  // Research Garden
+  'cp_017'   // Arid Garden (changed from Memory Match)
 ];
 
 const wordSearchCheckpoints = [
