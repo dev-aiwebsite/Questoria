@@ -394,7 +394,7 @@ export default function SlidingPuzzleGame({
 
   return (
     <div className="fixed inset-0 z-[999999] bg-black/80 flex items-center justify-center p-4">
-      <div data-game-modal className="border-3 border-black max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col" style={{ backgroundColor: '#669f90' }}>
+      <div data-game-modal className="border-3 border-black max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col" style={{ backgroundColor: '#669f90', fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
         {/* Blue Sky Header with Animated Clouds */}
         <div className="relative h-32 overflow-visible border-b-3 border-black" style={{ backgroundColor: '#5ab2e0' }}>
           {/* Animated Clouds - Multiple sets for continuous coverage */}
@@ -465,9 +465,9 @@ export default function SlidingPuzzleGame({
 
             {/* Center: Title */}
             <div className="flex-1 flex items-center justify-center px-2 min-w-0">
-              <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-900 text-center" style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
+              <h3 className="text-center !mb-6 font-serif font-bold !text-4xl">
                 Sliding Puzzle
-              </h2>
+              </h3>
             </div>
 
             {/* Right: Flag */}
@@ -593,15 +593,19 @@ export default function SlidingPuzzleGame({
       {/* How to Play Popup */}
       {showHowToPlay && (
         <div className="fixed inset-0 z-[9999999] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[80vh] overflow-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-bold">How to Play</h3>
-              <button
-                onClick={() => setShowHowToPlay(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition"
-              >
-                <X size={24} />
-              </button>
+          <div className="bg-white rounded-xl border-3 border-black p-6 max-w-2xl w-full max-h-[80vh] overflow-auto" style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
+            <div className="mb-4">
+              <div className="flex items-center justify-between">
+                <p className="whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl text-center py-4 text-2xl flex-1 mr-4">
+                  How to Play
+                </p>
+                <button
+                  onClick={() => setShowHowToPlay(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition flex-shrink-0"
+                >
+                  <X size={24} />
+                </button>
+              </div>
             </div>
             <div className="text-sm text-gray-600 space-y-2">
               <ul className="list-disc list-inside space-y-1">
