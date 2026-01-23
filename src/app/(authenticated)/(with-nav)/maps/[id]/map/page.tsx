@@ -25,6 +25,52 @@ const POPUP_BASE_SCALE = 0.9
 // Increase this value (e.g., 1.5, 2.0) to make everything bigger, decrease (e.g., 0.8, 0.9) to make smaller
 const CONTENT_SCALE = 10.5
 
+// Game assignment configuration
+const memoryMatchCheckpoints = [
+  'cp_002',  // Ironbark Garden & Eucalypt Walk
+  'cp_009',  // Weird and Wonderful Garden
+  'cp_011',  // Kids Backyard
+  'cp_012',  // Home Garden
+  'cp_015',  // Diversity Garden
+  'cp_017'   // Arid Garden
+];
+
+const jigsawPuzzleCheckpoints = [
+  'cp_001',  // Red Sands Garden
+  'cp_004',  // Stringybark Garden
+  'cp_006',  // Dry River Bed
+  'cp_014',  // Rockpool Waterway
+  'cp_016'   // Research Garden
+];
+
+const wordSearchCheckpoints = [
+  'cp_003',  // Box Garden
+  'cp_005',  // Forest Garden
+  'cp_007',  // Desert Discovery Camp
+  'cp_008',  // Ian Potter Lakeside Precinct Lawn
+  'cp_010',  // Serpentine Path
+  'cp_013'   // Future Garden
+];
+
+// Helper function to check if a checkpoint has a game
+function hasGame(checkpointId: string): boolean {
+  return memoryMatchCheckpoints.includes(checkpointId) ||
+         jigsawPuzzleCheckpoints.includes(checkpointId) ||
+         wordSearchCheckpoints.includes(checkpointId);
+}
+
+// Helper function to get game type for a checkpoint
+function getGameType(checkpointId: string): 'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle' | null {
+  if (memoryMatchCheckpoints.includes(checkpointId)) {
+    return 'memory';
+  } else if (jigsawPuzzleCheckpoints.includes(checkpointId)) {
+    return 'jigsawpuzzle';
+  } else if (wordSearchCheckpoints.includes(checkpointId)) {
+    return 'wordsearch';
+  }
+  return null;
+}
+
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
@@ -588,10 +634,21 @@ export default function Page() {
                 }
                 <Image
                   className="w-full h-full"
-                  style={isCheckpointVisited ? { 
-                    filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
-                    transition: 'filter 0.5s ease-in-out'
-                  } : {}}
+                  style={(() => {
+                    const hasGameForCheckpoint = hasGame(c.id);
+                    if (isCheckpointVisited) {
+                      return { 
+                        filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
+                        transition: 'filter 0.5s ease-in-out'
+                      };
+                    } else if (!hasGameForCheckpoint) {
+                      return {
+                        filter: 'grayscale(100%) brightness(1.5)',
+                        transition: 'filter 0.5s ease-in-out'
+                      };
+                    }
+                    return { transition: 'filter 0.5s ease-in-out' };
+                  })()}
                   src="/images/IconFlag.png"
                   width={100}
                   height={100}
@@ -608,72 +665,13 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    // Determine game type based on checkpoint ID
-                    const checkpointId = c.id;
-                    
-                    // Memory Match Game (12 checkpoints)
-                    const memoryMatchCheckpoints = [
-                      'cp_001',  // The Visitor Centre
-                      'cp_004',  // Peppermint Garden
-                      'cp_007',  // Dry River Bed
-                      'cp_010',  // Desert Discovery Camp
-                      'cp_013',  // Ian Potter Lakeside Precinct Lawn
-                      'cp_016',  // Backyard Garden
-                      'cp_019',  // Seaside Garden
-                      'cp_022',  // Gibson Hill
-                      'cp_025',  // Woodlots
-                      'cp_028',  // Amphitheatre
-                      'cp_031',  // Kids Backyard
-                      'cp_034'   // Water Saving Garden
-                    ];
-                    
-                    // Jigsaw Puzzle Game (12 checkpoints)
-                    const jigsawPuzzleCheckpoints = [
-                      'cp_002',  // Ironbank Garden
-                      'cp_005',  // Bloodwood Garden
-                      'cp_008',  // Forest Garden
-                      'cp_011',  // Gondwana Shelter
-                      'cp_014',  // How to Garden
-                      'cp_017',  // Lifestyle Garden
-                      'cp_020',  // Melaleuca Spits
-                      'cp_023',  // Hawson Hill
-                      'cp_026',  // Cultivar Garden
-                      'cp_029',  // Rockpool Pavilion
-                      'cp_032',  // Home Garden
-                      'cp_035'   // Diversity Garden
-                    ];
-                    
-                    // Word Search Game (11 checkpoints)
-                    const wordSearchCheckpoints = [
-                      'cp_003',  // Box Garden
-                      'cp_006',  // Stringybark Garden
-                      'cp_009',  // Gondwana Garden
-                      'cp_012',  // Lilypad Bridge
-                      'cp_015',  // Promenade Garden
-                      'cp_018',  // Greening Garden
-                      'cp_021',  // Weird and Wonderful Garden
-                      'cp_024',  // Arbour Garden
-                      'cp_027',  // Research Garden
-                      'cp_030',  // Serpentine Path
-                      'cp_033'   // Future Garden
-                    ];
-                    
-                    let selectedGame: 'memory' | 'wordsearch' | 'slidingpuzzle' | 'jigsawpuzzle';
-                    
-                    if (memoryMatchCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'memory';
-                    } else if (jigsawPuzzleCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'jigsawpuzzle';
-                    } else if (wordSearchCheckpoints.includes(checkpointId)) {
-                      selectedGame = 'wordsearch';
-                    } else {
-                      // Fallback to memory match (shouldn't happen)
-                      selectedGame = 'memory';
+                    const gameType = getGameType(c.id);
+                    if (gameType) {
+                      setGameType(gameType);
+                      setIsGameOpen(true);
                     }
-                    
-                    setGameType(selectedGame);
-                    setIsGameOpen(true);
                   }}
+                  hasGame={hasGame(c.id)}
                   onClose={() => {
                     setCheckpointDialogOpen(false)
                     setSelectedCheckpoint(null)
@@ -923,7 +921,8 @@ function CheckpointInfoCard({
   zoomLevel,
   checkpointId,
   onPlayGame,
-  onClose 
+  onClose,
+  hasGame = true
 }: {
   mapId: string;
   checkpointData: Checkpoint;
@@ -932,6 +931,7 @@ function CheckpointInfoCard({
   checkpointId: string;
   onPlayGame: () => void;
   onClose?: () => void;
+  hasGame?: boolean;
 }) {
   const { checkpoints: userCheckpoints } = useCurrentUserContext();
   const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.gems_collected || 0;
@@ -1007,16 +1007,18 @@ function CheckpointInfoCard({
                 <span className="font-bold">Worms Collected: {checkpointGems}</span>
               </div>
             )}
-            <button
-              className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
-              style={{ 
-                fontSize: buttonFontSize,
-                padding: buttonPadding,
-                width: buttonWidth
-              }}
-              onClick={onPlayGame}
-            >Play the Game
-            </button>
+            {hasGame && (
+              <button
+                className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
+                style={{ 
+                  fontSize: buttonFontSize,
+                  padding: buttonPadding,
+                  width: buttonWidth
+                }}
+                onClick={onPlayGame}
+              >Play the Game
+              </button>
+            )}
             <button
             onClick={() => {
               if(onClose){

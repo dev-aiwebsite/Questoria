@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
+import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
 import { useAppData } from "@/app/contexts/appDataContext";
@@ -23,6 +24,52 @@ const POPUP_BASE_SCALE = 0.6
 // Content scale multiplier - adjust this to scale all text, buttons, and spacing inside the popup
 // Increase this value (e.g., 1.5, 2.0) to make everything bigger, decrease (e.g., 0.8, 0.9) to make smaller
 const CONTENT_SCALE = 1.8
+
+// Game assignment configuration
+const memoryMatchCheckpoints = [
+  'cp_002',  // Ironbark Garden & Eucalypt Walk
+  'cp_009',  // Weird and Wonderful Garden
+  'cp_011',  // Kids Backyard
+  'cp_012',  // Home Garden
+  'cp_015',  // Diversity Garden
+  'cp_017'   // Arid Garden
+];
+
+const jigsawPuzzleCheckpoints = [
+  'cp_001',  // Red Sands Garden
+  'cp_004',  // Stringybark Garden
+  'cp_006',  // Dry River Bed
+  'cp_014',  // Rockpool Waterway
+  'cp_016'   // Research Garden
+];
+
+const wordSearchCheckpoints = [
+  'cp_003',  // Box Garden
+  'cp_005',  // Forest Garden
+  'cp_007',  // Desert Discovery Camp
+  'cp_008',  // Ian Potter Lakeside Precinct Lawn
+  'cp_010',  // Serpentine Path
+  'cp_013'   // Future Garden
+];
+
+// Helper function to check if a checkpoint has a game
+function hasGame(checkpointId: string): boolean {
+  return memoryMatchCheckpoints.includes(checkpointId) ||
+         jigsawPuzzleCheckpoints.includes(checkpointId) ||
+         wordSearchCheckpoints.includes(checkpointId);
+}
+
+// Helper function to get game type for a checkpoint
+function getGameType(checkpointId: string): 'memory' | 'wordsearch' | 'jigsawpuzzle' | null {
+  if (memoryMatchCheckpoints.includes(checkpointId)) {
+    return 'memory';
+  } else if (jigsawPuzzleCheckpoints.includes(checkpointId)) {
+    return 'jigsawpuzzle';
+  } else if (wordSearchCheckpoints.includes(checkpointId)) {
+    return 'wordsearch';
+  }
+  return null;
+}
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
@@ -47,7 +94,7 @@ export default function Page() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<number | null>(0)
   const [checkpointDialogOpen, setCheckpointDialogOpen] = useState(false)
   const [isGameOpen, setIsGameOpen] = useState(false)
-  const [gameType, setGameType] = useState<'memory' | 'wordsearch'>('memory')
+  const [gameType, setGameType] = useState<'memory' | 'wordsearch' | 'jigsawpuzzle'>('memory')
   const [showGemsAlreadyCollected, setShowGemsAlreadyCollected] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
@@ -466,12 +513,12 @@ export default function Page() {
   <>{!isMounted ? <PageLoader/> : 
   <>
     <div className="relative">
-      {/* Gem Counter - Top Right */}
+      {/* Worm Counter - Top Right */}
       <div 
         ref={gemCounterRef}
         className="fixed top-24 right-4 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border-3 border-black rounded-xl px-4 py-2 shadow-lg"
       >
-        <Sparkles className="fill-yellow-500 text-yellow-500" size={24} />
+        <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
         <span className="font-bold text-lg">
           {currentUser?.gems || 0}
         </span>
@@ -593,10 +640,21 @@ export default function Page() {
                 }
                 <Image
                   className="w-full h-full"
-                  style={isCheckpointVisited ? { 
-                    filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
-                    transition: 'filter 0.5s ease-in-out'
-                  } : {}}
+                  style={(() => {
+                    const hasGameForCheckpoint = hasGame(c.id);
+                    if (isCheckpointVisited) {
+                      return { 
+                        filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
+                        transition: 'filter 0.5s ease-in-out'
+                      };
+                    } else if (!hasGameForCheckpoint) {
+                      return {
+                        filter: 'grayscale(100%) brightness(1.5)',
+                        transition: 'filter 0.5s ease-in-out'
+                      };
+                    }
+                    return { transition: 'filter 0.5s ease-in-out' };
+                  })()}
                   src="/images/IconFlag.png"
                   width={100}
                   height={100}
@@ -613,11 +671,13 @@ export default function Page() {
                   zoomLevel={mapWidthRef.current / BASE_MAP_WIDTH}
                   checkpointId={c.id}
                   onPlayGame={() => {
-                    // Randomly select game type
-                    const randomGame = Math.random() < 0.5 ? 'memory' : 'wordsearch';
-                    setGameType(randomGame);
-                    setIsGameOpen(true);
+                    const gameType = getGameType(c.id);
+                    if (gameType) {
+                      setGameType(gameType);
+                      setIsGameOpen(true);
+                    }
                   }}
+                  hasGame={hasGame(c.id)}
                   onClose={() => {
                     setCheckpointDialogOpen(false)
                     setSelectedCheckpoint(null)
@@ -757,6 +817,18 @@ export default function Page() {
             mapId={mapId}
           />
         );
+      } else if (gameType === 'jigsawpuzzle') {
+        return (
+          <JigsawPuzzleGame
+            onWin={handleGameWin}
+            onClose={() => {
+              setIsGameOpen(false);
+            }}
+            checkpointId={checkpointId}
+            mapId={mapId}
+            puzzleSize={4}
+          />
+        );
       } else {
         return (
           <WordSearchGame
@@ -772,12 +844,12 @@ export default function Page() {
       }
     })()}
 
-    {/* Gems Already Collected Message */}
+    {/* Worms Already Collected Message */}
     {showGemsAlreadyCollected && (
       <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl border-3 border-black p-6 max-w-md w-full text-center">
-          <h3 className="text-2xl font-bold mb-4">Gems Already Collected</h3>
-          <p className="text-lg mb-4">You have already collected gems for this checkpoint.</p>
+          <h3 className="text-2xl font-bold mb-4">Worms Already Collected</h3>
+          <p className="text-lg mb-4">You have already collected worms for this checkpoint.</p>
           <button
             onClick={() => setShowGemsAlreadyCollected(false)}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -788,7 +860,7 @@ export default function Page() {
       </div>
     )}
 
-    {/* Animated Gems */}
+    {/* Animated Worms */}
     {animatingGems.map((gem) => (
       <div
         key={gem.id}
@@ -800,7 +872,7 @@ export default function Page() {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <Sparkles className="fill-yellow-500 text-yellow-500" size={32} />
+        <Image src="/images/worm.png" alt="Worm" width={40} height={40} className="object-contain" />
       </div>
     ))}
       </>
@@ -817,7 +889,8 @@ function CheckpointInfoCard({
   zoomLevel,
   checkpointId,
   onPlayGame,
-  onClose 
+  onClose,
+  hasGame = true
 }: {
   mapId: string;
   checkpointData: Checkpoint;
@@ -826,6 +899,7 @@ function CheckpointInfoCard({
   checkpointId: string;
   onPlayGame: () => void;
   onClose?: () => void;
+  hasGame?: boolean;
 }) {
   const { checkpoints: userCheckpoints } = useCurrentUserContext();
   const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.gems_collected || 0;
@@ -898,20 +972,22 @@ function CheckpointInfoCard({
                 className="flex items-center gap-2 mb-4 justify-center"
                 style={{ fontSize: bodyFontSize }}
               >
-                <Sparkles className="fill-yellow-500 text-yellow-500" size={20} />
-                <span className="font-bold">Gems Collected: {checkpointGems}</span>
+                <Image src="/images/worm.png" alt="Worm" width={28} height={28} className="object-contain" />
+                <span className="font-bold">Worms Collected: {checkpointGems}</span>
               </div>
             )}
-            <button
-              className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
-              style={{ 
-                fontSize: buttonFontSize,
-                padding: buttonPadding,
-                width: buttonWidth
-              }}
-              onClick={onPlayGame}
-            >Play the Game
-            </button>
+            {hasGame && (
+              <button
+                className="block mx-auto text-center rounded-lg bg-app-blue-600 text-white"
+                style={{ 
+                  fontSize: buttonFontSize,
+                  padding: buttonPadding,
+                  width: buttonWidth
+                }}
+                onClick={onPlayGame}
+              >Play the Game
+              </button>
+            )}
             <button
             onClick={() => {
               if(onClose){
