@@ -839,7 +839,7 @@ function CheckpointInfoCard({
   const scale = clampedZoom * POPUP_BASE_SCALE
 
   // Calculate scaled sizes
-  const headerFontSize = `${scale * 1.5}rem` // Base: 1.5rem (text-2xl ≈ 1.5rem)
+  const headerFontSize = `${scale * 2}rem` // Base: 1.5rem (text-2xl ≈ 1.5rem)
   const bodyFontSize = `${scale * 0.875}rem` // Base: 0.875rem (text-sm)
   const buttonFontSize = `${scale * 0.875}rem` // Base: 0.875rem
   const cardWidth = `${scale * 400}px` // Base: ~400px (w-100)
@@ -861,7 +861,7 @@ function CheckpointInfoCard({
     >
       <div className="mx-auto" style={{ width: cardWidth, maxWidth: '90vw' }}>
         <p 
-          className="whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl w-full text-center"
+          className="font-serif whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl w-full text-center"
           style={{ 
             fontSize: headerFontSize,
             paddingTop: headerPadding,
