@@ -59,6 +59,7 @@ export default function Page() {
         <div>
             {!isCleared && 
         <QuestionWrapper
+            count={3}
             onSubmit={handleSubmit}
             question={onboardingQuestions[currentStep - 1]}
             currentStep={currentStep}

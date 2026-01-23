@@ -1161,6 +1161,38 @@ export type OnboardingQuestions = {
 }
 
 export const onboardingQuestions: OnboardingQuestions[] = [
+    {
+    id: "nm439s3",
+    question: "From where does your journey begin?",
+    description: "From which land do you hail?",
+    type: "radio",
+    cta: {
+      idle: "Choose a location",
+      active: "Continue",
+    },
+    choices: [
+      {
+        id: "q3c1",
+        text: "I’m a local",
+      },
+      {
+        id: "q3c2",
+        text: "Melbourne metropolis 🏙️",
+      },
+      {
+        id: "q3c3",
+        text: "Regional Victoria 🏞️",
+      },
+      {
+        id: "q3c4",
+        text: "From across Australia 🌊",
+      },
+      {
+        id: "q3c5",
+        text: "From distant lands afar ✈️",
+      }
+    ]
+  },
   {
     id: "nm439s1",
     question: "Who's adventuring today?",
@@ -1168,7 +1200,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
     type: "radio",
     cta: {
       idle: "Choose your party",
-      active: "Continue",
+      active: "Start journey",
     },
     choices: [
       {
@@ -1228,39 +1260,7 @@ export const onboardingQuestions: OnboardingQuestions[] = [
         text: "Legendary quester: 65+ 🏰",
       },
     ]
-  },
-  {
-    id: "nm439s3",
-    question: "From where does your journey begin?",
-    description: "From which land do you hail?",
-    type: "radio",
-    cta: {
-      idle: "Choose a location",
-      active: "Start journey",
-    },
-    choices: [
-      {
-        id: "q3c1",
-        text: "I’m a local",
-      },
-      {
-        id: "q3c2",
-        text: "Melbourne metropolis 🏙️",
-      },
-      {
-        id: "q3c3",
-        text: "Regional Victoria 🏞️",
-      },
-      {
-        id: "q3c4",
-        text: "From across Australia 🌊",
-      },
-      {
-        id: "q3c5",
-        text: "From distant lands afar ✈️",
-      }
-    ]
-  },
+  }
 ]
 
 

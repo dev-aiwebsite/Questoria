@@ -33,7 +33,6 @@ export default function Page() {
     const newStep = currentStep + 1;
 
     if (newStep > questionCount) {
-      // final submit logic here
         try {
             const res = userOnboarding ? await updateUserOnboardingAnswer(userOnboarding.id, {...userOnboarding,answers}): await createUserOnboardingAnswer({answers, user_id: currentUser?.id})
          
@@ -47,19 +46,18 @@ export default function Page() {
         }  
 
     } else {
-      setCurrentStep(newStep as 1 | 2 | 3);
+      setCurrentStep(newStep);
     }
   }
 
-  const questionAnswers = questions.map(q => {
-    const found = answers.find(a => a.question_id === q.id);
-    return found?.value ?? null;
-  });
-
-  const isCleared = questionAnswers.every(ans => ans !== null && ans !== "");
+  const isCleared =
+  Array.isArray(userOnboarding?.answers) &&
+  userOnboarding.answers
+    .flatMap(a => a.value ?? [])
+    .every(v => v != null && String(v).trim() !== "");
 
   useEffect(() => {
-    if (currentUser?.onboarding) {
+    if (isCleared) {
       router.push(`/lite`);
     }
   }, []);
@@ -70,15 +68,16 @@ export default function Page() {
       <div>
         {!isCleared && (
           <QuestionWrapper
+            count={questionCount}
             onSubmit={handleSubmit}
-            question={onboardingQuestions[currentStep - 1]}
+            question={questions[currentStep - 1]}
             currentStep={currentStep}
             value={
-              answers.find(a => a.question_id === onboardingQuestions[currentStep - 1].id)
+              answers.find(a => a.question_id === questions[currentStep - 1].id)
                 ?.value ?? ""
             }
             onChange={(value) => {
-              const questionId = onboardingQuestions[currentStep - 1].id;
+              const questionId = questions[currentStep - 1].id;
 
               setAnswers(prev => {
                 const existing = prev.findIndex(a => a.question_id === questionId);

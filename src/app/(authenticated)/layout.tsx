@@ -22,12 +22,8 @@ export default function Layout({ children }: { children: ReactNode }) {
           return
         }
 
-       if (currentUser && userOnboarding) {
-          router.push("/lite/map");
-          return
-          
-        } else {
-           router.push("/lite/start");
+       if (currentUser && !userOnboarding) {
+        router.push("/lite/start");
           return
         }
     }

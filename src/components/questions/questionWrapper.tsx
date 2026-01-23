@@ -1,13 +1,16 @@
 import { OnboardingQuestions } from "@/lib/dummy";
 import InputChoices from "../inputChoices";
+import React from "react";
 
 export default function QuestionWrapper({
+    count,
     onSubmit,
     question,
     currentStep,
     value,
     onChange,
 }: {
+    count:number;
     onSubmit: () => void;
     question: OnboardingQuestions;
     currentStep: number;
@@ -27,32 +30,30 @@ export default function QuestionWrapper({
             ? typeof value === "string" && value.trim() !== ""
             : Array.isArray(value) && value.length > 0;
 
-
-    console.log(isAnswered)
-
     return <div className="flex flex-col flex-nowrap justify-center p-mobile pb-[3rem] relative mt-mobile h-screen">
         <div className="w-full h-fit max-h-screen overflow-auto">
 
-            <h2 className="text-2xl font-bold">{question.question}</h2>
+            <h1 className="header1">{question.question}</h1>
             <div className="h-[100px] flex flex-row flex-nowrap items-center gap-2">
-                <span className="rounded-full block w-6 h-6 bg-white flex items-center justify-center">
-                    <span className="h-3 w-3 bg-yellow-400 rounded-full"></span>
-                </span>
-                <span className="block flex-1 h-1 mt-1 border-t-1 border-dashed border-white"></span>
-                <span className="rounded-full block w-6 h-6 bg-white flex items-center justify-center">
-                    {currentStep > 1 &&
+                {Array.from({ length: count }).map((_, index) => (
+                <React.Fragment key={index}>
+                    {/* Step circle */}
+                    <span className="rounded-full block w-6 h-6 bg-white flex items-center justify-center">
+                    {currentStep > index && (
                         <span className="h-3 w-3 bg-yellow-400 rounded-full"></span>
-                    }
-                </span>
-                <span className="block flex-1 h-1 mt-1 border-t-1 border-dashed border-white"></span>
-                <span className="rounded-full block w-6 h-6 bg-white flex items-center justify-center">
-                    {currentStep > 2 &&
-                        <span className="h-3 w-3 bg-yellow-400 rounded-full"></span>
-                    }
-                </span>
+                    )}
+                    </span>
+
+                    {/* Connector (not after last step) */}
+                    {index < count - 1 && (
+                    <span className="block flex-1 h-1 mt-1 border-t-1 border-dashed border-white"></span>
+                    )}
+                </React.Fragment>
+                ))}
+
             </div>
             <div className="space-y-4">
-                <h3 className="header3 max-w-[250px]">{question.description}</h3>
+                <h3 className="header3 max-w-[300px]">{question.description}</h3>
                 <InputChoices
                     name={`question-${currentStep}`}
                     isMultiple={question.type !== "radio"}
