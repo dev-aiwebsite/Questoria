@@ -19,7 +19,11 @@ const BASE_MAP_WIDTH = 1000
 
 
 // This is the scale factor at base zoom (1.0). Higher values = larger popup, lower values = smaller popup
-const POPUP_BASE_SCALE = 0.25
+const POPUP_BASE_SCALE = 0.9
+
+// Content scale multiplier - adjust this to scale all text, buttons, and spacing inside the popup
+// Increase this value (e.g., 1.5, 2.0) to make everything bigger, decrease (e.g., 0.8, 0.9) to make smaller
+const CONTENT_SCALE = 10.5
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
@@ -944,19 +948,19 @@ function CheckpointInfoCard({
   const clampedZoom = Math.max(0.38, Math.min(5.0, zoomLevel))
   const scale = clampedZoom * POPUP_BASE_SCALE
 
-  // Calculate scaled sizes
-  const headerFontSize = `${scale * 1.5}rem` // Base: 1.5rem (text-2xl ≈ 1.5rem)
-  const bodyFontSize = `${scale * 0.875}rem` // Base: 0.875rem (text-sm)
-  const buttonFontSize = `${scale * 0.875}rem` // Base: 0.875rem
-  const cardWidth = `${scale * 400}px` // Base: ~400px (w-100)
-  const headerPadding = `${scale * 1}rem` // Base: 1rem (py-4)
-  const contentPaddingX = `${scale * 2.5}rem` // Base: 2.5rem (px-10)
-  const contentPaddingY = `${scale * 1.5}rem` // Base: 1.5rem (pt-6)
-  const contentPaddingBottom = `${scale * 5}rem` // Base: 5rem (increased from 3.5rem for more height)
-  const buttonPadding = `${scale * 0.375}rem ${scale * 1}rem` // Base: py-1.5 px-4
-  const backButtonPadding = `${scale * 1}rem` // Base: p-4
-  const descriptionMarginBottom = `${scale * 1.5}rem` // Base: 1.5rem (increased from default for more spacing)
-  const buttonWidth = `${scale * 100}px` // Base: 100px (w-25 is approximately 100px)
+  // Calculate scaled sizes - all multiplied by CONTENT_SCALE for easy adjustment
+  const headerFontSize = `${scale * CONTENT_SCALE * 1.5}rem` // Base: 1.5rem
+  const bodyFontSize = `${scale * CONTENT_SCALE * 0.875}rem` // Base: 0.875rem (text-sm)
+  const buttonFontSize = `${scale * CONTENT_SCALE * 0.875}rem` // Base: 0.875rem
+  const cardWidth = `${scale * 550}px` // Base: ~550px (popup width, not affected by content scale)
+  const headerPadding = `${scale * CONTENT_SCALE * 1}rem` // Base: 1rem
+  const contentPaddingX = `${scale * CONTENT_SCALE * 2.5}rem` // Base: 2.5rem
+  const contentPaddingY = `${scale * CONTENT_SCALE * 1.5}rem` // Base: 1.5rem
+  const contentPaddingBottom = `${scale * CONTENT_SCALE * 5}rem` // Base: 5rem
+  const buttonPadding = `${scale * CONTENT_SCALE * 0.375}rem ${scale * CONTENT_SCALE * 1}rem` // Base: py-1.5 px-4
+  const backButtonPadding = `${scale * CONTENT_SCALE * 1}rem` // Base: 1rem
+  const descriptionMarginBottom = `${scale * CONTENT_SCALE * 1.5}rem` // Base: 1.5rem
+  const buttonWidth = `${scale * CONTENT_SCALE * 100}px` // Base: 100px
   // Scale the ribbon-end clip-path - the 2.6rem value needs to scale with zoom
   const ribbonClipPath = `polygon(0% 0%, 100% 0%, 100% 100%, 50% calc(100% - ${scale * 2.6}rem), 0% 100%)`
 
