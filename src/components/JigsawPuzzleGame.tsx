@@ -13,6 +13,25 @@ interface JigsawPuzzleGameProps {
   puzzleSize?: number // Default 4x4 = 16 pieces
 }
 
+// Checkpoint-specific image configurations
+// Maps checkpoint ID to image path
+// Each folder contains exactly 1 image
+const CHECKPOINT_IMAGES: Record<string, string> = {
+  'cp_006': '/images/JigsawPuzzle/cp_006/1.png',  // Stringybark Garden
+  'cp_007': '/images/JigsawPuzzle/cp_007/1.png',  // Dry River Bed
+  'cp_027': '/images/JigsawPuzzle/cp_027/1.png',  // Research Garden
+  'cp_029': '/images/JigsawPuzzle/cp_029/1.png', // Rockpool Pavilion (Rockpool Waterway)
+};
+
+// Helper function to get image URL for a checkpoint
+function getCheckpointImage(checkpointId?: string, fallbackImageUrl?: string): string {
+  if (checkpointId && CHECKPOINT_IMAGES[checkpointId]) {
+    return CHECKPOINT_IMAGES[checkpointId];
+  }
+  // Use provided imageUrl or default
+  return fallbackImageUrl || "/slidingPuzzle/duckling.png";
+}
+
 type PuzzlePiece = {
   id: number
   correctPosition: number // The position this piece should be in when solved
@@ -41,8 +60,8 @@ export default function JigsawPuzzleGame({
   const swooshSoundRef = useRef<HTMLAudioElement | null>(null)
   const winSoundRef = useRef<HTMLAudioElement | null>(null)
 
-  // Default image if none provided
-  const defaultImage = imageUrl || "/slidingPuzzle/duckling.png"
+  // Get checkpoint-specific image or use provided/fallback
+  const defaultImage = getCheckpointImage(checkpointId, imageUrl)
 
   // Initialize audio elements
   useEffect(() => {

@@ -25,31 +25,34 @@ const POPUP_BASE_SCALE = 0.6
 // Increase this value (e.g., 1.5, 2.0) to make everything bigger, decrease (e.g., 0.8, 0.9) to make smaller
 const CONTENT_SCALE = 1.8
 
-// Game assignment configuration
+// Game assignment configuration based on actual checkpoint IDs in dummy.ts
+// Memory Match checkpoints
 const memoryMatchCheckpoints = [
-  'cp_002',  // Ironbark Garden & Eucalypt Walk (4 images)
-  'cp_009',  // Weird and Wonderful Garden
-  'cp_011',  // Kids Backyard
-  'cp_012',  // Home Garden
-  'cp_015'   // Diversity Garden
+  'cp_002',  // Ironbank Garden (Ironbark Garden & Eucalypt Walk) - 4 images in cp_002 folder
+  'cp_021',  // Weird and Wonderful Garden - 6 images in cp_021 folder
+  'cp_031',  // Kids Backyard - 6 images in cp_031 folder (user said 5 images, using best ones)
+  'cp_032',  // Home Garden - 6 images in cp_032 folder
+  'cp_035',  // Diversity Garden - 6 images in cp_035 folder
+  'cp_017'   // Lifestyle Garden (Arid Garden) - needs image folder
 ];
 
+// Jigsaw Puzzle checkpoints
 const jigsawPuzzleCheckpoints = [
-  'cp_001',  // Red Sands Garden
-  'cp_004',  // Stringybark Garden
-  'cp_006',  // Dry River Bed
-  'cp_014',  // Rockpool Waterway
-  'cp_016',  // Research Garden
-  'cp_017'   // Arid Garden (changed from Memory Match)
+  'cp_001',  // The Visitor Centre (Red Sands Garden)
+  'cp_006',  // Stringybark Garden
+  'cp_007',  // Dry River Bed
+  'cp_029',  // Rockpool Pavilion (Rockpool Waterway)
+  'cp_027'   // Research Garden
 ];
 
+// Word Search checkpoints (Nature Word Search)
 const wordSearchCheckpoints = [
   'cp_003',  // Box Garden
-  'cp_005',  // Forest Garden
-  'cp_007',  // Desert Discovery Camp
-  'cp_008',  // Ian Potter Lakeside Precinct Lawn
-  'cp_010',  // Serpentine Path
-  'cp_013'   // Future Garden
+  'cp_008',  // Forest Garden
+  'cp_010',  // Desert Discovery Camp
+  'cp_013',  // Ian Potter Lakeside Precinct Lawn
+  'cp_030',  // Serpentine Path
+  'cp_033'   // Future Garden
 ];
 
 // Helper function to check if a checkpoint has a game

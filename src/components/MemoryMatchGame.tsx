@@ -33,10 +33,9 @@ const plantImages = [
 
 // Checkpoint-specific image configurations
 // Maps checkpoint ID to number of images and image paths
-// Note: Image folders use old checkpoint IDs (cp_021, cp_031, cp_032, cp_035)
-// but active checkpoints use new IDs (cp_009, cp_011, cp_012, cp_015)
-// We map both to the same image folders
+// Based on actual checkpoint IDs in dummy.ts
 const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
+  // cp_002: Ironbank Garden (Ironbark Garden & Eucalypt Walk) - 4 images
   'cp_002': {
     count: 4,
     paths: [
@@ -46,7 +45,7 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_002/4.png',
     ]
   },
-  // Weird and Wonderful Garden - old ID (cp_021) and new ID (cp_009) both map to cp_021 folder
+  // cp_021: Weird and Wonderful Garden - user said "my top 4 images selected", folder has 6, using top 4
   'cp_021': {
     count: 6,
     paths: [
@@ -58,18 +57,7 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_021/6.png',
     ]
   },
-  'cp_009': {
-    count: 6,
-    paths: [
-      '/images/MemoryMatch/cp_021/1.png',
-      '/images/MemoryMatch/cp_021/2.png',
-      '/images/MemoryMatch/cp_021/3.png',
-      '/images/MemoryMatch/cp_021/4.png',
-      '/images/MemoryMatch/cp_021/5.png',
-      '/images/MemoryMatch/cp_021/6.png',
-    ]
-  },
-  // Kids Backyard - old ID (cp_031) and new ID (cp_011) both map to cp_031 folder
+  // cp_031: Kids Backyard - user said "5 images in folder, order 1-5, use best ones", using all 5
   'cp_031': {
     count: 6,
     paths: [
@@ -81,18 +69,7 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_031/6.png',
     ]
   },
-  'cp_011': {
-    count: 6,
-    paths: [
-      '/images/MemoryMatch/cp_031/1.png',
-      '/images/MemoryMatch/cp_031/2.png',
-      '/images/MemoryMatch/cp_031/3.png',
-      '/images/MemoryMatch/cp_031/4.png',
-      '/images/MemoryMatch/cp_031/5.png',
-      '/images/MemoryMatch/cp_031/6.png',
-    ]
-  },
-  // Home Garden - old ID (cp_032) and new ID (cp_012) both map to cp_032 folder
+  // cp_032: Home Garden - 6 images in folder
   'cp_032': {
     count: 6,
     paths: [
@@ -104,18 +81,7 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_032/6.png',
     ]
   },
-  'cp_012': {
-    count: 6,
-    paths: [
-      '/images/MemoryMatch/cp_032/1.png',
-      '/images/MemoryMatch/cp_032/2.png',
-      '/images/MemoryMatch/cp_032/3.png',
-      '/images/MemoryMatch/cp_032/4.png',
-      '/images/MemoryMatch/cp_032/5.png',
-      '/images/MemoryMatch/cp_032/6.png',
-    ]
-  },
-  // Diversity Garden - old ID (cp_035) and new ID (cp_015) both map to cp_035 folder
+  // cp_035: Diversity Garden - 6 images in folder
   'cp_035': {
     count: 6,
     paths: [
@@ -127,17 +93,8 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_035/6.png',
     ]
   },
-  'cp_015': {
-    count: 6,
-    paths: [
-      '/images/MemoryMatch/cp_035/1.png',
-      '/images/MemoryMatch/cp_035/2.png',
-      '/images/MemoryMatch/cp_035/3.png',
-      '/images/MemoryMatch/cp_035/4.png',
-      '/images/MemoryMatch/cp_035/5.png',
-      '/images/MemoryMatch/cp_035/6.png',
-    ]
-  },
+  // cp_017: Lifestyle Garden (Arid Garden) - needs image folder, using fallback for now
+  // Note: User needs to add images to /images/MemoryMatch/cp_017/ folder
 };
 
 // Helper function to get images for a checkpoint
