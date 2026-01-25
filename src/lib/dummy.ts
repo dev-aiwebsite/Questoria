@@ -88,21 +88,21 @@ export const checkpoints: Checkpoint[] = [
   {
     id: "cp_001",
     map_id: "234j3h4j3",
-    title: "The Visitor Centre",
-    subtitle: "Starting point",
-    pretext: "The quest awaits! Make your way to The Visitor Centre to begin your adventure.",
+    title: "Red Sands Garden ",
+    subtitle: "Red Sands Garden ",
+    pretext: "The quest awaits! Make your way to Red Sands Garden  to begin your adventure.",
     image: "/images/maps/map1-checkpoint-1.jpg",
     description:
-      "The Ironbark Garden is a serene native woodland space within the Royal Botanic Gardens Cranbourne, showcasing the rugged beauty of Australia’s ironbark forests. Designed to reflect the natural landscapes of south-eastern Australia, the garden features towering ironbark eucalypts, textured bark, native grasses, and understory plants that thrive in dry conditions.",
+      "Inspired by Australia’s Red Centre, this garden echoes desert landscapes with red sand circles and crescent shapes.  ",
     did_you_know: `<p><strong>Did you know?</strong> The stunning gardens you will be exploring began as a bold vision back in 1846, when land beside the Yarra River was set aside to create a botanical haven, making these gardens one of Victoria’s oldest and most cherished green treasures with nearly 180 years of plant-loving history!</p>
 
 <p>Over the decades, legendary botanists like <strong>Ferdinand von Mueller</strong> expanded the Garden’s scientific reach, building one of Australia’s most important plant collections and establishing the National Herbarium of Victoria, which now houses more than a million plant specimens!</p>
 
-<p>The Visitor Centre you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.</p>
+<p>Red Sands Garden  you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.</p>
 `,
     is_visited: true,
     challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of the Visitor Centre. <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Red Sands Garden  <strong>(Earn 1 Quest Gem)</strong>" },
       {
         title: "quiz",
         description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
@@ -115,7 +115,7 @@ export const checkpoints: Checkpoint[] = [
         ],
         correct_answer: "c2",
       },
-      { title: "happiness", description: "Tell us what you feel about the Visitor Centre <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "happiness", description: "Tell us what you feel about Red Sands Garden  <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 1,
     pos: { x: 48, y: 75 }
@@ -248,7 +248,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Rough, twisty bark wraps these trees like nature’s armor. It’s a great place to touch, look, and wonder how trees protect themselves.",
+      "Plants shaped by fire and recovery. Some survive it, some return stronger. Australia’s flora has learned a few tricks over time.",
     did_you_know: `<p><strong>Did you know?</strong> Stringbark trees have long, fibrous bark that peels off in strings, giving the garden its name.</p>`,
     is_visited: false,
     challenges: [
@@ -1083,20 +1083,20 @@ export const checkpoints: Checkpoint[] = [
   {
     id: "cp_034",
     map_id: "234j3h4j3",
-    title: "Water Saving Garden",
-    subtitle: "Water Saving Garden",
+    title: "Rockpool Waterway",
+    subtitle: "Rockpool Waterway",
     pretext: "",
     image: "",
     description:
-      "This garden is super smart with water. Learn how plants can stay happy using less.",
+      "Look out for the giant sculptures and cool flowing water as you wander past.",
     did_you_know: `<p><strong>Did you know?</strong> Water Saving Gardens feature plants that thrive with minimal water.</p>`,
     is_visited: false,
     challenges: [
-      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Water Saving Garden. <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Rockpool Waterway. <strong>(Earn 1 Quest Gem)</strong>" },
       {
         title: "quiz",
         description: "Answer the quiz <strong>(Earn 1 Quest Gem)</strong>",
-        question: "What is Water Saving Garden known for?",
+        question: "What is Rockpool Waterway known for?",
         choices: [
           { id: "c1", text: "Plants that thrive with less water" },
           { id: "c2", text: "Plants that need constant water" },
@@ -1105,10 +1105,10 @@ export const checkpoints: Checkpoint[] = [
         ],
         correct_answer: "c1",
       },
-      { title: "happiness", description: "Tell us what you feel about Water Saving Garden <strong>(Earn 1 Quest Gem)</strong>" },
+      { title: "happiness", description: "Tell us what you feel about Rockpool Waterway <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 34,
-    pos: { x: 63.5, y: 65 }
+    pos: { x: 60, y: 65 }
   },
   {
     id: "cp_035",

@@ -17,6 +17,7 @@ interface JigsawPuzzleGameProps {
 // Maps checkpoint ID to image path
 // Each folder contains exactly 1 image
 const CHECKPOINT_IMAGES: Record<string, string> = {
+  'cp_001': '/images/JigsawPuzzle/cp_001/1.png',  // Welcome to the Forest
   'cp_006': '/images/JigsawPuzzle/cp_006/1.png',  // Stringybark Garden
   'cp_007': '/images/JigsawPuzzle/cp_007/1.png',  // Dry River Bed
   'cp_027': '/images/JigsawPuzzle/cp_027/1.png',  // Research Garden

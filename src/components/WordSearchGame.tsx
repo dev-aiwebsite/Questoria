@@ -22,25 +22,25 @@ const NATURE_WORDS = [
 ]
 
 // Checkpoint-specific word lists (only for Word Search checkpoints)
-// Words longer than 7 characters are excluded for 7x7 grid compatibility
+// Words longer than gridSize will be automatically filtered out during grid generation
 const CHECKPOINT_WORDS: Record<string, string[]> = {
-  // cp_003 - Box Garden: BOX(3✅), EUCALYPT(8❌), GRAMPIANS(9❌), UNDERSTOREY(11❌), WILDFLOWER(10❌), CANOPY(6✅), ROCKY(5✅), SHRUB(5✅)
-  'cp_003': ['BOX', 'CANOPY', 'ROCKY', 'SHRUB'],
+  // cp_003 - Box Garden
+  'cp_003': ['BOX', 'EUCALYPT', 'WILDFLOWER', 'CANOPY', 'ROCKY', 'SHRUB'],
   
-  // cp_005 - Forest Garden: FOREST(6✅), WOODLAND(8❌), EUCALYPT(8❌), CANOPY(6✅), SHADE(5✅), HABITAT(7✅)
-  'cp_005': ['FOREST', 'CANOPY', 'SHADE', 'HABITAT'],
+  // cp_008 - Forest Garden
+  'cp_008': ['FOREST', 'WOODLAND', 'EUCALYPT', 'CANOPY', 'SHADE', 'HABITAT'],
   
-  // cp_007 - Desert Discovery Camp: DESERT(6✅), SAND(4✅), ROCK(4✅), SUN(3✅), HEAT(4✅), PLANT(5✅), SEED(4✅), LEAF(4✅), BUG(3✅), LIZARD(6✅), TOUGH(5✅), SURVIVE(7✅)
-  'cp_007': ['DESERT', 'SAND', 'ROCK', 'SUN', 'HEAT', 'PLANT', 'SEED', 'LEAF', 'BUG', 'LIZARD', 'TOUGH', 'SURVIVE'],
+  // cp_010 - Desert Discovery Camp
+  'cp_010': ['DESERT', 'SAND', 'ROCK', 'SUN', 'HEAT', 'PLANT', 'SEED', 'LEAF', 'BUG', 'LIZARD', 'TOUGH', 'SURVIVE'],
   
-  // cp_008 - Ian Potter Lakeside Precinct Lawn: LAKE(4✅), WATER(5✅), REFLECTION(10❌), LILYPAD(7✅), GRASS(5✅), SHORE(5✅), SKY(3✅), CLOUD(5✅), BREEZE(6✅), DUCK(4✅), PELICAN(7✅), PICNIC(6✅)
-  'cp_008': ['LAKE', 'WATER', 'LILYPAD', 'GRASS', 'SHORE', 'SKY', 'CLOUD', 'BREEZE', 'DUCK', 'PELICAN', 'PICNIC'],
+  // cp_013 - Ian Potter Lakeside Precinct Lawn
+  'cp_013': ['LAKE', 'WATER', 'LILYPAD', 'GRASS', 'SHORE', 'SKY', 'CLOUD', 'BREEZE', 'DUCK', 'PELICAN', 'PICNIC'],
   
-  // cp_010 - Serpentine Path: SERPENTINE(10❌), CURVE(5✅), PATH(4✅), WINDING(7✅), ARID(4✅), SAND(4✅), STONE(5✅), JOURNEY(7✅), FLOW(4✅), LINE(4✅), TRACK(5✅), TURN(4✅)
-  'cp_010': ['CURVE', 'PATH', 'WINDING', 'ARID', 'SAND', 'STONE', 'JOURNEY', 'FLOW', 'LINE', 'TRACK', 'TURN'],
+  // cp_030 - Serpentine Path
+  'cp_030': ['CURVE', 'PATH', 'WINDING', 'ARID', 'SAND', 'STONE', 'JOURNEY', 'FLOW', 'LINE', 'TRACK', 'TURN'],
   
-  // cp_013 - Future Garden: FUTURE(6✅), GROWTH(6✅), HEIGHT(6✅), SCALE(5✅), PLANNING(8❌), PATIENCE(8❌), AUSTRALIAN(9❌)
-  'cp_013': ['FUTURE', 'GROWTH', 'HEIGHT', 'SCALE'],
+  // cp_033 - Future Garden
+  'cp_033': ['FUTURE', 'GROWTH', 'HEIGHT', 'SCALE', 'PLAN', 'PATIENCE', 'AUSTRALIA', 'DIRT'],
 }
 
 export default function WordSearchGame({

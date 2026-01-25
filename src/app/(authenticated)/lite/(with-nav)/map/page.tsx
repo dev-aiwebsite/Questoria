@@ -74,11 +74,25 @@ function getGameType(checkpointId: string): 'memory' | 'wordsearch' | 'jigsawpuz
   return null;
 }
 
+// Checkpoint IDs to exclude from map (flags will not be shown)
+const excludedCheckpointIds = [
+  'cp_011', // Gondwana Shelter
+  'cp_015', // Promenade Garden
+  'cp_017', // Lifestyle Garden
+  'cp_018', // Greening Garden
+  'cp_025', // Woodlots
+  'cp_026', // Cultivar Garden
+  // 'cp_034'  // Water Saving Garden
+];
+
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
   const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
+  
+  // Filter out excluded checkpoints
+  const visibleCheckpoints = checkpoints.filter(c => !excludedCheckpointIds.includes(c.id));
 
   useEffect(()=>{
     setIsMounted(true)
@@ -281,7 +295,7 @@ export default function Page() {
 
   };
 
-  const targetMascotPos = selectedCheckpoint !== null ? checkpoints[selectedCheckpoint].pos : checkpoints[0].pos
+  const targetMascotPos = selectedCheckpoint !== null ? visibleCheckpoints[selectedCheckpoint].pos : visibleCheckpoints[0].pos
   const [mascotPos, setMascotPos] = useState(targetMascotPos)
   const [mascotAnimationPhase, setMascotAnimationPhase] = useState<'idle' | 'jumping-up' | 'flying' | 'jumping-down'>('idle')
   const mascotElementRef = useRef<HTMLDivElement>(null)
@@ -563,7 +577,7 @@ export default function Page() {
           />
 
           {checkpoints.length > 0 &&
-            checkpoints.map((c,index) => {
+            visibleCheckpoints.map((c,index) => {
                const userCheckPointChallengesData = currentUserCheckpoints.find(uc => uc.checkpoint_id === c.id)?.challenges
                const finishedChallenges = userCheckPointChallengesData && Object.values(userCheckPointChallengesData).filter(Boolean)
                const finishedChallengesCount = finishedChallenges?.length ?? 0
@@ -739,9 +753,21 @@ export default function Page() {
     
     {/* Game Modal - Randomly selected between Memory Match and Word Search */}
     {isGameOpen && selectedCheckpoint !== null && (() => {
-      const checkpointId = checkpoints[selectedCheckpoint].id;
+      const checkpointId = visibleCheckpoints[selectedCheckpoint].id;
       const checkpointIndex = selectedCheckpoint;
       
+      // Jigsaw Puzzle: First half of jigsaw puzzle checkpoints get 3x3, rest get 4x4
+      const getJigsawPuzzleSize = (checkpointId: string) => {
+        const jigsawIndex = jigsawPuzzleCheckpoints.indexOf(checkpointId);
+        if (jigsawIndex === -1) return 4; // Default to 4x4 if not found
+        
+        const totalJigsaw = jigsawPuzzleCheckpoints.length;
+        const firstHalfCount = Math.ceil(totalJigsaw / 2);
+        
+        // First half get 3x3, rest get 4x4
+        return jigsawIndex < firstHalfCount ? 3 : 4;
+      };
+
       // Shared onWin handler for both games
       const handleGameWin = (gems: number) => {
         // Check if checkpoint is already visited - if so, show message and don't award gems
@@ -765,7 +791,7 @@ export default function Page() {
         setIsGameOpen(false);
         
         // Get checkpoint flag position for animation
-        const checkpoint = checkpoints[checkpointIndex];
+        const checkpoint = visibleCheckpoints[checkpointIndex];
         let sourceX = window.innerWidth / 2;
         let sourceY = window.innerHeight / 2;
         
@@ -829,7 +855,7 @@ export default function Page() {
             }}
             checkpointId={checkpointId}
             mapId={mapId}
-            puzzleSize={4}
+            puzzleSize={getJigsawPuzzleSize(checkpointId)}
           />
         );
       } else {
