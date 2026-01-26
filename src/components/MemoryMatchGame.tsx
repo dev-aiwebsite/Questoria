@@ -34,6 +34,7 @@ const plantImages = [
 // Checkpoint-specific image configurations
 // Maps checkpoint ID to number of images and image paths
 // Based on actual checkpoint IDs in dummy.ts
+// All checkpoints use exactly 4 images
 const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
   // cp_002: Ironbank Garden (Ironbark Garden & Eucalypt Walk) - 4 images
   'cp_002': {
@@ -45,52 +46,44 @@ const CHECKPOINT_IMAGES: Record<string, { count: number; paths: string[] }> = {
       '/images/MemoryMatch/cp_002/4.png',
     ]
   },
-  // cp_021: Weird and Wonderful Garden - user said "my top 4 images selected", folder has 6, using top 4
+  // cp_021: Weird and Wonderful Garden - using first 4 images
   'cp_021': {
-    count: 6,
+    count: 4,
     paths: [
       '/images/MemoryMatch/cp_021/1.png',
       '/images/MemoryMatch/cp_021/2.png',
       '/images/MemoryMatch/cp_021/3.png',
       '/images/MemoryMatch/cp_021/4.png',
-      '/images/MemoryMatch/cp_021/5.png',
-      '/images/MemoryMatch/cp_021/6.png',
     ]
   },
-  // cp_031: Kids Backyard - user said "5 images in folder, order 1-5, use best ones", using all 5
+  // cp_031: Kids Backyard - using first 4 images
   'cp_031': {
-    count: 6,
+    count: 4,
     paths: [
       '/images/MemoryMatch/cp_031/1.png',
       '/images/MemoryMatch/cp_031/2.png',
       '/images/MemoryMatch/cp_031/3.png',
       '/images/MemoryMatch/cp_031/4.png',
-      '/images/MemoryMatch/cp_031/5.png',
-      '/images/MemoryMatch/cp_031/6.png',
     ]
   },
-  // cp_032: Home Garden - 6 images in folder
+  // cp_032: Home Garden - using first 4 images
   'cp_032': {
-    count: 6,
+    count: 4,
     paths: [
       '/images/MemoryMatch/cp_032/1.png',
       '/images/MemoryMatch/cp_032/2.png',
       '/images/MemoryMatch/cp_032/3.png',
       '/images/MemoryMatch/cp_032/4.png',
-      '/images/MemoryMatch/cp_032/5.png',
-      '/images/MemoryMatch/cp_032/6.png',
     ]
   },
-  // cp_035: Diversity Garden - 6 images in folder
+  // cp_035: Diversity Garden - using first 4 images
   'cp_035': {
-    count: 6,
+    count: 4,
     paths: [
       '/images/MemoryMatch/cp_035/1.png',
       '/images/MemoryMatch/cp_035/2.png',
       '/images/MemoryMatch/cp_035/3.png',
       '/images/MemoryMatch/cp_035/4.png',
-      '/images/MemoryMatch/cp_035/5.png',
-      '/images/MemoryMatch/cp_035/6.png',
     ]
   },
   // cp_017: Lifestyle Garden (Arid Garden) - needs image folder, using fallback for now

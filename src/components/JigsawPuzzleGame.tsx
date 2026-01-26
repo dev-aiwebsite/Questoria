@@ -17,11 +17,13 @@ interface JigsawPuzzleGameProps {
 // Maps checkpoint ID to image path
 // Each folder contains exactly 1 image
 const CHECKPOINT_IMAGES: Record<string, string> = {
-  'cp_001': '/images/JigsawPuzzle/cp_001/1.png',  // Welcome to the Forest
+  'cp_001': '/images/JigsawPuzzle/cp_001/1.png',  // Red Sands Garden
   'cp_006': '/images/JigsawPuzzle/cp_006/1.png',  // Stringybark Garden
   'cp_007': '/images/JigsawPuzzle/cp_007/1.png',  // Dry River Bed
+  'cp_012': '/images/JigsawPuzzle/cp_012/1.png',  // Lilypad Bridge
   'cp_027': '/images/JigsawPuzzle/cp_027/1.png',  // Research Garden
-  'cp_029': '/images/JigsawPuzzle/cp_029/1.png', // Rockpool Pavilion (Rockpool Waterway)
+  'cp_032': '/images/JigsawPuzzle/cp_032/1.png',  // Home Garden
+  'cp_034': '/images/JigsawPuzzle/cp_034/1.png'   // Rockpool Waterway
 };
 
 // Helper function to get image URL for a checkpoint

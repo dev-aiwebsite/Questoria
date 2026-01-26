@@ -41,8 +41,10 @@ const jigsawPuzzleCheckpoints = [
   'cp_001',  // The Visitor Centre (Red Sands Garden)
   'cp_006',  // Stringybark Garden
   'cp_007',  // Dry River Bed
-  'cp_029',  // Rockpool Pavilion (Rockpool Waterway)
-  'cp_027'   // Research Garden
+  'cp_012',  // Lilypad Bridge
+  'cp_027',  // Research Garden
+  'cp_032',  // Home Garden
+  'cp_034'   // Rockpool Waterway
 ];
 
 // Word Search checkpoints (Nature Word Search)
