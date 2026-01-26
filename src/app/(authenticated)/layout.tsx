@@ -1,41 +1,15 @@
-"use client"
+import { SessionProvider } from "next-auth/react";
+import { AppDataProvider } from "../contexts/appDataContext";
+import { CurrentUserProvider } from "../contexts/currentUserContext";
 
-import { ReactNode, useEffect } from "react";
-import { useCurrentUserContext } from "../contexts/currentUserContext";
-import { usePathname, useRouter } from "next/navigation";
-import PageLoader from "@/components/pageLoader";
-
-const protectedRoutes = ['/lite']
-
-export default function Layout({ children }: { children: ReactNode }) {
-  const router = useRouter();
-  const pathName = usePathname()
-  const { currentUser, userOnboarding, isFetching } = useCurrentUserContext();
-  
-  
-  useEffect(() => {
-    if(isFetching) return
-
-    if(pathName.startsWith('/lite') || protectedRoutes.includes(pathName)){
-        if (!currentUser) {
-          router.push("/login");
-          return
-        }
-
-       if (currentUser && !userOnboarding) {
-        router.push("/lite/start");
-          return
-        }
-    }
-
-   
-  }, [isFetching, currentUser, router, userOnboarding]);
-
-  return <>
-    {isFetching ?
-      <PageLoader /> :
-      <div className="bg-primary">{children}</div>
-
-    }</>
-
+export default function Layout({ children }: { children: React.ReactNode }) {
+    return <>
+        <SessionProvider>
+            <AppDataProvider>
+                <CurrentUserProvider>
+                    {children}
+                </CurrentUserProvider>
+            </AppDataProvider>
+        </SessionProvider>
+    </>
 }

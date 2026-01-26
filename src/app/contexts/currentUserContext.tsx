@@ -3,6 +3,7 @@
 import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
 import { getUserById, User } from "@/server-actions/crudUser";
 import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
+import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type CurrentUserContextType = {
@@ -26,32 +27,14 @@ type Props = {
     children: ReactNode;
 };
 
-const STORAGE_KEYS = {
-    CURRENT_USER: 'questoria_currentUser',
-    CHECKPOINTS: 'questoria_checkpoints',
-    ONBOARDINGANSWERS: "questoria_onboarding_answers"
-};
-
 export const CurrentUserProvider = ({ children }: Props) => {
+    const {data, status} = useSession()
     const [isFetching, setIsFetching] = useState(true)
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(null)
 
     const [maps, setMaps] = useState<UserMap[] | null>(null)
-    const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(() => {
-        if (typeof window !== 'undefined') {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEYS.CHECKPOINTS);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    return parsed;
-                }
-            } catch (e) {
-                console.error('Error loading checkpoints from localStorage:', e);
-            }
-        }
-        return null;
-    });
+    const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(null);
     const currentUserRef = useRef<User | null>(null)
 
     // Keep ref in sync with state
@@ -60,28 +43,21 @@ export const CurrentUserProvider = ({ children }: Props) => {
     }, [currentUser])
 
     useEffect(()=>{
+        if(status !== 'authenticated' || currentUser) return
 
         async function fetchData(){
+            if(!data) return
             setIsFetching(true)
-
-            if(currentUser){
-                setIsFetching(false)
-                return
-            }
-
-            const loggedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-            const parsedLoggedUser = loggedUser ? JSON.parse(loggedUser)as User : null 
-            if(!parsedLoggedUser){
-                setIsFetching(false)
-                return
-            }
-
+                
             try {
-                    const getUserRes = await getUserById(parsedLoggedUser.id)
-                    if(getUserRes.data){
-                        setCurrentUser(getUserRes.data)
+                    const getUserRes = await getUserById(data?.user.id)
+                    if(!getUserRes.data){
+                        setIsFetching(false)
+                        return
                     }
-                    const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(parsedLoggedUser.id)
+                    setCurrentUser(getUserRes.data)
+                    
+                    const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(getUserRes.data.id)
                     if(getUserOnboardingRes.data){
                         setUserOnboarding(getUserOnboardingRes.data)
                     }
@@ -95,34 +71,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
         }
         fetchData()
 
-    },[])
-
-    // Save currentUser to localStorage whenever it changes
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            if (currentUser) {
-                try {
-                    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
-                } catch (e) {
-                    console.error('Error saving currentUser to localStorage:', e);
-                }
-            } else {
-                localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-            }
-        }
-    }, [currentUser]);
-    // Save currentUser onboarding answer to localStorage whenever it changes
-
-    // Save checkpoints to localStorage whenever they change
-    useEffect(() => {
-        if (typeof window !== 'undefined' && checkpoints) {
-            try {
-                localStorage.setItem(STORAGE_KEYS.CHECKPOINTS, JSON.stringify(checkpoints));
-            } catch (e) {
-                console.error('Error saving checkpoints to localStorage:', e);
-            }
-        }
-    }, [checkpoints]);
+    },[status])
 
     // Wrapper to update gems when user is updated
     const updateCurrentUser = (user: User | null) => {

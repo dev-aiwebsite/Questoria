@@ -20,6 +20,7 @@
 #### 🗺️ Map Page
 - **Fixed:** Back button functionality (now correctly navigates back to Welcome Page).
 - **Fixed:** Header text font.
+- [] update
 
 
 #### 📸 Camera
@@ -27,3 +28,21 @@
 
 ### Complete page
 - Added complete page
+
+
+
+### 🚀 Lite Version Updates
+**Date:** 27 January 2026
+
+### Authentication
+- [x] Implement NextAuth
+- [x] Add middleware/proxy
+- [x] Update sign-in flow
+- [x] Update registration flow
+- [x] Add user onboarding check (route to `/lite/start`)
+- [x] Update `currentUserContext`
+- *Note: Bcrypt is temporarily disabled.*
+
+#### 🗺️ Map Page
+- [ ] Update to save progress to the database
+
