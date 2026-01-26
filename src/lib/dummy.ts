@@ -100,7 +100,7 @@ export const checkpoints: Checkpoint[] = [
 
 <p>Red Sands Garden  you see today stands amid this legacy of exploration, discovery, science, conservation and culture — welcoming over two million visitors each year to learn, wander and connect with nature and history alike.</p>
 `,
-    is_visited: true,
+    is_visited: false,
     challenges: [
       { title: "selfie", description: "Snap a magical moment! Capture a selfie or photo of Red Sands Garden  <strong>(Earn 1 Quest Gem)</strong>" },
       {
