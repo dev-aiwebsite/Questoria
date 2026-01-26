@@ -572,7 +572,7 @@ export default function WordSearchGame({
 
             {/* Center: Title */}
             <div className="flex-1 flex items-center justify-center px-2 min-w-0">
-              <h3 className="text-center !mb-6 font-serif font-bold !text-4xl">
+              <h3 className="text-center !mb-6 font-bold !text-4xl" style={{ fontFamily: 'var(--font-bayon)' }}>
                 Nature Word Search
               </h3>
             </div>
