@@ -2,8 +2,6 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthenticateUser } from "./server-actions/authenticateUser";
 
-
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -15,14 +13,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const user = await AuthenticateUser(credentials as {
           email: string;
-          password: string;
+          pass: string;
           viaadmin?: boolean;
         })
 
-        
-        if (!user) return null
-        return user
-
+        if (user) {
+          return user
+        } else {
+          throw new Error('wrong credentials 2')
+        }
       },
     }),
   ], callbacks: {
@@ -34,7 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email;
         token.avatar = user.avatar ?? null;
 
-        token.user_id = user.id;
+        token.id = user.id;
 
         // Default to false until checked
         token.onboarding = user?.onboarding ?? false;

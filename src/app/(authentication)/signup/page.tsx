@@ -1,18 +1,17 @@
 "use client";
 
-import { useAppData } from "@/app/contexts/appDataContext";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
 import PageLoader from "@/components/pageLoader";
 import PrivacyPolicyPopup from "@/components/popups/privacyPolicyPopup";
 import TermsOfUsePopup from "@/components/popups/termsOfUsePopup";
+import { createUser } from "@/server-actions/crudUser";
+import { LoginUser } from "@/server-actions/loginLogout";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const { registerUser } = useAppData();
-    const { setCurrentUser } = useCurrentUserContext();
-
+    const router = useRouter()
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
@@ -80,11 +79,21 @@ export default function Page() {
                 onboarding: false
             };
 
+         
             async function register() {
-                const res = await registerUser(formData);
-                if (res) {
-                    setCurrentUser(res);
+                const res = await createUser(formData);
+                if (res.success && res.data) {
                     setIsSuccess(true)
+
+                     const authRes = await LoginUser({
+                        email: res.data.email,
+                        pass: res.data.password,
+                    }, false)
+
+                setIsSuccess(true)
+                router.push(authRes?.redirectUrl)
+
+
                 }
             }
             register()

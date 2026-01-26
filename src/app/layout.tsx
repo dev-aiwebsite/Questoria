@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Bayon, Inter } from "next/font/google";
-import { AppDataProvider } from "./contexts/appDataContext";
-import { CurrentUserProvider } from "./contexts/currentUserContext";
 import "./globals.css";
 
 
@@ -27,12 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${bayon.variable} antialiased`}>
-        <AppDataProvider>
-          <CurrentUserProvider>
+      <body className={`${inter.variable} ${bayon.variable} antialiased bg-primary`}>
             {children}
-          </CurrentUserProvider>
-        </AppDataProvider>
       </body>
     </html>
   );

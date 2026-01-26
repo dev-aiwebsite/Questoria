@@ -2,10 +2,10 @@
 
 import { signIn, signOut } from "@/auth";
 
-export const LoginUser = async (credentials: {useremail:string,userpass:string}, redirect: boolean = false) => {
-    const { useremail, userpass } = credentials;
+export const LoginUser = async (credentials: {email:string,pass:string}, redirect: boolean = false) => {
+    const { email, pass } = credentials;
     try {
-        const redirectUrl = await signIn('credentials', { useremail, userpass, redirectTo:"/dashboard", redirect: redirect });
+        const redirectUrl = await signIn('credentials', { email, pass, redirectTo:"/lite", redirect: redirect });
         return {
             redirectUrl
         }

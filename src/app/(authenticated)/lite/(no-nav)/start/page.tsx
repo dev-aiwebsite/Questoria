@@ -1,5 +1,5 @@
 "use client";
-
+import { useSession } from "next-auth/react";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import Clouds from "@/components/clouds";
 import QuestionWrapper from "@/components/questions/questionWrapper";
@@ -7,6 +7,7 @@ import { onboardingQuestions } from "@/lib/dummy";
 import { createUserOnboardingAnswer, updateUserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { updateUser } from "@/server-actions/crudUser";
 
 type AnswerItem = {
   question_id: string;
@@ -16,6 +17,7 @@ type AnswerItem = {
 type AnswersState = AnswerItem[];
 
 export default function Page() {
+  const { update } = useSession();
   const { currentUser, setUserOnboarding, userOnboarding } = useCurrentUserContext();
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -35,9 +37,10 @@ export default function Page() {
     if (newStep > questionCount) {
         try {
             const res = userOnboarding ? await updateUserOnboardingAnswer(userOnboarding.id, {...userOnboarding,answers}): await createUserOnboardingAnswer({answers, user_id: currentUser?.id})
-         
+            const updateUserRes = updateUser(currentUser.id, {onboarding: true})
             if(res.data){
                 setUserOnboarding(res.data)
+                await update({ onboarding: true });
                 router.push("/lite")
             }
             
@@ -63,9 +66,9 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <div  className="bg-primary absolute top-0">
       <Clouds className="opacity-50 absolute -z-0" />
-      <div>
+      
         {!isCleared && (
           <QuestionWrapper
             count={questionCount}
@@ -94,6 +97,6 @@ export default function Page() {
           />
         )}
       </div>
-    </>
+    
   );
 }

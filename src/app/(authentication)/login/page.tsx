@@ -1,53 +1,39 @@
 "use client"
-import { useAppData } from "@/app/contexts/appDataContext";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import LogoWithClouds from "@/components/logoWithClouds";
 import PageLoader from "@/components/pageLoader";
-import { getUserOnboardingAnswerByUserId } from "@/server-actions/crudUserOnboarding";
+import { LoginUser } from "@/server-actions/loginLogout";
 import { OctagonX } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
     const [userEmail, setUserEmail] = useState("")
     const [userPass, setUserPass] = useState("")
     const [error, setError] = useState("")
-    const {setCurrentUser, setUserOnboarding} = useCurrentUserContext()
-    const {users} = useAppData()
     const [isSuccess, stIsSuccess] = useState(false)
-    
+    const router = useRouter()
 
     
     async function login() {
-        if (!userEmail || !userPass) {
-            setError('Invalid credentials')
-            return
-        }
-        const userData = users.find(u => userEmail === u.email || userEmail === u.username);
-
-
-        if (!userData) {
-            setError('Invalid credentials')
-            return
-        }
-
-        if (userData.password != userPass) {
-            setError('Invalid credentials')
-            return
-        }
-        
-             
-        
-        setCurrentUser(userData)
-        const {data} = await getUserOnboardingAnswerByUserId(userData.id)
-            console.log(data, 'getUserOnboardingAnswerByUserId')
-            if(data){
-                setUserOnboarding(data)
-            }
-        stIsSuccess(true)
         setError("")
-        return
+            async function login() {
+                const authRes = await LoginUser({
+                    email: userEmail,
+                    pass: userPass,
+                }, false)
+                
+                if(authRes){
+                    stIsSuccess(true)
+                    router.push(authRes?.redirectUrl)
+
+                } else {
+                    setError('Invalid credentials')
+                }
+                console.log(authRes, 'authres')
+                }
+            login()
     }
 
     return (<>{isSuccess ? <PageLoader /> : 

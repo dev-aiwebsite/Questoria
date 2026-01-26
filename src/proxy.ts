@@ -29,7 +29,10 @@ export async function proxy(req: NextRequest) {
         if (isProtectedPage) return NextResponse.redirect(new URL("/login", req.url));
         return NextResponse.next();
       }
-  
+      
+      if(!pathname.startsWith("/lite/start") && !token.onboarding) {
+        return NextResponse.redirect(new URL("/lite/start", req.url));
+      }
     
       if (isHome || isAuthPage ) {
         return NextResponse.redirect(new URL("/lite", req.url));
