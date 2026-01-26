@@ -634,7 +634,7 @@ export default function Page() {
                   className={`isolate w-[calc(40px+1.5%)] aspect-square absolute -translate-x-1/2 -translate-y-full z-10 ${mascotAnimationPhase !== 'idle' ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   style={{ left: c.pos.x + "%", top: c.pos.y + "%" }}
                 >
-                {!isCheckpointVisited && !c.is_visited &&  <Image
+                {!isCheckpointVisited && !c.is_visited && hasGame(c.id) &&  <Image
                   className="w-[22%] h-auto aspect-square absolute left-[48%] top-[28%]"
                   src="/images/IconLock.png"
                   width={100}
@@ -666,15 +666,10 @@ export default function Page() {
                         filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
                         transition: 'filter 0.5s ease-in-out'
                       };
-                    } else if (!hasGameForCheckpoint) {
-                      return {
-                        filter: 'grayscale(100%) brightness(1.5)',
-                        transition: 'filter 0.5s ease-in-out'
-                      };
                     }
                     return { transition: 'filter 0.5s ease-in-out' };
                   })()}
-                  src="/images/IconFlag.png"
+                  src={!hasGame(c.id) ? "/images/IconFlagWhite.png" : "/images/IconFlag.png"}
                   width={100}
                   height={100}
                   alt={c.title}
