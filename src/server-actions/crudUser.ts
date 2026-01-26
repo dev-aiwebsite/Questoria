@@ -12,14 +12,14 @@ type Result<T> = {
 export type User = {
   id: string;
   username:string;
-  firstname: string | null;
-  lastname: string | null;
-  email: string | null;
-  password: string | null;
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
   avatar: string | null;
   xp: number | null;
   gems: number | null;
-  onboarding: boolean | null;
+  onboarding: boolean;
   created_at: string;
 };
 
@@ -80,6 +80,19 @@ export async function getUserById(id: string): Promise<Result<User>> {
   try {
     const result = await pool.query(`SELECT * FROM public.users WHERE id = $1`, [id]);
     if (!result.rows[0]) return { success: false, message: `User ${id} not found` };
+
+    return { success: true, message: "User fetched successfully", data: result.rows[0] as User };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+export async function getUserByEmail(email: string): Promise<Result<User>> {
+  try {
+    const result = await pool.query(`SELECT * FROM public.users WHERE email = $1`, [email]);
+    if (!result.rows[0]) return { success: false, message: `User ${email} not found` };
 
     return { success: true, message: "User fetched successfully", data: result.rows[0] as User };
   } catch (error: unknown) {
