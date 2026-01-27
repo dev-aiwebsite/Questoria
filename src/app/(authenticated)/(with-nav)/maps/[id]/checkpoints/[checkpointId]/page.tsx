@@ -16,7 +16,11 @@ export default function Page() {
                 <>Data not found.</>
                 :
                 <div className="space-y-6">
-                    <h3 className="text-center header3 !mb-6">{checkpointData.subtitle}</h3>
+                    <h3 
+                      className={`text-center header3 !mb-6 ${checkpointId === 'cp_013' ? 'text-sm' : ''}`}
+                    >
+                      {checkpointData.subtitle}
+                    </h3>
                     <Image
                         className="border-black border-3 rounded-xl w-full"
                         src={checkpointData.image}

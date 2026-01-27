@@ -940,7 +940,9 @@ function CheckpointInfoCard({
 
   // Calculate scaled sizes
   // Calculate scaled sizes - all multiplied by CONTENT_SCALE for easy adjustment
-  const headerFontSize = `${scale * CONTENT_SCALE * 1.5}rem` // Base: 1.5rem
+  // Shrink font size for cp_013 (Ian Potter Lakeside Precinct Lawn) due to long text
+  const isLongSubtitle = checkpointId === 'cp_013'
+  const headerFontSize = `${scale * CONTENT_SCALE * (isLongSubtitle ? 1.1 : 1.5)}rem` // Base: 1.5rem, 1.1rem for long subtitles
   const bodyFontSize = `${scale * CONTENT_SCALE * 0.875}rem` // Base: 0.875rem (text-sm)
   const buttonFontSize = `${scale * CONTENT_SCALE * 0.875}rem` // Base: 0.875rem
   const cardWidth = `${scale * 550}px` // Base: ~550px (popup width, not affected by content scale)
@@ -962,7 +964,7 @@ function CheckpointInfoCard({
     >
       <div className="mx-auto" style={{ width: cardWidth, maxWidth: '90vw' }}>
         <p 
-          className="font-serif whitespace-nowrap font-bold border-3 border-black bg-yellow-400 rounded-xl w-full text-center"
+          className={`font-serif font-bold border-3 border-black bg-yellow-400 rounded-xl w-full text-center ${isLongSubtitle ? '' : 'whitespace-nowrap'}`}
           style={{ 
             fontSize: headerFontSize,
             paddingTop: headerPadding,
