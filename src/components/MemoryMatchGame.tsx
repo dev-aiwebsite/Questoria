@@ -329,7 +329,7 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
       const allMatched = matchedCards.every((c) => c.isMatched);
       if (allMatched) {
         setGameWon(true);
-        const gemsAwarded = 1; // Always award 1 worm
+        const gemsAwarded = 2; // Games award 2 worms
         // Play win sound
         playSound(winSoundRef);
         // Call onWin immediately, then close after a short delay
@@ -471,7 +471,7 @@ export default function MemoryMatchGame({ onWin, onClose, checkpointId, mapId, t
                 <p className="text-lg font-bold mb-4">
                   You earned <span className="text-2xl inline-flex items-center gap-1">
                     <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
-                    1 Worm
+                    2 Worms
                   </span>
                 </p>
               </div>

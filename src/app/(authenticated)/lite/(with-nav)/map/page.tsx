@@ -5,7 +5,7 @@ import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
@@ -95,6 +95,14 @@ export default function Page() {
   
   // Filter out excluded checkpoints
   const visibleCheckpoints = checkpoints.filter(c => !excludedCheckpointIds.includes(c.id));
+  
+  // Calculate total possible worms
+  // Games give 2 worms, white flags (no games) give 1 worm
+  const totalPossibleWorms = useMemo(() => {
+    const gameCheckpoints = visibleCheckpoints.filter(c => hasGame(c.id)).length;
+    const whiteFlagCheckpoints = visibleCheckpoints.filter(c => !hasGame(c.id)).length;
+    return (gameCheckpoints * 2) + (whiteFlagCheckpoints * 1);
+  }, [visibleCheckpoints]);
 
   useEffect(()=>{
     setIsMounted(true)
@@ -129,6 +137,7 @@ export default function Page() {
   const gemCounterRef = useRef<HTMLDivElement>(null)
   const gemAnimationIdRef = useRef(0)
   const animatedGemIdsRef = useRef<Set<number>>(new Set())
+  const processedWhiteFlagsRef = useRef<Set<string>>(new Set())
   
   const zoomIn = () => {
     const newWidth = Math.min(mapWidthRef.current + (mapWidthRef.current * 0.5), BASE_MAP_WIDTH)
@@ -330,6 +339,42 @@ export default function Page() {
       }, 200) // Jump up duration
     }
   }, [targetMascotPos.x, targetMascotPos.y, selectedCheckpoint])
+  
+  // Handle white flag viewing - give 1 worm when white flag dialog opens for first time
+  useEffect(() => {
+    if (checkpointDialogOpen && selectedCheckpoint !== null) {
+      const checkpoint = visibleCheckpoints[selectedCheckpoint];
+      if (checkpoint && !hasGame(checkpoint.id)) {
+        const isWhiteFlagViewed = userCheckpoints?.find(uc => uc.checkpoint_id === checkpoint.id)?.is_visited || false;
+        const alreadyProcessed = processedWhiteFlagsRef.current.has(checkpoint.id);
+        
+        if (!isWhiteFlagViewed && !alreadyProcessed) {
+          // Mark as processed to prevent duplicate awards
+          processedWhiteFlagsRef.current.add(checkpoint.id);
+          
+          // Give 1 worm for viewing white flag
+          // addCheckpointGems already updates the user's total gems
+          addCheckpointGems(checkpoint.id, 1);
+          markCheckpointVisited(checkpoint.id);
+          
+          // Trigger gem animation after a short delay to ensure dialog is visible
+          setTimeout(() => {
+            const flagElement = document.querySelector(`[data-checkpoint-index="${selectedCheckpoint}"]`);
+            let sourceX = window.innerWidth / 2;
+            let sourceY = window.innerHeight / 2;
+            
+            if (flagElement) {
+              const rect = flagElement.getBoundingClientRect();
+              sourceX = rect.left + rect.width / 2;
+              sourceY = rect.top + rect.height / 2;
+            }
+            
+            triggerGemAnimation(1, sourceX, sourceY);
+          }, 100);
+        }
+      }
+    }
+  }, [checkpointDialogOpen, selectedCheckpoint, visibleCheckpoints, userCheckpoints, addCheckpointGems, markCheckpointVisited])
 
   // Handle mouse/touch drag to scroll
   const handleStart = (clientX: number, clientY: number) => {
@@ -537,7 +582,7 @@ export default function Page() {
       >
         <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
         <span className="font-bold text-lg">
-          {currentUser?.gems || 0}
+          {currentUser?.gems || 0}/{totalPossibleWorms}
         </span>
       </div>
      
@@ -581,6 +626,7 @@ export default function Page() {
                const currentCheckPointData = userCheckpoints.find(uc => uc.checkpoint_id === c.id)
                const finishedChallenges = currentCheckPointData ? [currentCheckPointData.selfie, currentCheckPointData.quiz].filter(Boolean) : [];
                const finishedChallengesCount = finishedChallenges?.length ?? 0
+               const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0
                const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.is_visited || false
                
               const isSelected = selectedCheckpoint === index && checkpointDialogOpen
@@ -661,15 +707,34 @@ export default function Page() {
                   className="w-full h-full"
                   style={(() => {
                     const hasGameForCheckpoint = hasGame(c.id);
-                    if (isCheckpointVisited) {
+                    
+                    // For game flags: turn green when visited
+                    if (hasGameForCheckpoint && isCheckpointVisited) {
                       return { 
                         filter: 'hue-rotate(120deg) saturate(1.5) brightness(1.1)',
                         transition: 'filter 0.5s ease-in-out'
                       };
                     }
+                    
                     return { transition: 'filter 0.5s ease-in-out' };
                   })()}
-                  src={!hasGame(c.id) ? "/images/IconFlagWhite.png" : "/images/IconFlag.png"}
+                  src={(() => {
+                    const hasGameForCheckpoint = hasGame(c.id);
+                    const isWhiteFlag = !hasGameForCheckpoint;
+                    const currentCheckpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0;
+                    const whiteFlagViewed = isWhiteFlag && (isCheckpointVisited || currentCheckpointGems > 0);
+                    
+                    // Use blue flag image when white flag checkpoint is visited
+                    if (whiteFlagViewed) {
+                      return "/images/IconFlagBlue.png";
+                    }
+                    // Use white flag for unvisited info checkpoints
+                    if (isWhiteFlag) {
+                      return "/images/IconFlagWhite.png";
+                    }
+                    // Use regular flag for game checkpoints
+                    return "/images/IconFlag.png";
+                  })()}
                   width={100}
                   height={100}
                   alt={c.title}
