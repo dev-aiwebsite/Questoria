@@ -128,7 +128,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Step into a garden that feels strong and sturdy, like it’s guarding secret treasures. The plants here are tough and clever, built to survive and thrive.",
+      "Tough ironbark trees and hardy plants from some of Australia’s most resilient forests. Quiet, rugged, and built to last. ",
     did_you_know: `<p><strong>Did you know?</strong> Ironbark trees have incredibly hard bark that helps protect them from bushfires.</p>`,
     is_visited: false,
     challenges: [
