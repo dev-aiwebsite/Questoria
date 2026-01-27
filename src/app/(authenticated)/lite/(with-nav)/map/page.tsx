@@ -89,7 +89,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
   
@@ -780,8 +780,6 @@ export default function Page() {
           return;
         }
           
-        // Update gems immediately so counter updates
-        addGems(gems);
         addCheckpointGems(checkpointId, gems);
         
         // Close the game immediately

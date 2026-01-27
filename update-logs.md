@@ -43,6 +43,15 @@
 - [x] Update `currentUserContext`
 - *Note: Bcrypt is temporarily disabled.*
 
+### Feedback Page
+- [x] Added database table
+- [x] Added form function
+
 #### 🗺️ Map Page
-- [ ] Update to save progress to the database
+- [x] Add user_checkpoints table to database
+- [x] update all function in currentUserContext that uses userCheckpoints
+- [x] Update to save game progress to the database
+- [x] Removed addGem function
+- [x] Calculate user gems in addCheckpointGems base on gems collected. 
+
 

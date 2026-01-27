@@ -14,7 +14,7 @@ export default function Page() {
 
             
             <h2 className="text-2xl font-serif text-center mb-6">Capture the right moment</h2>
-            <div className="cursor-pointer overflow-hidden bg-white rounded-xl border border-black w-full h-[250] flex items-center justify-center">
+            <div className="cursor-pointer overflow-hidden bg-yellow-400 rounded-xl border-3 border-black w-full h-[250] flex items-center justify-center">
                 {ARImage ?
                     <Image
                         className="w-full h-auto object-cover"

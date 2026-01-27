@@ -1426,12 +1426,10 @@ export type UserCheckpoint = {
     user_id: string;
     checkpoint_id: string;
     is_visited: boolean;
-    challenges: {
-        selfie: string;
-        quiz: string;
-        happiness: number;
-    };
-    gems_collected?: number;
+    selfie: string;
+    quiz: string;
+    happiness: number;
+    gems_collected: number;
 }
 export const user_checkpoints:UserCheckpoint[] = [
   {
@@ -1439,11 +1437,9 @@ export const user_checkpoints:UserCheckpoint[] = [
     user_id: "a9f3k2",
     checkpoint_id: "234jfgfg1",
     is_visited: false,
-    challenges: {
-      "selfie": "",
-      "quiz": "",
-      "happiness": 0
-    },
+    "selfie": "",
+    "quiz": "",
+    "happiness": 0,
     gems_collected: 0
   }
 ]
