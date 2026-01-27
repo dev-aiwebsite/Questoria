@@ -123,8 +123,8 @@ export const checkpoints: Checkpoint[] = [
   {
     id: "cp_002",
     map_id: "234j3h4j3",
-    title: "Ironbank Garden",
-    subtitle: "Ironbank Garden",
+    title: "Ironbark Garden",
+    subtitle: "Ironbark Garden",
     pretext: "",
     image: "",
     description:
