@@ -1,8 +1,10 @@
 "use client";
 
-import { user_checkpoints, user_maps, UserCheckpoint, UserMap } from "@/lib/dummy"; // your User type
-import { getUserById, User } from "@/server-actions/crudUser";
+import { user_maps, UserMap } from "@/lib/dummy"; // your User type
+import { getUserById, updateUser, User } from "@/server-actions/crudUser";
+import { createUserCheckpoint, getUserCheckpointsByUserId, updateUserCheckpoint, UserCheckpoint } from "@/server-actions/crudUserCheckpoint";
 import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
+import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
@@ -13,7 +15,6 @@ type CurrentUserContextType = {
     setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
     checkpoints: UserCheckpoint[] | null;
     setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
-    addGems: (amount: number) => void;
     addCheckpointGems: (checkpointId: string, amount: number) => void;
     markCheckpointVisited: (checkpointId: string) => void;
     userOnboarding: UserOnboardingAnswer | null;
@@ -28,39 +29,46 @@ type Props = {
 };
 
 export const CurrentUserProvider = ({ children }: Props) => {
-    const {data, status} = useSession()
+    const { data: session, status } = useSession()
     const [isFetching, setIsFetching] = useState(true)
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(null)
 
     const [maps, setMaps] = useState<UserMap[] | null>(null)
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(null);
+
     const currentUserRef = useRef<User | null>(null)
+    const checkpointsRef = useRef<UserCheckpoint[] | null>(null);
 
     // Keep ref in sync with state
+    useEffect(() => { checkpointsRef.current = checkpoints; }, [checkpoints]);
     useEffect(() => {
         currentUserRef.current = currentUser;
     }, [currentUser])
 
-    useEffect(()=>{
-        if(status !== 'authenticated' || currentUser) return
+    useEffect(() => {
+        if (status !== 'authenticated' || currentUser) return
 
-        async function fetchData(){
-            if(!data) return
+        queueMicrotask(async () => {
+            if (!session) return
             setIsFetching(true)
-                
+
             try {
-                    const getUserRes = await getUserById(data?.user.id)
-                    if(!getUserRes.data){
-                        setIsFetching(false)
-                        return
-                    }
-                    setCurrentUser(getUserRes.data)
-                    
-                    const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(getUserRes.data.id)
-                    if(getUserOnboardingRes.data){
-                        setUserOnboarding(getUserOnboardingRes.data)
-                    }
+                const { data: userResData } = await getUserById(session.user.id)
+                if (!userResData) {
+                    setIsFetching(false)
+                    return
+                }
+                setCurrentUser(userResData)
+
+                const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(userResData.id)
+                if (getUserOnboardingRes.data) {
+                    setUserOnboarding(getUserOnboardingRes.data)
+                }
+                const { data } = await getUserCheckpointsByUserId(userResData.id)
+                if (data) {
+                    setCheckpoints(data)
+                }
             } catch (error) {
                 console.log(error)
             } finally {
@@ -68,157 +76,38 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 console.log(isFetching, 'setting to false')
 
             }
-        }
-        fetchData()
+        })
 
-    },[status])
 
-    // Wrapper to update gems when user is updated
-    const updateCurrentUser = (user: User | null) => {
-        setCurrentUser(user);
-        currentUserRef.current = user;
-    };
-
-    // Function to add gems to current user
-    const addGems = (amount: number) => {
-        setCurrentUser((prevUser) => {
-            if (!prevUser) {
-                return prevUser;
-            }
-            const oldGems = prevUser.gems || 0;
-            const newGems = +oldGems + +amount;
-            const updatedUser = {
-                ...prevUser,
-                gems: newGems
-            };
-            // Update ref immediately
-            currentUserRef.current = updatedUser;
-            return updatedUser;
-        });
-    };
-
-    // Function to add gems to a specific checkpoint
-    const addCheckpointGems = (checkpointId: string, amount: number) => {
-        const userId = currentUserRef.current?.id;
-        if (!userId) return;
-
-        setCheckpoints((prev) => {
-            if (!prev) {
-                // If no checkpoints exist, create one
-                return [{
-                    id: `new-${checkpointId}-${Date.now()}`,
-                    user_id: userId,
-                    checkpoint_id: checkpointId,
-                    is_visited: false,
-                    challenges: {
-                        selfie: "",
-                        quiz: "",
-                        happiness: 0
-                    },
-                    gems_collected: amount
-                }];
-            }
-
-            const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
-            if (existingCheckpoint) {
-                // Update existing checkpoint
-                return prev.map((cp) => {
-                    if (cp.checkpoint_id === checkpointId) {
-                        return {
-                            ...cp,
-                            gems_collected: (cp.gems_collected || 0) + amount
-                        };
-                    }
-                    return cp;
-                });
-            } else {
-                // Create new checkpoint entry
-                return [...prev, {
-                    id: `new-${checkpointId}-${Date.now()}`,
-                    user_id: userId,
-                    checkpoint_id: checkpointId,
-                    is_visited: false,
-                    challenges: {
-                        selfie: "",
-                        quiz: "",
-                        happiness: 0
-                    },
-                    gems_collected: amount
-                }];
-            }
-        });
-    };
-
-    // Function to mark a checkpoint as visited
-    const markCheckpointVisited = (checkpointId: string) => {
-        const userId = currentUserRef.current?.id;
-        if (!userId) return;
-
-        setCheckpoints((prev) => {
-            if (!prev) {
-                // If no checkpoints exist, create one
-                return [{
-                    id: `new-${checkpointId}-${Date.now()}`,
-                    user_id: userId,
-                    checkpoint_id: checkpointId,
-                    is_visited: true,
-                    challenges: {
-                        selfie: "",
-                        quiz: "",
-                        happiness: 0
-                    },
-                    gems_collected: 0
-                }];
-            }
-
-            const existingCheckpoint = prev.find(cp => cp.checkpoint_id === checkpointId);
-            if (existingCheckpoint) {
-                // Update existing checkpoint
-                return prev.map((cp) => {
-                    if (cp.checkpoint_id === checkpointId) {
-                        return {
-                            ...cp,
-                            is_visited: true
-                        };
-                    }
-                    return cp;
-                });
-            } else {
-                // Create new checkpoint entry
-                return [...prev, {
-                    id: `new-${checkpointId}-${Date.now()}`,
-                    user_id: userId,
-                    checkpoint_id: checkpointId,
-                    is_visited: true,
-                    challenges: {
-                        selfie: "",
-                        quiz: "",
-                        happiness: 0
-                    },
-                    gems_collected: 0
-                }];
-            }
-        });
-    };
+    }, [status])
 
     useEffect(() => {
         if (!currentUser) return
         const currentUserId = currentUser.id
-        const checkpointsRes = user_checkpoints.filter(c => c.user_id == currentUserId)
         const mapsRes = user_maps.filter(m => m.user_id == currentUserId)
 
-        queueMicrotask(() => {
+        queueMicrotask(async () => {
             if (mapsRes) {
                 setMaps(mapsRes)
             }
+            let userCheckpoints: UserCheckpoint[] = []
+
+            if (!checkpoints) {
+                const { data } = await getUserCheckpointsByUserId(currentUserId)
+                if (data) {
+                    userCheckpoints = data
+                    setCheckpoints(data)
+                }
+            }
+
             // Merge saved checkpoints with dummy data checkpoints
-            if (checkpointsRes) {
+            if (userCheckpoints) {
                 setCheckpoints((prevSaved) => {
                     if (!prevSaved) {
-                        return checkpointsRes;
+                        return userCheckpoints;
                     }
                     // Merge: use saved checkpoint data if exists, otherwise use dummy data
-                    const merged = checkpointsRes.map(dummyCp => {
+                    const merged = userCheckpoints.map(dummyCp => {
                         const saved = prevSaved.find(sc => sc.checkpoint_id === dummyCp.checkpoint_id);
                         if (saved) {
                             // Use saved data but keep dummy data structure
@@ -226,7 +115,10 @@ export const CurrentUserProvider = ({ children }: Props) => {
                                 ...dummyCp,
                                 is_visited: saved.is_visited,
                                 gems_collected: saved.gems_collected,
-                                challenges: saved.challenges || dummyCp.challenges
+                                selfie: saved.selfie || dummyCp.selfie,
+                                quiz: saved.quiz || dummyCp.quiz,
+                                happiness: saved.happiness || dummyCp.happiness
+
                             };
                         }
                         return dummyCp;
@@ -244,9 +136,121 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
 
     }, [currentUser])
+    // Wrapper to update gems when user is updated
+    const updateCurrentUser = (user: User | null) => {
+        setCurrentUser(user);
+        currentUserRef.current = user;
+    };
+
+    // Function to add gems to a specific checkpoint
+    const addCheckpointGems = (checkpointId: string, amount: number) => {
+        const latestUser = currentUserRef.current;
+        const userId = latestUser?.id;
+        if (!userId) return;
+
+        const currentList = checkpointsRef.current || [];
+        const existingIndex = currentList.findIndex(cp => cp.checkpoint_id === checkpointId);
+
+        let newCheckpointData: UserCheckpoint;
+        let newCheckpointsList: UserCheckpoint[];
+
+        if (existingIndex > -1) {
+            const existingCp = currentList[existingIndex];
+
+            newCheckpointData = {
+                ...existingCp,
+                gems_collected: amount
+            };
+
+            newCheckpointsList = [...currentList];
+            newCheckpointsList[existingIndex] = newCheckpointData;
+
+        } else {
+
+            newCheckpointData = {
+                id: nanoid(10),
+                user_id: userId,
+                checkpoint_id: checkpointId,
+                is_visited: true,
+                selfie: "",
+                quiz: "",
+                happiness: 0,
+                gems_collected: amount
+            };
+            newCheckpointsList = [...currentList, newCheckpointData];
+            createUserCheckpoint(newCheckpointData) 
+                 .catch(err => console.error("Failed to create checkpoint:", err));
+        }
+
+        const totalUserGems = newCheckpointsList.reduce((sum, cp) => sum + (cp.gems_collected || 0), 0);
+
+        setCurrentUser((prev) => {
+            if (!prev) return null;
+            const updated = { ...prev, gems: totalUserGems };
+            currentUserRef.current = updated;
+            return updated;
+        });
+
+        setCheckpoints(newCheckpointsList);
+        checkpointsRef.current = newCheckpointsList;
+
+        updateUserCheckpoint(checkpointId, { gems_collected: amount })
+            .catch((error) => {
+                console.error("Failed to save checkpoint gems:", error);
+            });
+
+        updateUser(userId, { gems: totalUserGems })
+            .catch((error) => console.error("Failed to sync user total:", error));
+
+    };
+
+    // Function to mark a checkpoint as visited
+    const markCheckpointVisited = (checkpointId: string) => {
+        const userId = currentUserRef.current?.id;
+        if (!userId) return;
+
+        const currentList = checkpointsRef.current || [];
+        const existingIndex = currentList.findIndex(cp => cp.checkpoint_id === checkpointId);
+
+        if (existingIndex > -1 && currentList[existingIndex].is_visited) {
+            return;
+        }
+
+        let newCheckpointData: UserCheckpoint;
+        let newCheckpointsList: UserCheckpoint[];
+
+        if (existingIndex > -1) {
+            newCheckpointData = {
+                ...currentList[existingIndex],
+                is_visited: true
+            };
+            newCheckpointsList = [...currentList];
+            newCheckpointsList[existingIndex] = newCheckpointData;
+        } else {
+            newCheckpointData = {
+                id: nanoid(10),
+                user_id: userId,
+                checkpoint_id: checkpointId,
+                is_visited: true,
+                selfie: "",
+                quiz: "",
+                happiness: 0,
+                gems_collected: 0
+            };
+            newCheckpointsList = [...currentList, newCheckpointData];
+        }
+
+        setCheckpoints(newCheckpointsList);
+        checkpointsRef.current = newCheckpointsList;
+
+        updateUserCheckpoint(checkpointId, { is_visited: true })
+            .catch((error) => {
+                console.error(`Failed to mark checkpoint ${checkpointId} as visited:`, error);
+            });
+    };
 
     return (
-        <CurrentUserContext.Provider value={{isFetching, userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addGems, addCheckpointGems, markCheckpointVisited }}>
+        <CurrentUserContext.Provider value={{ isFetching, userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addCheckpointGems, markCheckpointVisited }}>
             {children}
         </CurrentUserContext.Provider>
     );

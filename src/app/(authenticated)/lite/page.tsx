@@ -12,16 +12,14 @@ export default function Page() {
                 <Clouds />
             </div>
             <div className="bg-white rounded-2xl border-3 border-black prose space-y-6 text-base p-10 my-auto overflow-auto">
-                <h2 className="p-2 rounded-xl text-3xl font-medium uppercase !mb-10 font-serif">Welcome to QUESTORIA</h2>
+                <h2 className="p-2 rounded-xl text-3xl font-medium uppercase !mb-10 font-serif">WELCOME TO QUESTORIA</h2>
                 
                     <p>
                         <strong>A game made for curious explorers.</strong>
                     </p>
                    
                     <p>
-                        Our first quest lives at <strong>Royal Botanic Gardens, Cranbourne</strong>.
-                        <br />
-                        Full of winding paths, hidden details, and moments worth stopping for.
+                        Our first quest begins in the living landscapes of the <strong>Royal Botanic Gardens, Cranbourne, Victoria, Australia.</strong> It&apos;s full of winding paths and hidden details; you can play while you visit or explore from home.
                     </p>
 
                      <Image
@@ -33,45 +31,16 @@ export default function Page() {
                     />
 
                     <p>
-                        <strong>Meet your guide, a Southern Brown Bandicoot</strong>
+                        <strong>Meet your guide, a Southern Brown Bandicoot!</strong>
                         <br />
-                        These shy foragers help keep gardens healthy as they search for food and turn over soil.
+                        These shy foragers help keep gardens healthy as they search for food and turn over soil. As you explore, you’ll collect the foods bandicoots look for in the wild.
                     </p>
-
-                    <p>
-                        As you explore, you’ll collect the foods bandicoots look for in the wild.
-                        <br />
-                        Each find adds to your progress and helps your bandicoot along the way.
-                    </p>
-
-                     <Image
-                     className="block !my-12 mx-auto border-3 border-black rounded-xl w-full"
-                    src="/images/bandicott.png"
-                    alt=""
-                    width={200}
-                    height={200}
-                    />
-
-                    <p>
-                        <strong>Did you know?</strong>
-                        <br />
-                        Southern Brown Bandicoots are native to this part of Victoria and rely on safe,
-                        well-cared-for habitats to survive.
-                    </p>
-
-                    <p>
-                        You can play while you’re here, or explore from home.
-                        <br />
-                        Take your time. Wander. See what you find.
-                    </p>
-                
-
 
                 <Link
                     className="btn primary mt-10"
                     href={"/lite/map"}
                 >
-                    Enter Map
+                    Start Exploring
                 </Link>
             </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkpoint, checkpoints, currentUserId, user_checkpoints } from "@/lib/dummy";
+import { Checkpoint, checkpoints, currentUserId } from "@/lib/dummy";
 import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -89,7 +89,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addGems, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
   
@@ -212,8 +212,6 @@ export default function Page() {
     }
   }
   
-  const currentUserCheckpoints = user_checkpoints.filter(c => c.user_id === currentUserId)
-
   // Function to trigger gem animation
   const triggerGemAnimation = (count: number, sourceX: number, sourceY: number) => {
     if (!gemCounterRef.current) return;
@@ -623,12 +621,11 @@ export default function Page() {
             alt="Victoria Botanical Garden"
           />
 
-          {checkpoints.length > 0 &&
+          {checkpoints.length > 0 && userCheckpoints &&
             visibleCheckpoints.map((c,index) => {
-               const userCheckPointChallengesData = currentUserCheckpoints.find(uc => uc.checkpoint_id === c.id)?.challenges
-               const finishedChallenges = userCheckPointChallengesData && Object.values(userCheckPointChallengesData).filter(Boolean)
+               const currentCheckPointData = userCheckpoints.find(uc => uc.checkpoint_id === c.id)
+               const finishedChallenges = currentCheckPointData ? [currentCheckPointData.selfie, currentCheckPointData.quiz].filter(Boolean) : [];
                const finishedChallengesCount = finishedChallenges?.length ?? 0
-               const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0
                const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.is_visited || false
                
               const isSelected = selectedCheckpoint === index && checkpointDialogOpen
@@ -838,8 +835,6 @@ export default function Page() {
           return;
         }
           
-        // Update gems immediately so counter updates
-        addGems(gems);
         addCheckpointGems(checkpointId, gems);
         
         // Close the game immediately

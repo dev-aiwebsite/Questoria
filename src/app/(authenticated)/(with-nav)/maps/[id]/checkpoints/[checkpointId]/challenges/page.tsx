@@ -20,12 +20,12 @@ export default function Page() {
     const {setCheckpoints, checkpoints:user_checkpoints} = useCurrentUserContext()
     const currentUserCheckpoints = user_checkpoints?.filter(uc => uc.user_id === currentUserId)
     const currentUserCheckpoint = currentUserCheckpoints?.find(c => c.checkpoint_id === checkpointId)
-    const currentUserChallenges = currentUserCheckpoint?.challenges
-    const currentUserChallengesAnswers = currentUserChallenges ? Object.values(currentUserChallenges).filter(Boolean) : []
+    
+    const currentUserChallengesAnswers = [currentUserCheckpoint?.selfie, currentUserCheckpoint?.happiness, currentUserCheckpoint?.quiz].filter(Boolean)
 
-    const [ARImage, setARImage] = useState(currentUserChallenges?.selfie || "")
-    const [quizAnswer, setQuizAnswer] = useState(currentUserChallenges?.quiz || "")
-    const [happinessVal, setHappinessVal] = useState<number | undefined>(currentUserChallenges?.happiness)
+    const [ARImage, setARImage] = useState(currentUserCheckpoint?.selfie || "")
+    const [quizAnswer, setQuizAnswer] = useState(currentUserCheckpoint?.quiz || "")
+    const [happinessVal, setHappinessVal] = useState<number | undefined>(currentUserCheckpoint?.happiness)
     const [isCleared, setIsCleared] = useState(currentUserChallengesAnswers.length >= 3)
     const [openQuiz, setOpenQuiz] = useState(false)
     const [openCamera, setOpenCamera] = useState(false)
@@ -50,9 +50,9 @@ export default function Page() {
             const currentCheckpointIndex = currentUserCheckpoints.findIndex(c => c.checkpoint_id == checkpointId)
             if(currentCheckpointIndex !== -1 && user_checkpoints){
                 const newValue = [...user_checkpoints]
-                newValue[currentCheckpointIndex].challenges.selfie = ARImage
-                newValue[currentCheckpointIndex].challenges.quiz = quizAnswer
-                newValue[currentCheckpointIndex].challenges.happiness = happinessVal || 0
+                newValue[currentCheckpointIndex].selfie = ARImage
+                newValue[currentCheckpointIndex].quiz = quizAnswer
+                newValue[currentCheckpointIndex].happiness = happinessVal || 0
                 setCheckpoints(newValue)
             }
 
