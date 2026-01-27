@@ -1,8 +1,9 @@
 "use client"
 import LogoWithClouds from "@/components/logoWithClouds";
 import PageLoader from "@/components/pageLoader";
+import { Button } from "@/components/shadcn/ui/button";
 import { LoginUser } from "@/server-actions/loginLogout";
-import { OctagonX } from "lucide-react";
+import { LoaderCircle, OctagonX } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,11 +14,13 @@ export default function Page() {
     const [userPass, setUserPass] = useState("")
     const [error, setError] = useState("")
     const [isSuccess, stIsSuccess] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
     
     async function login() {
         setError("")
+        setIsLoading(true)
             async function login() {
                 const authRes = await LoginUser({
                     email: userEmail,
@@ -26,12 +29,13 @@ export default function Page() {
                 
                 if(authRes){
                     stIsSuccess(true)
-                    router.push(authRes?.redirectUrl)
+                    setIsLoading(false)
+                    router.push('/lite')
 
                 } else {
                     setError('Invalid credentials')
                 }
-                console.log(authRes, 'authres')
+                
                 }
             login()
     }
@@ -72,8 +76,10 @@ export default function Page() {
                     />
                     <button
                         type="submit"
-                        className="btn primary font-bold w-full"
+                        className="btn primary font-bold w-full !flex flex-row items-center justify-center gap-2"
+                        disabled={isLoading}
                     >
+                        {isLoading && <LoaderCircle className="animate-spin" />}
                         START QUEST
                     </button>
                 </form>

@@ -63,6 +63,7 @@ body {
   .app-container {
     @apply rounded-xl border-3 border-black;
   }
+
 }
 
 .lineheight-1 {
@@ -196,4 +197,8 @@ body {
 }
 .social.linkedin {
     background-position: 0% 100%;
+}
+
+button:disabled {
+    filter: grayscale(0.5);
 }
