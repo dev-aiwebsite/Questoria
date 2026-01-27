@@ -17,8 +17,8 @@ type AnswerItem = {
 type AnswersState = AnswerItem[];
 
 export default function Page() {
-  const { update } = useSession();
-  const { currentUser, setUserOnboarding, userOnboarding } = useCurrentUserContext();
+  const { update, data:session } = useSession();
+  const { setCurrentUser, currentUser, setUserOnboarding, userOnboarding } = useCurrentUserContext();
   const [currentStep, setCurrentStep] = useState(1);
 
   // UI state (not DB state)
@@ -36,11 +36,20 @@ export default function Page() {
 
     if (newStep > questionCount) {
         try {
-            const res = userOnboarding ? await updateUserOnboardingAnswer(userOnboarding.id, {...userOnboarding,answers}): await createUserOnboardingAnswer({answers, user_id: currentUser?.id})
-            const updateUserRes = updateUser(currentUser.id, {onboarding: true})
-            if(res.data){
+          console.log(userOnboarding, 'userOnboarding')
+          console.log({...userOnboarding,answers}, 'new data')
+            const res = userOnboarding ? await updateUserOnboardingAnswer(userOnboarding.id, {...userOnboarding,answers}): await createUserOnboardingAnswer({answers, user_id: currentUser.id})
+            console.log(res, 'useronboarding res')
+            if(!res.success) return
+            
+            const updateUserRes = await updateUser(currentUser.id, {onboarding: true})
+            
+            console.log(updateUserRes, 'updateUserRes')
+            if(res.data && updateUserRes.data){
                 setUserOnboarding(res.data)
-                await update({ onboarding: true });
+                const resUpdateSession = await update({ onboarding: true });
+                console.log(resUpdateSession, 'resUpdateSession')
+                setCurrentUser(updateUserRes.data)
                 router.push("/lite")
             }
             
@@ -53,17 +62,13 @@ export default function Page() {
     }
   }
 
-  const isCleared =
-  Array.isArray(userOnboarding?.answers) &&
-  userOnboarding.answers
-    .flatMap(a => a.value ?? [])
-    .every(v => v != null && String(v).trim() !== "");
+  const isCleared = session ? session.user.onboarding : false
 
   useEffect(() => {
     if (isCleared) {
       router.push(`/lite`);
     }
-  }, []);
+  }, [isCleared]);
 
   return (
     <div  className="bg-primary absolute top-0">
