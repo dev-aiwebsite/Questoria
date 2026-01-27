@@ -158,7 +158,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "This garden is full of neat shapes and tidy paths that feel like a giant green puzzle. It’s a fun place to spot patterns made by plants.",
+      "A box eucalypt canopy with plants inspired by the Grampians. Look closely. The smaller details tend to steal the show.",
     did_you_know: `<p><strong>Did you know?</strong> Box trees are often used in formal gardens because they can be trimmed into neat shapes that last for decades.</p>`,
     is_visited: false,
     challenges: [
