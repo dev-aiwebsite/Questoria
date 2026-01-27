@@ -32,7 +32,6 @@ export default function MobileLogoDropdown({align = 'start', trigger }: { trigge
                         onClick={() => setIsTermsOpen(true)}>
                         Terms of use
                     </DropdownMenuItem>
-                    <DropdownMenuItem>About</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
