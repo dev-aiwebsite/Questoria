@@ -134,7 +134,12 @@ export async function updateUserOnboardingAnswer(
     for (const [key, value] of Object.entries(data)) {
       if (key === "id" || key === "created_at") continue;
       fields.push(`${key} = $${i++}`);
-      values.push(value);
+      if(key == 'answers'){
+        values.push(JSON.stringify(value));
+      }else {
+
+        values.push(value);
+      }
     }
 
     values.push(id);
