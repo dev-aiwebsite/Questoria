@@ -278,7 +278,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "This river doesn’t always have water, but it still has lots to explore. Follow the stones and imagine how water rushes through after rain.",
+      "Inspired by inland river systems that run only after rain. Look for clues in the sand and stones. Water leaves stories behind, even when it’s gone.",
     did_you_know: `<p><strong>Did you know?</strong> Many plants in dry river beds survive long droughts by storing water in roots and stems.</p>`,
     is_visited: false,
     challenges: [
@@ -308,7 +308,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Walk beneath leafy roofs made by tall trees above you. This garden feels like a secret forest full of quiet magic.",
+      "A winding walk through different forest landscapes, from woodlands to taller eucalypt country. ",
     did_you_know: `<p><strong>Did you know?</strong> Forest Gardens show layers of vegetation from ground cover to tall canopy trees, mimicking natural forests.</p>`,
     is_visited: false,
     challenges: [
@@ -368,7 +368,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Welcome to the desert, where plants know how to save every drop of water. Look around to see how life survives in hot, dry places.",
+      "A desert-themed stop near the sand gardens, featuring plants from arid Australia. Proof that life finds a way, even when conditions are tough.",
     did_you_know: `<p><strong>Did you know?</strong> The Desert Discovery Camp shows plants that thrive in harsh, dry conditions, teaching us how to adapt to extreme climates.</p>`,
     is_visited: false,
     challenges: [
@@ -878,7 +878,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "This is where plant scientists test ideas and learn new things. It’s a thinking garden full of smart plants.",
+      "Behind the scenes of the garden, this space is all about learning and care.",
     did_you_know: `<p><strong>Did you know?</strong> Research Gardens help scientists study plant growth, climate response, and biodiversity.</p>`,
     is_visited: false,
     challenges: [
@@ -968,7 +968,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "This path wiggles and winds like a friendly snake. Follow it and see where the adventure takes you.",
+      "A gently winding path through the arid gardens. Follow the curves. Straight lines are overrated here.",
     did_you_know: `<p><strong>Did you know?</strong> Serpentine paths are designed to slow your walk and encourage discovery.</p>`,
     is_visited: false,
     challenges: [
@@ -998,7 +998,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "A garden made just for play, discovery, and fun. Touch, explore, and imagine all you like here.",
+      "A playful space under the eucalypts, designed for exploration and learning. Built for curious minds and energetic legs.",
     did_you_know: `<p><strong>Did you know?</strong> Kids Backyards are designed to be interactive and sensory-friendly for children.</p>`,
     is_visited: false,
     challenges: [
@@ -1028,7 +1028,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Simple, cozy, and full of everyday plant ideas. This garden shows how small spaces can be full of life.",
+      "A stroll through different styles of Australian home gardens from past to present. Like time travel, but with more mulch.",
     did_you_know: `<p><strong>Did you know?</strong> Home Gardens are designed to show real-life gardening ideas for small spaces.</p>`,
     is_visited: false,
     challenges: [
@@ -1058,7 +1058,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Step into tomorrow and see how gardens might grow in years to come. New ideas and clever designs live here.",
+      "A semi-enclosed garden that invites you closer to the plants. Those red-and-white poles show how tall things may grow. Patience pays off.",
     did_you_know: `<p><strong>Did you know?</strong> Future Gardens explore innovative gardening ideas like sustainability and new plant varieties.</p>`,
     is_visited: false,
     challenges: [
@@ -1118,7 +1118,7 @@ export const checkpoints: Checkpoint[] = [
     pretext: "",
     image: "",
     description:
-      "Many different plants live together here in harmony. It’s a celebration of how differences make gardens stronger.",
+      "A compact snapshot of Australia’s many bioregions. One small space, a big reminder of just how varied this place really is.",
     did_you_know: `<p><strong>Did you know?</strong> Diversity Gardens show how different plants support each other in ecosystems.</p>`,
     is_visited: false,
     challenges: [
