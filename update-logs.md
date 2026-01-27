@@ -51,7 +51,8 @@
 - [x] Add user_checkpoints table to database
 - [x] update all function in currentUserContext that uses userCheckpoints
 - [x] Update to save game progress to the database
-- [x] Removed addGem function
+- [x] Remove addGem function
 - [x] Calculate user gems in addCheckpointGems base on gems collected. 
 
-
+### Welcome Page
+- Update copy and remove the real-life bandicoot image.
