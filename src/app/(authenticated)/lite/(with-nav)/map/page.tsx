@@ -353,7 +353,7 @@ export default function Page() {
           processedWhiteFlagsRef.current.add(checkpoint.id);
           
           // Give 1 worm for viewing white flag
-          addGems(1);
+          // addCheckpointGems already updates the user's total gems
           addCheckpointGems(checkpoint.id, 1);
           markCheckpointVisited(checkpoint.id);
           
@@ -374,7 +374,7 @@ export default function Page() {
         }
       }
     }
-  }, [checkpointDialogOpen, selectedCheckpoint, visibleCheckpoints, userCheckpoints, addGems, addCheckpointGems, markCheckpointVisited])
+  }, [checkpointDialogOpen, selectedCheckpoint, visibleCheckpoints, userCheckpoints, addCheckpointGems, markCheckpointVisited])
 
   // Handle mouse/touch drag to scroll
   const handleStart = (clientX: number, clientY: number) => {
@@ -626,6 +626,7 @@ export default function Page() {
                const currentCheckPointData = userCheckpoints.find(uc => uc.checkpoint_id === c.id)
                const finishedChallenges = currentCheckPointData ? [currentCheckPointData.selfie, currentCheckPointData.quiz].filter(Boolean) : [];
                const finishedChallengesCount = finishedChallenges?.length ?? 0
+               const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0
                const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.is_visited || false
                
               const isSelected = selectedCheckpoint === index && checkpointDialogOpen
@@ -720,7 +721,8 @@ export default function Page() {
                   src={(() => {
                     const hasGameForCheckpoint = hasGame(c.id);
                     const isWhiteFlag = !hasGameForCheckpoint;
-                    const whiteFlagViewed = isWhiteFlag && (isCheckpointVisited || checkpointGems > 0);
+                    const currentCheckpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0;
+                    const whiteFlagViewed = isWhiteFlag && (isCheckpointVisited || currentCheckpointGems > 0);
                     
                     // Use blue flag image when white flag checkpoint is visited
                     if (whiteFlagViewed) {
