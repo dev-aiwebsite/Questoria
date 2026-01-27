@@ -1,6 +1,7 @@
 import { OnboardingQuestions } from "@/lib/dummy";
 import InputChoices from "../inputChoices";
-import React from "react";
+import React, { useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 export default function QuestionWrapper({
     count,
@@ -11,17 +12,22 @@ export default function QuestionWrapper({
     onChange,
 }: {
     count:number;
-    onSubmit: () => void;
+    onSubmit: (
+        setIsSuccess:React.Dispatch<React.SetStateAction<boolean>>,
+        setIsLoading:React.Dispatch<React.SetStateAction<boolean>>
+    ) => void;
     question: OnboardingQuestions;
     currentStep: number;
     value?: string | string[];
     onChange: (value: string | string[]) => void;
 }) {
 
+    const [isLoading, setIsLoading] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
 
     function handleSubmit() {
         if (onSubmit) {
-            onSubmit()
+            onSubmit(setIsSuccess, setIsLoading)
         }
     }
 
@@ -70,10 +76,13 @@ export default function QuestionWrapper({
             </div>
             <button
                 onClick={handleSubmit}
-                disabled={!isAnswered}
+                disabled={!isAnswered || isLoading}
                 className="w-fit mt-4 ml-auto font-bold min-w-[100px] primary input disabled:!bg-stone-300 disabled:cursor-not-allowed"
             >
-                {isAnswered ? question.cta.active : question.cta.idle}
+                {isSuccess ? "STARTING JOURNEY..." : <>
+                                    {isLoading && <LoaderCircle className="animate-spin" />}
+                                    {isAnswered ? question.cta.active : question.cta.idle}</>}
+                
             </button>
         </div>
     </div>

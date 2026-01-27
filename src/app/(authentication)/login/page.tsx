@@ -1,12 +1,10 @@
 "use client"
+import { useAppRouter } from "@/app/contexts/appRouter";
 import LogoWithClouds from "@/components/logoWithClouds";
-import PageLoader from "@/components/pageLoader";
-import { Button } from "@/components/shadcn/ui/button";
 import { LoginUser } from "@/server-actions/loginLogout";
 import { LoaderCircle, OctagonX } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
@@ -15,8 +13,7 @@ export default function Page() {
     const [error, setError] = useState("")
     const [isSuccess, stIsSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter()
-
+    const router = useAppRouter()
     
     async function login() {
         setError("")
@@ -34,13 +31,15 @@ export default function Page() {
 
                 } else {
                     setError('Invalid credentials')
+                    stIsSuccess(false)
+                    setIsLoading(false)
                 }
                 
                 }
             login()
     }
 
-    return (<>{isSuccess ? <PageLoader /> : 
+    return (<>
         <div className="relative isolate flex flex-col bg-primary h-screen overflow-hidden">
             <div className="mt-10 -z-2">
                 <LogoWithClouds />
@@ -79,8 +78,9 @@ export default function Page() {
                         className="btn primary font-bold w-full !flex flex-row items-center justify-center gap-2"
                         disabled={isLoading}
                     >
+                        {isSuccess ? "ENTERING..." : <>
                         {isLoading && <LoaderCircle className="animate-spin" />}
-                        START QUEST
+                        START QUEST</>}
                     </button>
                 </form>
 
@@ -99,7 +99,7 @@ export default function Page() {
                 </div>
             </div>
         </div>
-        }
+ 
     </>
     );
 }

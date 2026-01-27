@@ -1,7 +1,9 @@
+"use client"
+import { Link } from "@/app/contexts/appRouter";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Page() {
+    
     return (
         <div className="p-mobile bg-primary height-with-nav pb-[100px] overflow-auto">
             <div className="gap-4 text-center flex flex-col flex-nowrap justify-center h-full min-h-fit">

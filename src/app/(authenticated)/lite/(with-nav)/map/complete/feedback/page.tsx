@@ -1,10 +1,11 @@
 "use client";
 
+import { Link } from "@/app/contexts/appRouter";
 import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
 import { createFeedback } from "@/server-actions/crudFeedback";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useState } from "react";
 // Import the server action created in step 2
 
@@ -140,7 +141,8 @@ function ThankYouPage() {
             <div className="w-14 h-14 social insta"></div>
             <div className="w-14 h-14 social tiktok"></div>
           </div>
-          <Link href="/lite/map" className="!mt-10 w-full btn primary block py-3">
+          <Link
+          href="/lite/map" className="!mt-10 w-full btn primary block py-3">
             Return to Map
           </Link>
         </div>

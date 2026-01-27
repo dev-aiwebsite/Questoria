@@ -5,9 +5,9 @@ import Clouds from "@/components/clouds";
 import QuestionWrapper from "@/components/questions/questionWrapper";
 import { onboardingQuestions } from "@/lib/dummy";
 import { createUserOnboardingAnswer, updateUserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { updateUser } from "@/server-actions/crudUser";
+import { useAppRouter } from "@/app/contexts/appRouter";
 
 type AnswerItem = {
   question_id: string;
@@ -28,34 +28,39 @@ export default function Page() {
 
   const questions = onboardingQuestions.filter(q => q.id !== "nm439s2");
   const questionCount = questions.length;
-  const router = useRouter();
+  const router = useAppRouter();
 
-  async function handleSubmit() {
+  async function handleSubmit(setIsSuccess: Dispatch<SetStateAction<boolean>>, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     if(!currentUser) return
     const newStep = currentStep + 1;
 
     if (newStep > questionCount) {
+      setIsLoading(true)
         try {
-          console.log(userOnboarding, 'userOnboarding')
-          console.log({...userOnboarding,answers}, 'new data')
             const res = userOnboarding ? await updateUserOnboardingAnswer(userOnboarding.id, {...userOnboarding,answers}): await createUserOnboardingAnswer({answers, user_id: currentUser.id})
-            console.log(res, 'useronboarding res')
+            
             if(!res.success) return
             
             const updateUserRes = await updateUser(currentUser.id, {onboarding: true})
             
-            console.log(updateUserRes, 'updateUserRes')
+            
             if(res.data && updateUserRes.data){
                 setUserOnboarding(res.data)
                 const resUpdateSession = await update({ onboarding: true });
                 console.log(resUpdateSession, 'resUpdateSession')
                 setCurrentUser(updateUserRes.data)
+
+                setIsSuccess(true)
                 router.push("/lite")
             }
             
         } catch (error) {
             console.log(error)
+            setIsSuccess(false)
+        } finally {
+          setIsLoading(false)
         }  
+
 
     } else {
       setCurrentStep(newStep);

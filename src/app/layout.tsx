@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bayon, Inter } from "next/font/google";
 import "./globals.css";
+import { AppRouterProvider } from "./contexts/appRouter";
 
 
 const inter = Inter({
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${bayon.variable} antialiased bg-primary`}>
+        <AppRouterProvider>
             {children}
+        </AppRouterProvider>
       </body>
     </html>
   );

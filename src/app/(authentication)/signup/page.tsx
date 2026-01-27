@@ -1,17 +1,17 @@
 "use client";
 
+import { useAppRouter } from "@/app/contexts/appRouter";
 import LogoWithClouds from "@/components/logoWithClouds";
-import PageLoader from "@/components/pageLoader";
 import PrivacyPolicyPopup from "@/components/popups/privacyPolicyPopup";
 import TermsOfUsePopup from "@/components/popups/termsOfUsePopup";
 import { createUser } from "@/server-actions/crudUser";
 import { LoginUser } from "@/server-actions/loginLogout";
+import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const router = useRouter()
+    const router = useAppRouter()
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
@@ -28,6 +28,7 @@ export default function Page() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isSuccess, setIsSuccess] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     async function handleSubmit() {
 
@@ -81,6 +82,7 @@ export default function Page() {
 
          
             async function register() {
+                setIsLoading(true)
                 const res = await createUser(formData);
                 if (res.success && res.data) {
                     setIsSuccess(true)
@@ -90,8 +92,10 @@ export default function Page() {
                         pass: res.data.password,
                     }, false)
 
-                setIsSuccess(true)
+               
                 router.push(authRes?.redirectUrl)
+                 setIsSuccess(true)
+                setIsLoading(false)
 
 
                 }
@@ -101,9 +105,8 @@ export default function Page() {
         }
     }, [agreeTerms, agreePrivacy])
     return (
-        <>{isSuccess ? <PageLoader /> :
+        
             <>
-
                 <PrivacyPolicyPopup
                     isTriggerHidden={true}
                     open={isPrivacyOpen}
@@ -212,12 +215,14 @@ export default function Page() {
                             required
                         />
 
-                        <button
-                            type="submit"
-                            className="text-xl btn primary font-bold w-full mt-4"
-                        >
-                            Register
-                        </button>
+                          <button
+                        type="submit"
+                        className="btn primary font-bold w-full !flex flex-row items-center justify-center gap-2"
+                        disabled={isLoading}
+                    >{isSuccess ? "ENTERING GAME..." : <>
+                        {isLoading && <LoaderCircle className="animate-spin" />}
+                        REGISTER</>}
+                    </button>
 
                         <div className="justify-center text-center flex gap-4 flex-row font-bold">
                             <Link className="underline flex-1" href="/login">
@@ -226,7 +231,6 @@ export default function Page() {
                         </div>
                     </form>
                 </div>
-            </>}
         </>
     );
 }

@@ -1,7 +1,7 @@
 "use client"
 import { IconBack, IconLogoText } from "@/lib/icons/icons";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/app/contexts/appRouter";
 import { useRouter } from "next/navigation";
 import MobileLogoDropdown from "../mobileLogoDropdown";
 

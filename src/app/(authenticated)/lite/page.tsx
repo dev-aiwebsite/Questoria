@@ -1,11 +1,10 @@
 "use client"
 
+import { Link } from "@/app/contexts/appRouter";
 import Clouds from "@/components/clouds";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Page() {
-
     return (
         <div className="relative isolate flex flex-col bg-primary h-screen overflow-hidden p-5">
             <div className="absolute top-0 mt-10 -z-2">
