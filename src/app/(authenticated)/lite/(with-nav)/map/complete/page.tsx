@@ -1,10 +1,15 @@
 "use client"
 import { Link } from "@/app/contexts/appRouter";
+import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import PageLoader from "@/components/pageLoader";
 import Image from "next/image";
 
 export default function Page() {
+    const {isFetching, checkpoints} = useCurrentUserContext()
+    const totalWorms = checkpoints ? checkpoints.reduce((total, current) => { return total + +current.gems_collected},0) : 0
     
-    return (
+    return <>
+    {isFetching ? <PageLoader /> :
         <div className="p-mobile bg-primary height-with-nav pb-[100px] overflow-auto">
             <div className="gap-4 text-center flex flex-col flex-nowrap justify-center h-full min-h-fit">
                 <h1 className="header1 text-center mb-6">Congratulations!</h1>
@@ -23,7 +28,7 @@ export default function Page() {
                         <div className="border-3 border-black flex flex-row flex-nowrap gap-2 py-2 px-4 bg-white rounded-lg font-bold text-lg justify-center items-center">
                             <span>Worms</span>
                             <span className="border-gray-400 border-y border-1 border-dashed flex-1 h-[1px]"></span>
-                            <span>x10</span>
+                            <span>x{totalWorms}</span>
                             <div
                                 className="worm"
                             ></div>
@@ -59,5 +64,6 @@ export default function Page() {
 
             </div>
         </div>
-    );
+    }</>
+    ;
 }
