@@ -15,7 +15,7 @@ export type UserCheckpoint = {
   checkpoint_id: string;
   is_visited: boolean;
   selfie: string;
-  quiz: string; // Assuming this is a JSON string or simple text answer
+  quiz: string; 
   happiness: number;
   gems_collected: number;
 };

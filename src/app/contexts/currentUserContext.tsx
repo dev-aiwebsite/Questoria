@@ -2,7 +2,7 @@
 
 import { user_maps, UserMap } from "@/lib/dummy"; // your User type
 import { getUserById, updateUser, User } from "@/server-actions/crudUser";
-import { getUserCheckpointsByUserId, updateUserCheckpoint, UserCheckpoint } from "@/server-actions/crudUserCheckpoint";
+import { createUserCheckpoint, getUserCheckpointsByUserId, updateUserCheckpoint, UserCheckpoint } from "@/server-actions/crudUserCheckpoint";
 import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
@@ -164,6 +164,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
             newCheckpointsList = [...currentList];
             newCheckpointsList[existingIndex] = newCheckpointData;
+
         } else {
 
             newCheckpointData = {
@@ -177,6 +178,8 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 gems_collected: amount
             };
             newCheckpointsList = [...currentList, newCheckpointData];
+            createUserCheckpoint(newCheckpointData) 
+                 .catch(err => console.error("Failed to create checkpoint:", err));
         }
 
         const totalUserGems = newCheckpointsList.reduce((sum, cp) => sum + (cp.gems_collected || 0), 0);
