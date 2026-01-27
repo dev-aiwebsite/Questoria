@@ -56,3 +56,7 @@
 
 ### Welcome Page
 - Update copy and remove the real-life bandicoot image.
+
+### Inside App
+
+- Change Terms and Privacy popup button to close

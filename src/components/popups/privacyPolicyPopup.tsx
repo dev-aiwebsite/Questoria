@@ -1,18 +1,20 @@
 "use client";
 
+import { cn } from "@/lib/helper";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode } from "react";
 
 
 type PopupProps= {
   triggerClassName?:string;
+  closeClassName?:string;
   closeText?: ReactNode;
   triggerText?: ReactNode;
   open?: boolean;
   onClose?: (v:boolean) => void;
   isTriggerHidden?:boolean;
 }
-export default function PrivacyPolicyPopup({closeText = 'I have read and fully understand.', isTriggerHidden, onClose, open =false, triggerClassName, triggerText = "Privacy Policy" }:PopupProps) {
+export default function PrivacyPolicyPopup({closeClassName, closeText = 'I have read and fully understand.', isTriggerHidden, onClose, open =false, triggerClassName, triggerText = "Privacy Policy" }:PopupProps) {
 
   return (
     <>
@@ -34,7 +36,7 @@ export default function PrivacyPolicyPopup({closeText = 'I have read and fully u
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white border-3 border-black rounded-2xl p-6 w-[90%] max-w-3xl max-h-[80vh] overflow-y-auto"
+              className="relative bg-white border-3 border-black rounded-2xl p-6 w-[90%] max-w-3xl max-h-[80vh] overflow-y-auto"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -248,14 +250,14 @@ export default function PrivacyPolicyPopup({closeText = 'I have read and fully u
               </div>
 
               {/* Close Button */}
-              <div className="flex justify-center mt-6 gap-2">
-                <button
-                  onClick={() =>  onClose?.(false)}
-                  className="btn primary text-xs !flex gap-2 items-center justify-center"
-                >
-                  {closeText}
-                </button>
-              </div>
+              
+              <button
+                onClick={() =>  onClose?.(false)}
+                className={cn("mx-auto btn primary text-xs !flex mt-6 gap-2 items-center justify-center", closeClassName)}
+              >
+                {closeText}
+              </button>
+              
             </motion.div>
           </motion.div>
         )}

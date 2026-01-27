@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import TermsAndConditionPopup from "./popups/termsOfUsePopup";
 import PrivacyPolicyPopup from "./popups/privacyPolicyPopup";
 import { ReactNode, useState } from "react";
+import { X } from "lucide-react";
 
 export default function MobileLogoDropdown({align = 'start', trigger }: { trigger?: ReactNode; align?: "center" | "start" | "end" | undefined }) {
     const [isTermsOpen, setIsTermsOpen] = useState(false)
@@ -12,8 +13,8 @@ export default function MobileLogoDropdown({align = 'start', trigger }: { trigge
 
     return (
         <>
-            <PrivacyPolicyPopup isTriggerHidden={true} open={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
-            <TermsAndConditionPopup isTriggerHidden={true} open={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
+            <PrivacyPolicyPopup closeClassName="sticky bottom-0 left-full text-white !bg-black/50 !hover:bg-gray-400/90 aspect-square !rounded-full !border-none" closeText={<X />} isTriggerHidden={true} open={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
+            <TermsAndConditionPopup closeClassName="sticky bottom-0 left-full text-white !bg-black/50 !hover:bg-gray-400/90 aspect-square !rounded-full !border-none" closeText={<X />} isTriggerHidden={true} open={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     {trigger ?? (
