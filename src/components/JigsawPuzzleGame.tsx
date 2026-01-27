@@ -10,7 +10,7 @@ interface JigsawPuzzleGameProps {
   checkpointId: string
   mapId: string
   imageUrl?: string // Optional image URL
-  puzzleSize?: number // Default 4x4 = 16 pieces
+  puzzleSize?: number // Default 3x3 = 9 pieces
 }
 
 // Checkpoint-specific image configurations
@@ -48,7 +48,7 @@ export default function JigsawPuzzleGame({
   checkpointId,
   mapId,
   imageUrl,
-  puzzleSize = 4
+  puzzleSize = 3
 }: JigsawPuzzleGameProps) {
   const [pieces, setPieces] = useState<PuzzlePiece[]>([])
   const [moves, setMoves] = useState(0)

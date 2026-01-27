@@ -753,16 +753,9 @@ export default function Page() {
       const checkpointId = visibleCheckpoints[selectedCheckpoint].id;
       const checkpointIndex = selectedCheckpoint;
       
-      // Jigsaw Puzzle: First half of jigsaw puzzle checkpoints get 3x3, rest get 4x4
+      // Jigsaw Puzzle: All puzzles are 3x3
       const getJigsawPuzzleSize = (checkpointId: string) => {
-        const jigsawIndex = jigsawPuzzleCheckpoints.indexOf(checkpointId);
-        if (jigsawIndex === -1) return 4; // Default to 4x4 if not found
-        
-        const totalJigsaw = jigsawPuzzleCheckpoints.length;
-        const firstHalfCount = Math.ceil(totalJigsaw / 2);
-        
-        // First half get 3x3, rest get 4x4
-        return jigsawIndex < firstHalfCount ? 3 : 4;
+        return 3; // All jigsaw puzzles are 3x3
       };
 
       // Shared onWin handler for both games
