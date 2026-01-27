@@ -697,7 +697,6 @@ export default function Page() {
                   hasGame={hasGame(c.id)}
                   onClose={() => {
                     setCheckpointDialogOpen(false)
-                    setSelectedCheckpoint(null)
                   }}
                 />
               )}
