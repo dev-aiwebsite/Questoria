@@ -4,7 +4,7 @@ import PageLoader from "@/components/pageLoader";
 import NextLink from "next/link";
 import type { LinkProps } from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import React, { createContext, useContext, useState, useEffect, SetStateAction, AnchorHTMLAttributes, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, SetStateAction, ReactNode } from "react";
 
 type AppRouterContextType = {
   isRouting: boolean;

@@ -57,6 +57,44 @@
 ### Welcome Page
 - Update copy and remove the real-life bandicoot image.
 
-### Inside App
 
+### 🚀 Lite Version Updates
+**Date:** 28 January 2026
+### Inside App
 - Change Terms and Privacy popup button to close
+
+### App Loader
+- Added `appRouter` to handle navigation state and initialization.
+
+### Proxy.ts
+- Updated restriction logic to exclude `.gif` and other media file types from blocking rules.
+
+### Todos
+- [ ] Add logic to trigger map completed
+- [ ] Add logic for map time completion
+- [ ] Update complete page accordingly
+
+---
+
+### Implementation Snippets
+
+#### Map Completion Logic
+```typescript
+const mapTimer = {
+  startTime: 0,
+  
+  start() {
+    this.startTime = performance.now();
+  },
+
+  triggerComplete() {
+    const endTime = performance.now();
+    const totalTimeMs = endTime - this.startTime;
+    const seconds = (totalTimeMs / 1000).toFixed(2);
+    
+    console.log(`Map finished in ${seconds}s`);
+    // Logic to update the UI or send to DB goes here
+    return seconds;
+  }
+};
+```

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function PageLoader() {
   return (
-    <div className="fixed top-0 left-0 bg-white/80 h-screen w-screen flex items-center justify-center z-[9999999999999]">
+    <div className="fixed top-0 left-0 bg-white h-screen w-screen flex items-center justify-center z-[9999999999999]">
       <div className="flex flex-col items-center justify-center gap-6">
         <div className="flex items-center justify-center aspect-square w-[120px] h-auto rounded-full border-black border-2 bg-primary">
           <div className="border-4 border-white w-full h-full rounded-full items-center justify-center flex relative">
