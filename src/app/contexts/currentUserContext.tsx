@@ -164,6 +164,10 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
             newCheckpointsList = [...currentList];
             newCheckpointsList[existingIndex] = newCheckpointData;
+                updateUserCheckpoint(checkpointId, {is_visited:true, gems_collected: amount })
+            .catch((error) => {
+                console.log("Failed to save checkpoint gems:", error);
+            });
 
         } else {
 
@@ -193,14 +197,6 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
         setCheckpoints(newCheckpointsList);
         checkpointsRef.current = newCheckpointsList;
-
-        updateUserCheckpoint(checkpointId, { gems_collected: amount })
-            .catch((error) => {
-                console.error("Failed to save checkpoint gems:", error);
-            });
-
-        updateUser(userId, { gems: totalUserGems })
-            .catch((error) => console.error("Failed to sync user total:", error));
 
     };
 

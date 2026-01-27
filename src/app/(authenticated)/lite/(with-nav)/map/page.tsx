@@ -89,7 +89,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, checkpoints: userCheckpoints } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
   
@@ -355,7 +355,7 @@ export default function Page() {
           // Give 1 worm for viewing white flag
           // addCheckpointGems already updates the user's total gems
           addCheckpointGems(checkpoint.id, 1);
-          markCheckpointVisited(checkpoint.id);
+          // markCheckpointVisited(checkpoint.id);
           
           // Trigger gem animation after a short delay to ensure dialog is visible
           setTimeout(() => {
@@ -374,7 +374,7 @@ export default function Page() {
         }
       }
     }
-  }, [checkpointDialogOpen, selectedCheckpoint, visibleCheckpoints, userCheckpoints, addCheckpointGems, markCheckpointVisited])
+  }, [checkpointDialogOpen, selectedCheckpoint, visibleCheckpoints, userCheckpoints, addCheckpointGems])
 
   // Handle mouse/touch drag to scroll
   const handleStart = (clientX: number, clientY: number) => {
@@ -571,6 +571,10 @@ export default function Page() {
     }
   }, [])
 
+  const totalGemsCollected = userCheckpoints?.reduce((total, current) => {
+    return total + +current.gems_collected
+  },0)
+
   return (
   <>{!isMounted ? <PageLoader/> : 
   <>
@@ -582,7 +586,7 @@ export default function Page() {
       >
         <Image src="/images/worm.png" alt="Worm" width={32} height={32} className="object-contain" />
         <span className="font-bold text-lg">
-          {currentUser?.gems || 0}/{totalPossibleWorms}
+          {totalGemsCollected || 0}/{totalPossibleWorms}
         </span>
       </div>
      
@@ -626,8 +630,8 @@ export default function Page() {
                const currentCheckPointData = userCheckpoints.find(uc => uc.checkpoint_id === c.id)
                const finishedChallenges = currentCheckPointData ? [currentCheckPointData.selfie, currentCheckPointData.quiz].filter(Boolean) : [];
                const finishedChallengesCount = finishedChallenges?.length ?? 0
-               const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.gems_collected || 0
-               const isCheckpointVisited = userCheckpoints?.find(uc => uc.checkpoint_id === c.id)?.is_visited || false
+               const checkpointGems = currentCheckPointData?.gems_collected || 0
+               const isCheckpointVisited = currentCheckPointData?.is_visited || false
                
               const isSelected = selectedCheckpoint === index && checkpointDialogOpen
               
@@ -877,12 +881,13 @@ export default function Page() {
           triggerGemAnimation(gems, sourceX, sourceY);
           
           // Calculate animation duration (800ms + delay for last gem)
-          const animationDuration = 800 + (gems - 1) * 50;
+          // const animationDuration = 800 + (gems - 1) * 50;
           
           // Mark checkpoint as visited after animation completes
-          setTimeout(() => {
-            markCheckpointVisited(checkpointId);
-          }, animationDuration);
+          // setTimeout(() => {
+          //   markCheckpointVisited(checkpointId);
+          // }, animationDuration);
+
         });
       };
 
