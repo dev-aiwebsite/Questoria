@@ -31,7 +31,7 @@ const memoryMatchCheckpoints = [
   'cp_002',  // Ironbank Garden (Ironbark Garden & Eucalypt Walk) - 4 images in cp_002 folder
   'cp_021',  // Weird and Wonderful Garden - 6 images in cp_021 folder
   'cp_031',  // Kids Backyard - 6 images in cp_031 folder (user said 5 images, using best ones)
-  'cp_032',  // Home Garden - 6 images in cp_032 folder
+  // 'cp_032',  // Home Garden - 6 images in cp_032 folder
   'cp_035',  // Diversity Garden - 6 images in cp_035 folder
   'cp_017'   // Lifestyle Garden (Arid Garden) - needs image folder
 ];
@@ -620,9 +620,12 @@ export default function Page() {
                     
                     if (!isDragging) {
                       if (selectedCheckpoint === index && checkpointDialogOpen) {
-                        // Close if clicking the same flag
+                        // Close if clicking the same flag when dialog is open
                         setCheckpointDialogOpen(false)
                         setSelectedCheckpoint(null)
+                      } else if (selectedCheckpoint === index && !checkpointDialogOpen) {
+                        // If same checkpoint is selected but dialog is closed, reopen it directly
+                        setCheckpointDialogOpen(true)
                       } else {
                         // Set checkpoint but don't open dialog yet - wait for animation
                         setCheckpointDialogOpen(false)

@@ -614,9 +614,12 @@ export default function Page() {
                     
                     if (!isDragging) {
                       if (selectedCheckpoint === index && checkpointDialogOpen) {
-                        // Close if clicking the same flag
+                        // Close if clicking the same flag when dialog is open
                         setCheckpointDialogOpen(false)
                         setSelectedCheckpoint(null)
+                      } else if (selectedCheckpoint === index && !checkpointDialogOpen) {
+                        // If same checkpoint is selected but dialog is closed, reopen it directly
+                        setCheckpointDialogOpen(true)
                       } else {
                         // Set checkpoint but don't open dialog yet - wait for animation
                         setCheckpointDialogOpen(false)

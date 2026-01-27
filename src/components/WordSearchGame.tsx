@@ -25,10 +25,10 @@ const NATURE_WORDS = [
 // Words longer than gridSize will be automatically filtered out during grid generation
 const CHECKPOINT_WORDS: Record<string, string[]> = {
   // cp_003 - Box Garden
-  'cp_003': ['BOX', 'EUCALYPT', 'WILDFLOWER', 'CANOPY', 'ROCKY', 'SHRUB'],
+  'cp_003': ['BOX', 'EUCALYPT', 'WILDFLOWER', 'CANOPY', 'ROCKY', 'SHRUB' , 'LEAF', 'BUG'],
   
   // cp_008 - Forest Garden
-  'cp_008': ['FOREST', 'WOODLAND', 'EUCALYPT', 'CANOPY', 'SHADE', 'HABITAT'],
+  'cp_008': ['FOREST', 'WOODLAND', 'EUCALYPT', 'CANOPY', 'SHADE', 'HABITAT', 'LINE', 'DIRT'],
   
   // cp_010 - Desert Discovery Camp
   'cp_010': ['DESERT', 'SAND', 'ROCK', 'SUN', 'HEAT', 'PLANT', 'SEED', 'LEAF', 'BUG', 'LIZARD', 'TOUGH', 'SURVIVE'],
@@ -196,10 +196,23 @@ export default function WordSearchGame({
       .map(w => w.toUpperCase())
       .filter(w => w.length <= maxLength)
     
-    // Select words (up to gridSize * 0.8, but at least 3)
-    const selectedWords = [...filteredWords]
+    // Select words (up to gridSize * 0.8, but at least 6)
+    const minWords = 6
+    const maxWords = Math.min(filteredWords.length, Math.floor(currentGridSize * 0.8))
+    const targetWordCount = Math.max(minWords, maxWords)
+    
+    // If we don't have enough words in the pool, duplicate and shuffle to ensure we have at least 6
+    let wordsToSelect = [...filteredWords]
+    if (wordsToSelect.length < minWords) {
+      // Duplicate words until we have enough
+      while (wordsToSelect.length < minWords) {
+        wordsToSelect = [...wordsToSelect, ...filteredWords]
+      }
+    }
+    
+    const selectedWords = wordsToSelect
       .sort(() => Math.random() - 0.5)
-      .slice(0, Math.max(3, Math.min(filteredWords.length, Math.floor(currentGridSize * 0.8))))
+      .slice(0, Math.min(targetWordCount, wordsToSelect.length))
 
     setWords(selectedWords)
     setFoundWords(new Set())
@@ -281,6 +294,150 @@ export default function WordSearchGame({
           newWordCellMap.set(word, wordCells)
           placedWords.push(word)
           placed = true
+        }
+      }
+    }
+    
+    // Ensure at least 6 words are placed - retry if needed
+    const MIN_PLACED_WORDS = 6
+    if (placedWords.length < MIN_PLACED_WORDS) {
+      // Try to place additional words from the remaining pool
+      const remainingWords = selectedWords.filter(w => !placedWords.includes(w))
+      const wordsToAdd = remainingWords.slice(0, MIN_PLACED_WORDS - placedWords.length)
+      
+      for (const word of wordsToAdd) {
+        let placed = false
+        let attempts = 0
+        
+        while (!placed && attempts < 200) { // More attempts for additional words
+          attempts++
+          
+          // Random direction: 0=horizontal, 1=vertical, 2=diagonal down-right, 3=diagonal down-left
+          const direction = Math.floor(Math.random() * 4)
+          // Random reverse: 50% chance
+          const reverse = Math.random() > 0.5
+          const wordToPlace = reverse ? word.split('').reverse().join('') : word
+          
+          // Random starting position
+          let row = Math.floor(Math.random() * currentGridSize)
+          let col = Math.floor(Math.random() * currentGridSize)
+          
+          // Check if word fits
+          let fits = true
+          const cells: { row: number; col: number }[] = []
+          
+          for (let i = 0; i < wordToPlace.length; i++) {
+            let checkRow = row
+            let checkCol = col
+            
+            if (direction === 0) {
+              // Horizontal
+              checkCol = col + i
+            } else if (direction === 1) {
+              // Vertical
+              checkRow = row + i
+            } else if (direction === 2) {
+              // Diagonal down-right
+              checkRow = row + i
+              checkCol = col + i
+            } else {
+              // Diagonal down-left
+              checkRow = row + i
+              checkCol = col - i
+            }
+            
+            if (checkRow < 0 || checkRow >= currentGridSize || checkCol < 0 || checkCol >= currentGridSize) {
+              fits = false
+              break
+            }
+            
+            // Check if cell is already occupied by another word
+            if (newGrid[checkRow][checkCol] !== '' && newGrid[checkRow][checkCol] !== wordToPlace[i]) {
+              fits = false
+              break
+            }
+            
+            cells.push({ row: checkRow, col: checkCol })
+          }
+          
+          if (fits) {
+            // Place the word
+            const wordCells = new Set<string>()
+            for (let i = 0; i < wordToPlace.length; i++) {
+              newGrid[cells[i].row][cells[i].col] = wordToPlace[i]
+              wordCells.add(`${cells[i].row}-${cells[i].col}`)
+            }
+            newWordCellMap.set(word, wordCells)
+            placedWords.push(word)
+            placed = true
+          }
+        }
+      }
+      
+      // If still don't have 6 words, add from fallback pool (shorter words that are easier to place)
+      if (placedWords.length < MIN_PLACED_WORDS) {
+        const fallbackWords = filteredWords
+          .filter(w => w.length <= 4 && !placedWords.includes(w))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, MIN_PLACED_WORDS - placedWords.length)
+        
+        for (const word of fallbackWords) {
+          let placed = false
+          let attempts = 0
+          
+          while (!placed && attempts < 300) {
+            attempts++
+            
+            const direction = Math.floor(Math.random() * 4)
+            const reverse = Math.random() > 0.5
+            const wordToPlace = reverse ? word.split('').reverse().join('') : word
+            
+            let row = Math.floor(Math.random() * currentGridSize)
+            let col = Math.floor(Math.random() * currentGridSize)
+            
+            let fits = true
+            const cells: { row: number; col: number }[] = []
+            
+            for (let i = 0; i < wordToPlace.length; i++) {
+              let checkRow = row
+              let checkCol = col
+              
+              if (direction === 0) {
+                checkCol = col + i
+              } else if (direction === 1) {
+                checkRow = row + i
+              } else if (direction === 2) {
+                checkRow = row + i
+                checkCol = col + i
+              } else {
+                checkRow = row + i
+                checkCol = col - i
+              }
+              
+              if (checkRow < 0 || checkRow >= currentGridSize || checkCol < 0 || checkCol >= currentGridSize) {
+                fits = false
+                break
+              }
+              
+              if (newGrid[checkRow][checkCol] !== '' && newGrid[checkRow][checkCol] !== wordToPlace[i]) {
+                fits = false
+                break
+              }
+              
+              cells.push({ row: checkRow, col: checkCol })
+            }
+            
+            if (fits) {
+              const wordCells = new Set<string>()
+              for (let i = 0; i < wordToPlace.length; i++) {
+                newGrid[cells[i].row][cells[i].col] = wordToPlace[i]
+                wordCells.add(`${cells[i].row}-${cells[i].col}`)
+              }
+              newWordCellMap.set(word, wordCells)
+              placedWords.push(word)
+              placed = true
+            }
+          }
         }
       }
     }
