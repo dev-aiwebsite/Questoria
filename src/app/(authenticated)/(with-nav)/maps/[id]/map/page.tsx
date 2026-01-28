@@ -89,7 +89,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addCheckpointGems, markCheckpointVisited, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, markCheckpointVisited, userCheckpoints } = useCurrentUserContext();
   const {users} = useAppData()
   
   // Filter out excluded checkpoints
@@ -945,7 +945,7 @@ function CheckpointInfoCard({
   onClose?: () => void;
   hasGame?: boolean;
 }) {
-  const { checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { userCheckpoints } = useCurrentUserContext();
   const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.gems_collected || 0;
   
   // Position the card to the right of the flag, or left if too close to right edge

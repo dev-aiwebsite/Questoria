@@ -1,12 +1,15 @@
 "use client";
 
+import { excludedCheckpointIds } from "@/app/(authenticated)/lite/(with-nav)/map/(withActivityLogger)/page";
+import { checkpoints as checkpointsData } from "@/lib/dummy";
 import { getUserById, User } from "@/server-actions/crudUser";
 import { createUserCheckpoint, getUserCheckpointsByUserId, updateUserCheckpoint, UserCheckpoint } from "@/server-actions/crudUserCheckpoint";
-import { getUserMapsByUserId, UserMap } from "@/server-actions/crudUserMaps";
+import { getUserMapsByUserId, updateUserMap, UserMap } from "@/server-actions/crudUserMaps";
 import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { useAppRouter } from "./appRouter";
 
 type CurrentUserContextType = {
     currentUser: User | null;
@@ -15,8 +18,8 @@ type CurrentUserContextType = {
     setUserMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
     activeMapId: string;
     setActiveMapId: React.Dispatch<React.SetStateAction<string>>;
-    checkpoints: UserCheckpoint[] | null;
-    setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
+    userCheckpoints: UserCheckpoint[] | null;
+    setUserCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
     addCheckpointGems: (checkpointId: string, amount: number) => void;
     markCheckpointVisited: (checkpointId: string) => void;
     userOnboarding: UserOnboardingAnswer | null;
@@ -35,16 +38,17 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const [isFetching, setIsFetching] = useState(true)
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(null)
+    const router = useAppRouter()
 
     const [userMaps, setUserMaps] = useState<UserMap[] | null>(null)
-    const [activeMapId, setActiveMapId] = useState("")
-    const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(null);
+    const [activeMapId, setActiveMapId] = useState("234j3h4j3")
+    const [userCheckpoints, setUserCheckpoints] = useState<UserCheckpoint[] | null>(null);
 
     const currentUserRef = useRef<User | null>(null)
     const checkpointsRef = useRef<UserCheckpoint[] | null>(null);
-
+    const visibleCheckpoints = checkpointsData.filter(c => !excludedCheckpointIds.includes(c.id));
     // Keep ref in sync with state
-    useEffect(() => { checkpointsRef.current = checkpoints; }, [checkpoints]);
+    useEffect(() => { checkpointsRef.current = userCheckpoints; }, [userCheckpoints]);
     useEffect(() => {
         currentUserRef.current = currentUser;
     }, [currentUser])
@@ -71,7 +75,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
                 }
                 const { data } = await getUserCheckpointsByUserId(currentUserId)
                 if (data) {
-                    setCheckpoints(data)
+                    setUserCheckpoints(data)
                 }
 
                  const mapsRes = await getUserMapsByUserId(currentUserId)
@@ -96,24 +100,24 @@ export const CurrentUserProvider = ({ children }: Props) => {
         const currentUserId = currentUser.id
 
         queueMicrotask(async () => {
-            let userCheckpoints: UserCheckpoint[] = []
+            let userCheckpnts: UserCheckpoint[] = []
 
-            if (!checkpoints) {
+            if (!userCheckpoints) {
                 const { data } = await getUserCheckpointsByUserId(currentUserId)
                 if (data) {
-                    userCheckpoints = data
-                    setCheckpoints(data)
+                    userCheckpnts = data
+                    setUserCheckpoints(data)
                 }
             }
 
             // Merge saved checkpoints with dummy data checkpoints
-            if (userCheckpoints) {
-                setCheckpoints((prevSaved) => {
+            if (userCheckpnts) {
+                setUserCheckpoints((prevSaved) => {
                     if (!prevSaved) {
-                        return userCheckpoints;
+                        return userCheckpnts;
                     }
                     // Merge: use saved checkpoint data if exists, otherwise use dummy data
-                    const merged = userCheckpoints.map(dummyCp => {
+                    const merged = userCheckpnts.map(dummyCp => {
                         const saved = prevSaved.find(sc => sc.checkpoint_id === dummyCp.checkpoint_id);
                         if (saved) {
                             // Use saved data but keep dummy data structure
@@ -202,60 +206,92 @@ export const CurrentUserProvider = ({ children }: Props) => {
             return updated;
         });
 
-        setCheckpoints(newCheckpointsList);
+        setUserCheckpoints(newCheckpointsList);
         checkpointsRef.current = newCheckpointsList;
 
+
+        //check if map is completed
+        const visitedIds = new Set(newCheckpointsList.map(c => c.checkpoint_id));
+        const allVisibleVisited = visibleCheckpoints.every(vCp => visitedIds.has(vCp.id));
+        console.log(allVisibleVisited, 'allVisibleVisited')
+        if (allVisibleVisited) setMapComplete();
     };
 
     // Function to mark a checkpoint as visited
-    const markCheckpointVisited = (checkpointId: string) => {
-        const userId = currentUserRef.current?.id;
-        if (!userId) return;
+        const markCheckpointVisited = (checkpointId: string) => {
+            const userId = currentUserRef.current?.id;
+            if (!userId) return;
 
-        const currentList = checkpointsRef.current || [];
-        const existingIndex = currentList.findIndex(cp => cp.checkpoint_id === checkpointId);
+            const currentList = checkpointsRef.current || [];
+            const existingIndex = currentList.findIndex(cp => cp.checkpoint_id === checkpointId);
 
-        if (existingIndex > -1 && currentList[existingIndex].is_visited) {
-            return;
+            if (existingIndex > -1 && currentList[existingIndex].is_visited) {
+                return;
+            }
+
+            let newCheckpointData: UserCheckpoint;
+            let newCheckpointsList: UserCheckpoint[];
+
+            if (existingIndex > -1) {
+                newCheckpointData = {
+                    ...currentList[existingIndex],
+                    is_visited: true
+                };
+                newCheckpointsList = [...currentList];
+                newCheckpointsList[existingIndex] = newCheckpointData;
+            } else {
+                newCheckpointData = {
+                    id: nanoid(10),
+                    user_id: userId,
+                    checkpoint_id: checkpointId,
+                    is_visited: true,
+                    selfie: "",
+                    quiz: "",
+                    happiness: 0,
+                    gems_collected: 0
+                };
+                newCheckpointsList = [...currentList, newCheckpointData];
+            }
+
+            setUserCheckpoints(newCheckpointsList);
+            checkpointsRef.current = newCheckpointsList;
+
+            updateUserCheckpoint(checkpointId, { is_visited: true })
+                .catch((error) => {
+                    console.error(`Failed to mark checkpoint ${checkpointId} as visited:`, error);
+                });
+        };
+
+        function setMapComplete() {
+            if (!userMaps || !activeMapId) return;
+            const currentUserMap = userMaps.find(um => um.map_id == activeMapId)
+            
+            if(!currentUserMap) return
+
+            if(currentUserMap.is_completed){
+                router.push('/lite/map/complete')
+                return
+            }
+
+            try {
+                updateUserMap(currentUserMap.id, {is_completed: true})
+            } catch (error) {
+                console.log(error)
+            }
+            
+            const newUserMaps = userMaps.map(um => 
+                um.map_id === activeMapId
+                ? { ...um, is_completed: true }
+                : um
+            );
+
+            setUserMaps(newUserMaps);
+            router.push('/lite/map/complete')
         }
-
-        let newCheckpointData: UserCheckpoint;
-        let newCheckpointsList: UserCheckpoint[];
-
-        if (existingIndex > -1) {
-            newCheckpointData = {
-                ...currentList[existingIndex],
-                is_visited: true
-            };
-            newCheckpointsList = [...currentList];
-            newCheckpointsList[existingIndex] = newCheckpointData;
-        } else {
-            newCheckpointData = {
-                id: nanoid(10),
-                user_id: userId,
-                checkpoint_id: checkpointId,
-                is_visited: true,
-                selfie: "",
-                quiz: "",
-                happiness: 0,
-                gems_collected: 0
-            };
-            newCheckpointsList = [...currentList, newCheckpointData];
-        }
-
-        setCheckpoints(newCheckpointsList);
-        checkpointsRef.current = newCheckpointsList;
-
-        updateUserCheckpoint(checkpointId, { is_visited: true })
-            .catch((error) => {
-                console.error(`Failed to mark checkpoint ${checkpointId} as visited:`, error);
-            });
-    };
-
 
     
     return (
-        <CurrentUserContext.Provider value={{activeMapId, setActiveMapId, isFetching, userOnboarding, setUserOnboarding, userMaps, setUserMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addCheckpointGems, markCheckpointVisited }}>
+        <CurrentUserContext.Provider value={{activeMapId, setActiveMapId, isFetching, userOnboarding, setUserOnboarding, userMaps, setUserMaps, userCheckpoints, setUserCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addCheckpointGems, markCheckpointVisited }}>
             {children}
         </CurrentUserContext.Provider>
     );

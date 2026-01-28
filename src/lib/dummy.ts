@@ -688,7 +688,7 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Melaleuca Spits <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 20,
-    pos: { x: 63.5, y: 50.8 }
+    pos: { x: 58, y: 31 }
   },
   {
     id: "cp_021",
@@ -958,7 +958,7 @@ export const checkpoints: Checkpoint[] = [
       { title: "happiness", description: "Tell us what you feel about Rockpool Pavilion <strong>(Earn 1 Quest Gem)</strong>" },
     ],
     order: 29,
-    pos: { x: 50.7, y: 48.8 }
+    pos: { x: 63.5, y: 47.8 }
   },
   {
     id: "cp_030",

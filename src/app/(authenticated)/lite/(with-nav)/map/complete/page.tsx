@@ -3,11 +3,16 @@ import { Link } from "@/contexts/appRouter";
 import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
 import Image from "next/image";
+import { formatSeconds } from "@/lib/helper";
 
 export default function Page() {
-    const {isFetching, checkpoints} = useCurrentUserContext()
-    const totalWorms = checkpoints ? checkpoints.reduce((total, current) => { return total + +current.gems_collected},0) : 0
+    const {isFetching, userCheckpoints, userMaps, activeMapId } = useCurrentUserContext()
+    const totalWorms = userCheckpoints ? userCheckpoints.reduce((total, current) => { return total + +current.gems_collected},0) : 0
+     const currentUserMap = userMaps?.find(um => um.map_id == activeMapId)
+    const totalTime = currentUserMap ? currentUserMap.completion_time_seconds : 0
     
+    
+           
     return <>
     {isFetching ? <PageLoader /> :
         <div className="p-mobile bg-primary height-with-nav pb-[100px] overflow-auto">
@@ -38,7 +43,7 @@ export default function Page() {
                         <div className="border-3 border-black flex flex-row flex-nowrap gap-2 py-2 px-4 bg-white rounded-lg font-bold text-lg justify-center items-center">
                             <span>Total Time</span>
                             <span className="border-gray-400 border-y border-1 border-dashed flex-1 h-[1px]"></span>
-                            <span>5hrs</span>
+                            <span>{formatSeconds(totalTime)}</span>
                             <Image
                             className="h-10 object-contain"
                             src="/images/IconClock.png"

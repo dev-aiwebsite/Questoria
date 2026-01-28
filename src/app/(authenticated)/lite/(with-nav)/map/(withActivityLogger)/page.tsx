@@ -1,19 +1,16 @@
 "use client";
 
-import { Checkpoint, checkpoints, currentUserId } from "@/lib/dummy";
-import { ZoomIn, ZoomOut, Sparkles } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useState, useRef, useEffect, useMemo } from "react";
-import { flushSync } from "react-dom";
-import MemoryMatchGame from "@/components/MemoryMatchGame";
-import WordSearchGame from "@/components/WordSearchGame";
 import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
-import { useCurrentUserContext } from "@/contexts/currentUserContext";
+import MemoryMatchGame from "@/components/MemoryMatchGame";
 import PageLoader from "@/components/pageLoader";
+import WordSearchGame from "@/components/WordSearchGame";
 import { useAppData } from "@/contexts/appDataContext";
-import { MapActivityProvider } from "@/contexts/mapActivityContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
+import { Checkpoint, checkpoints, currentUserId } from "@/lib/dummy";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -78,7 +75,7 @@ function getGameType(checkpointId: string): 'memory' | 'wordsearch' | 'jigsawpuz
 }
 
 // Checkpoint IDs to exclude from map (flags will not be shown)
-const excludedCheckpointIds = [
+export const excludedCheckpointIds = [
   'cp_011', // Gondwana Shelter
   'cp_015', // Promenade Garden
   'cp_017', // Lifestyle Garden
@@ -90,7 +87,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addCheckpointGems, checkpoints: userCheckpoints, setActiveMapId } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, userCheckpoints, setActiveMapId } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
   
@@ -993,7 +990,7 @@ function CheckpointInfoCard({
   onClose?: () => void;
   hasGame?: boolean;
 }) {
-  const { checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { userCheckpoints } = useCurrentUserContext();
   const checkpointGems = userCheckpoints?.find(uc => uc.checkpoint_id === checkpointId)?.gems_collected || 0;
   
   // Position the card to the right of the flag, or left if too close to right edge

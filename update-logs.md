@@ -69,7 +69,12 @@
 ### Proxy.ts
 - Updated restriction logic to exclude `.gif` and other media file types from blocking rules.
 
+
+### Map
+- fix flag position of cp_020,cp_029
+
 ### Todos
-- [ ] Add logic to trigger map completed
+- [x] Add logic to trigger map completed
 - [x] Add logic for map time completion
-- [ ] Update complete page accordingly
+- [x] Update complete page accordingly
+

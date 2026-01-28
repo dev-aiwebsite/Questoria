@@ -17,8 +17,8 @@ import { useState } from "react";
 export default function Page() {
     const { id: mapId } = useParams<{ id: string }>();
     const { checkpointId } = useParams<{ checkpointId: string }>();
-    const {setCheckpoints, checkpoints:user_checkpoints} = useCurrentUserContext()
-    const currentUserCheckpoints = user_checkpoints?.filter(uc => uc.user_id === currentUserId)
+    const {setUserCheckpoints, userCheckpoints} = useCurrentUserContext()
+    const currentUserCheckpoints = userCheckpoints?.filter(uc => uc.user_id === currentUserId)
     const currentUserCheckpoint = currentUserCheckpoints?.find(c => c.checkpoint_id === checkpointId)
     
     const currentUserChallengesAnswers = [currentUserCheckpoint?.selfie, currentUserCheckpoint?.happiness, currentUserCheckpoint?.quiz].filter(Boolean)
@@ -48,12 +48,12 @@ export default function Page() {
         // add logic for saving to database
         if(currentUserCheckpoints){
             const currentCheckpointIndex = currentUserCheckpoints.findIndex(c => c.checkpoint_id == checkpointId)
-            if(currentCheckpointIndex !== -1 && user_checkpoints){
-                const newValue = [...user_checkpoints]
+            if(currentCheckpointIndex !== -1 && userCheckpoints){
+                const newValue = [...userCheckpoints]
                 newValue[currentCheckpointIndex].selfie = ARImage
                 newValue[currentCheckpointIndex].quiz = quizAnswer
                 newValue[currentCheckpointIndex].happiness = happinessVal || 0
-                setCheckpoints(newValue)
+                setUserCheckpoints(newValue)
             }
 
         }
