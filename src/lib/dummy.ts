@@ -1401,22 +1401,18 @@ export type UserMap = {
     id: string;
     user_id: string;
     map_id: string;
-    onboarding_questions: {
-        nm439s1: string;
-        nm439s2: string;
-        nm439s3: string;
-    };
+    is_completed: boolean;
+    completion_time_seconds: number;
+    created_at: string;
 }
 export const user_maps:UserMap[] = [
   {
     id: "6jidlm3",
     user_id: "a9f3k2",
     map_id: "234j3h4j3",
-    onboarding_questions: {
-      "nm439s1": "",
-      "nm439s2": "",
-      "nm439s3": "",
-    }
+    is_completed: false,
+    completion_time_seconds: 0,
+    created_at: "2026-01-19 14:54:06.195804+00"
   }
 ]
 

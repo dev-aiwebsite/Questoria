@@ -1,8 +1,8 @@
 "use client";
 
-import { user_maps, UserMap } from "@/lib/dummy"; // your User type
-import { getUserById, updateUser, User } from "@/server-actions/crudUser";
+import { getUserById, User } from "@/server-actions/crudUser";
 import { createUserCheckpoint, getUserCheckpointsByUserId, updateUserCheckpoint, UserCheckpoint } from "@/server-actions/crudUserCheckpoint";
+import { getUserMapsByUserId, UserMap } from "@/server-actions/crudUserMaps";
 import { getUserOnboardingAnswerByUserId, UserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
@@ -11,8 +11,10 @@ import { createContext, ReactNode, useContext, useEffect, useRef, useState } fro
 type CurrentUserContextType = {
     currentUser: User | null;
     setCurrentUser: (user: User | null) => void;
-    maps: UserMap[] | null;
-    setMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
+    userMaps: UserMap[] | null;
+    setUserMaps: React.Dispatch<React.SetStateAction<UserMap[] | null>>;
+    activeMapId: string;
+    setActiveMapId: React.Dispatch<React.SetStateAction<string>>;
     checkpoints: UserCheckpoint[] | null;
     setCheckpoints: React.Dispatch<React.SetStateAction<UserCheckpoint[] | null>>;
     addCheckpointGems: (checkpointId: string, amount: number) => void;
@@ -34,7 +36,8 @@ export const CurrentUserProvider = ({ children }: Props) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [userOnboarding, setUserOnboarding] = useState<UserOnboardingAnswer | null>(null)
 
-    const [maps, setMaps] = useState<UserMap[] | null>(null)
+    const [userMaps, setUserMaps] = useState<UserMap[] | null>(null)
+    const [activeMapId, setActiveMapId] = useState("")
     const [checkpoints, setCheckpoints] = useState<UserCheckpoint[] | null>(null);
 
     const currentUserRef = useRef<User | null>(null)
@@ -54,21 +57,28 @@ export const CurrentUserProvider = ({ children }: Props) => {
             setIsFetching(true)
 
             try {
-                const { data: userResData } = await getUserById(session.user.id)
+                const currentUserId = session.user.id
+                const { data: userResData } = await getUserById(currentUserId)
                 if (!userResData) {
                     setIsFetching(false)
                     return
                 }
                 setCurrentUser(userResData)
 
-                const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(userResData.id)
+                const getUserOnboardingRes = await getUserOnboardingAnswerByUserId(currentUserId)
                 if (getUserOnboardingRes.data) {
                     setUserOnboarding(getUserOnboardingRes.data)
                 }
-                const { data } = await getUserCheckpointsByUserId(userResData.id)
+                const { data } = await getUserCheckpointsByUserId(currentUserId)
                 if (data) {
                     setCheckpoints(data)
                 }
+
+                 const mapsRes = await getUserMapsByUserId(currentUserId)
+                if (mapsRes.data) {
+                    setUserMaps(mapsRes.data)
+                }
+
             } catch (error) {
                 console.log(error)
             } finally {
@@ -84,12 +94,8 @@ export const CurrentUserProvider = ({ children }: Props) => {
     useEffect(() => {
         if (!currentUser) return
         const currentUserId = currentUser.id
-        const mapsRes = user_maps.filter(m => m.user_id == currentUserId)
 
         queueMicrotask(async () => {
-            if (mapsRes) {
-                setMaps(mapsRes)
-            }
             let userCheckpoints: UserCheckpoint[] = []
 
             if (!checkpoints) {
@@ -136,6 +142,7 @@ export const CurrentUserProvider = ({ children }: Props) => {
 
 
     }, [currentUser])
+    
     // Wrapper to update gems when user is updated
     const updateCurrentUser = (user: User | null) => {
         setCurrentUser(user);
@@ -245,8 +252,10 @@ export const CurrentUserProvider = ({ children }: Props) => {
             });
     };
 
+
+    
     return (
-        <CurrentUserContext.Provider value={{ isFetching, userOnboarding, setUserOnboarding, maps, setMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addCheckpointGems, markCheckpointVisited }}>
+        <CurrentUserContext.Provider value={{activeMapId, setActiveMapId, isFetching, userOnboarding, setUserOnboarding, userMaps, setUserMaps, checkpoints, setCheckpoints, currentUser, setCurrentUser: updateCurrentUser, addCheckpointGems, markCheckpointVisited }}>
             {children}
         </CurrentUserContext.Provider>
     );

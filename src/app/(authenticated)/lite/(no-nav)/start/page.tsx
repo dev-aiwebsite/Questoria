@@ -1,13 +1,13 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import Clouds from "@/components/clouds";
 import QuestionWrapper from "@/components/questions/questionWrapper";
 import { onboardingQuestions } from "@/lib/dummy";
 import { createUserOnboardingAnswer, updateUserOnboardingAnswer } from "@/server-actions/crudUserOnboarding";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { updateUser } from "@/server-actions/crudUser";
-import { useAppRouter } from "@/app/contexts/appRouter";
+import { useAppRouter } from "@/contexts/appRouter";
 
 type AnswerItem = {
   question_id: string;

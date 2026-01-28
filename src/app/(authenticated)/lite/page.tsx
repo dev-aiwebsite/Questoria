@@ -1,6 +1,6 @@
 "use client"
 
-import { Link } from "@/app/contexts/appRouter";
+import { Link } from "@/contexts/appRouter";
 import Clouds from "@/components/clouds";
 import Image from "next/image";
 

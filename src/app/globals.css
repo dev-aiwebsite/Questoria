@@ -43,20 +43,22 @@ body {
     @apply border-3 border-black bg-white px-3 py-2.5 rounded-xl;
   }
   .btn {
-    @apply border-3 border-black bg-white px-3 py-2.5 rounded-xl;
+    @apply border-3 border-black bg-white px-3 py-2.5 rounded-xl h-[unset];
   }
   .btn.primary,
   button.primary {
     @apply block bg-accent hover:brightness-125 transition text-center font-bold;
   }
 
-  .header1 {
+
+
+  .header1,h1 {
     @apply text-3xl font-serif;
   }
-  .header2 {
+  .header2,h2 {
     @apply text-xl mb-2 font-serif;
   }
-  .header3 {
+  .header3,h3 {
     @apply text-lg font-bold mb-2;
   }
 

@@ -1,5 +1,5 @@
 "use client"
-import { useAppRouter } from "@/app/contexts/appRouter";
+import { useAppRouter } from "@/contexts/appRouter";
 import LogoWithClouds from "@/components/logoWithClouds";
 import { LoginUser } from "@/server-actions/loginLogout";
 import { LoaderCircle, OctagonX } from "lucide-react";

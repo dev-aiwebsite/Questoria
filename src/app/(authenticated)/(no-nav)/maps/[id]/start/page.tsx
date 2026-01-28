@@ -1,5 +1,5 @@
 "use client"
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import Clouds from "@/components/clouds";
 import QuestionWrapper from "@/components/questions/questionWrapper";
 import { onboardingQuestions } from "@/lib/dummy";
@@ -14,26 +14,20 @@ type Answers = {
 export default function Page() {
     const { id } = useParams<{ id: string }>();
     const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
-    const { maps, setMaps } = useCurrentUserContext()
+    const { userMaps, setUserMaps, userOnboarding} = useCurrentUserContext()
 
     const [answers, setAnswers] = useState<Answers>({ 1: "", 2: [], 3: "" });
     const questionCount = onboardingQuestions.length
     const router = useRouter()
-    const currentMap = maps?.find(m => m.map_id == id)
+    const currentMap = userMaps?.find(m => m.map_id == id)
 
     function handleSubmit() {
         const newStep = currentStep + 1
         if (newStep > questionCount) {
-            if (maps && answers) {
-                if (maps && answers) {
-                    const newData = [...maps];
-                    const mapIndex = newData.findIndex(m => m.map_id == id);
-                    if (mapIndex != -1) {
-                        newData[mapIndex].onboarding_questions.nm439s1 = answers[1] as string;
-                        newData[mapIndex].onboarding_questions.nm439s2 = (answers[2] as string[]).join(",");
-                        newData[mapIndex].onboarding_questions.nm439s3 = answers[3] as string;
-                    }
-                    setMaps(newData);
+            if (userMaps && answers) {
+                if (userMaps && answers) {
+                    const newData = [...userMaps];   
+                    setUserMaps(newData);
                 }
             }
 
@@ -44,7 +38,7 @@ export default function Page() {
     }
 
 
-    const questionAnswers = currentMap ? Object.values(currentMap.onboarding_questions).filter(Boolean) : []
+    const questionAnswers = userOnboarding?.answers.map(a => a.value) ?? []
     const isCleared = questionAnswers.length >= 3
 
     useEffect(() => {

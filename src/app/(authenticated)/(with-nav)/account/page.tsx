@@ -1,6 +1,6 @@
 import { Settings, SquarePen } from "lucide-react";
 import Image from "next/image";
-import { Link } from "@/app/contexts/appRouter";
+import { Link } from "@/contexts/appRouter";
 
 export default function Page() {
     return (

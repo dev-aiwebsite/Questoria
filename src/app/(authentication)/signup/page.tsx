@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppRouter } from "@/app/contexts/appRouter";
+import { useAppRouter } from "@/contexts/appRouter";
 import LogoWithClouds from "@/components/logoWithClouds";
 import PrivacyPolicyPopup from "@/components/popups/privacyPolicyPopup";
 import TermsOfUsePopup from "@/components/popups/termsOfUsePopup";

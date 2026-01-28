@@ -71,30 +71,5 @@
 
 ### Todos
 - [ ] Add logic to trigger map completed
-- [ ] Add logic for map time completion
+- [x] Add logic for map time completion
 - [ ] Update complete page accordingly
-
----
-
-### Implementation Snippets
-
-#### Map Completion Logic
-```typescript
-const mapTimer = {
-  startTime: 0,
-  
-  start() {
-    this.startTime = performance.now();
-  },
-
-  triggerComplete() {
-    const endTime = performance.now();
-    const totalTimeMs = endTime - this.startTime;
-    const seconds = (totalTimeMs / 1000).toFixed(2);
-    
-    console.log(`Map finished in ${seconds}s`);
-    // Logic to update the UI or send to DB goes here
-    return seconds;
-  }
-};
-```

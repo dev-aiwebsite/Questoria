@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bayon, Inter } from "next/font/google";
 import "./globals.css";
-import { AppRouterProvider } from "./contexts/appRouter";
+import { AppRouterProvider } from "../contexts/appRouter";
 import { Suspense } from "react";
 import PageLoader from "@/components/pageLoader";
 

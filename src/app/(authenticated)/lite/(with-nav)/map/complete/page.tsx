@@ -1,6 +1,6 @@
 "use client"
-import { Link } from "@/app/contexts/appRouter";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { Link } from "@/contexts/appRouter";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
 import Image from "next/image";
 

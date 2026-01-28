@@ -11,8 +11,8 @@ import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
 import SlidingPuzzleGame from "@/components/SlidingPuzzleGame";
 import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
-import { useAppData } from "@/app/contexts/appDataContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
+import { useAppData } from "@/contexts/appDataContext";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000

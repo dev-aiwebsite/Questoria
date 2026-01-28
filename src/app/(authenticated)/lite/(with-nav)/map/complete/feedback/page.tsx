@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@/app/contexts/appRouter";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { Link } from "@/contexts/appRouter";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import { createFeedback } from "@/server-actions/crudFeedback";
 import { Star } from "lucide-react";
 import Image from "next/image";

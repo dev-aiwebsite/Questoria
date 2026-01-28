@@ -1,7 +1,7 @@
 "use client"
 
 
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import ARCamera from "@/components/ARCamera";
 import HappinessRating from "@/components/HappinessRating";
 import InputChoices from "@/components/inputChoices";

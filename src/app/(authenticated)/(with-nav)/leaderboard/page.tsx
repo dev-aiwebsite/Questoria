@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppData } from "@/app/contexts/appDataContext";
+import { useAppData } from "@/contexts/appDataContext";
 import { User } from "@/server-actions/crudUser";
 import Image from "next/image";
 

@@ -10,9 +10,10 @@ import { flushSync } from "react-dom";
 import MemoryMatchGame from "@/components/MemoryMatchGame";
 import WordSearchGame from "@/components/WordSearchGame";
 import JigsawPuzzleGame from "@/components/JigsawPuzzleGame";
-import { useCurrentUserContext } from "@/app/contexts/currentUserContext";
+import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
-import { useAppData } from "@/app/contexts/appDataContext";
+import { useAppData } from "@/contexts/appDataContext";
+import { MapActivityProvider } from "@/contexts/mapActivityContext";
 
 // Base map width - change this to adjust default zoom level
 const BASE_MAP_WIDTH = 1000
@@ -89,7 +90,7 @@ const excludedCheckpointIds = [
 
 export default function Page() {
   const { id:mapId } = useParams<{ id: string }>();
-  const { currentUser, setCurrentUser, addCheckpointGems, checkpoints: userCheckpoints } = useCurrentUserContext();
+  const { currentUser, setCurrentUser, addCheckpointGems, checkpoints: userCheckpoints, setActiveMapId } = useCurrentUserContext();
   const [isMounted, setIsMounted] = useState(false)
   const {users} = useAppData()
   
@@ -107,6 +108,10 @@ export default function Page() {
   useEffect(()=>{
     setIsMounted(true)
   },[])
+  useEffect(()=>{
+    setActiveMapId(mapId || "234j3h4j3")
+  },[mapId])
+
   // Initialize user if not set (for development/testing)
   useEffect(() => {
     if (!currentUser) {
@@ -964,6 +969,7 @@ export default function Page() {
       </>
       }
   </>
+  
   );
 }
 
