@@ -2,7 +2,7 @@
 import { checkpoints } from "@/lib/dummy";
 import { cn } from "@/lib/helper";
 import { Star } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 

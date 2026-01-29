@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppRouterProvider } from "../contexts/appRouter";
 import { Suspense } from "react";
 import PageLoader from "@/components/pageLoader";
+import { AppDataProvider } from "@/contexts/appDataContext";
 
 
 const inter = Inter({
@@ -29,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${bayon.variable} antialiased bg-primary`}>
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<PageLoader isFallback />}>
+          <AppDataProvider>
         <AppRouterProvider>
             {children}
         </AppRouterProvider>
+          </AppDataProvider>
         </Suspense>
       </body>
     </html>

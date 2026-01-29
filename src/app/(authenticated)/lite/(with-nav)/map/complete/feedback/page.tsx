@@ -4,7 +4,7 @@ import { Link } from "@/contexts/appRouter";
 import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import { createFeedback } from "@/server-actions/crudFeedback";
 import { Star } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 
 import { useState } from "react";
 // Import the server action created in step 2

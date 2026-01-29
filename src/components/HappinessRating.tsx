@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/helper";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import { useState } from "react";
 
 export default function HappinessRating({value, onChange}:{value?: number; onChange: (v:number)=> void;}) {

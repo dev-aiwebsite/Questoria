@@ -2,7 +2,7 @@
 
 import { maps } from "@/lib/dummy";
 import { Calendar, Clock } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 

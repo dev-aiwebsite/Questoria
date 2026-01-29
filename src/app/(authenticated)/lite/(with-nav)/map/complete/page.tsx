@@ -2,7 +2,7 @@
 import { Link } from "@/contexts/appRouter";
 import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import PageLoader from "@/components/pageLoader";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import { formatSeconds } from "@/lib/helper";
 
 export default function Page() {

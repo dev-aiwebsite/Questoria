@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import { ImageIcon } from "lucide-react";
 import { cn } from "@/lib/helper";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";

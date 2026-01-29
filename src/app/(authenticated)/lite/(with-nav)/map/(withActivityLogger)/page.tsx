@@ -8,7 +8,7 @@ import { useAppData } from "@/contexts/appDataContext";
 import { useCurrentUserContext } from "@/contexts/currentUserContext";
 import { Checkpoint, checkpoints, currentUserId } from "@/lib/dummy";
 import { ZoomIn, ZoomOut } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -594,7 +594,7 @@ export default function Page() {
      
       <div 
         ref={scrollContainerRef}
-        className={`block border-3 border-black w-screen overflow-auto height-with-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+        className={`bg-primary block border-3 border-black w-screen overflow-auto height-with-nav flex ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
         style={{ 
           touchAction: 'none',
           willChange: 'scroll-position',
@@ -781,8 +781,8 @@ export default function Page() {
               transition: mascotAnimationPhase === 'flying' 
                 ? 'left 1s ease-in-out, top 1s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, aspect-ratio 0.5s ease-in-out'
                 : 'transform 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out, aspect-ratio 0.2s ease-in-out',
-              width: mascotAnimationPhase === 'flying' ? 'calc(50px+0.8%)' : 'calc(40px+0.6%)',
-              height: mascotAnimationPhase === 'flying' ? 'auto' : 'calc(40px+0.6%)',
+              width: mascotAnimationPhase === 'flying' ? 'calc(50px + 0.8%)' : 'calc(40px + 0.6%)',
+              height: mascotAnimationPhase === 'flying' ? 'auto' : 'calc(40px + 0.6%)',
               aspectRatio: mascotAnimationPhase === 'flying' ? '433 / 733' : '1 / 1',
               display: 'flex',
               alignItems: 'center',

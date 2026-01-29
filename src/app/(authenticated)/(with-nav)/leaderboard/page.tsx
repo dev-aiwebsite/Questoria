@@ -2,7 +2,7 @@
 
 import { useAppData } from "@/contexts/appDataContext";
 import { User } from "@/server-actions/crudUser";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 
 export default function Page() {
   const { isFetching, users } = useAppData();

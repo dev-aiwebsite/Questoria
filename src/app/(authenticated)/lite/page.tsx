@@ -2,7 +2,7 @@
 
 import { Link } from "@/contexts/appRouter";
 import Clouds from "@/components/clouds";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 
 export default function Page() {
     return (

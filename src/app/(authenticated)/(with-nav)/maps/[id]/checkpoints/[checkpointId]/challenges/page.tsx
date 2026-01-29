@@ -9,7 +9,7 @@ import { CheckpointQuizData, checkpoints, currentUserId } from "@/lib/dummy";
 import { isCheckpointQuiz } from "@/lib/helper";
 import { IconCameraAdd } from "@/lib/icons/icons";
 import { CircleCheck } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";

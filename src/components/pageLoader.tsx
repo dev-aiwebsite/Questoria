@@ -1,6 +1,7 @@
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
+import PageLoaderResourcesProgress from "./PageLoaderResourcesProgress";
 
-export default function PageLoader() {
+export default function PageLoader({isFallback}:{isFallback?:boolean}) {
   return (
     <div className="fixed top-0 left-0 bg-white h-screen w-screen flex items-center justify-center z-[9999999999999]">
       <div className="flex flex-col items-center justify-center gap-6">
@@ -27,6 +28,12 @@ export default function PageLoader() {
           <span className="loading-dot delay-1">.</span>
           <span className="loading-dot delay-2">.</span>
         </div>
+
+        {!isFallback && 
+        <div>
+          <PageLoaderResourcesProgress />
+        </div>
+        }
       </div>
     </div>
   );

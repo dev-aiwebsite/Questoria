@@ -1,5 +1,5 @@
 import ImportantUpdatesCarousel from "@/components/importantUpdatesCarousel";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 
 export default function Page() {

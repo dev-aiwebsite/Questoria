@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X, Trophy, Sparkles } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 
 interface MemoryMatchGameProps {
   onWin: (gems: number) => void;

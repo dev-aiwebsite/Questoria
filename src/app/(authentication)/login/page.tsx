@@ -3,7 +3,7 @@ import { useAppRouter } from "@/contexts/appRouter";
 import LogoWithClouds from "@/components/logoWithClouds";
 import { LoginUser } from "@/server-actions/loginLogout";
 import { LoaderCircle, OctagonX } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useState } from "react";
 

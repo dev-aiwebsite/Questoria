@@ -2,7 +2,7 @@
 
 import { Checkpoint, checkpoints, currentUserId } from "@/lib/dummy";
 import { ZoomIn, ZoomOut } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";

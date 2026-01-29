@@ -1,5 +1,6 @@
 "use client";
 
+import { imagesData } from "@/data/imagesList";
 import { createUser, getUsers, User, UserForm } from "@/server-actions/crudUser";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -9,12 +10,17 @@ isFetching: boolean;
 users: User[];
 setUsers: React.Dispatch<React.SetStateAction<User[]>>;
 registerUser: (formData:UserForm) => Promise<User | undefined>;
+imagesLoaded: boolean;
+setImagesLoaded: React.Dispatch<React.SetStateAction<boolean>>
+imagesProgress: number;
 };
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
 export function AppDataProvider({ children }: { children: React.ReactNode }) {
   const [users, setUsers] = useState<User[]>([]);
+   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [imagesProgress, setImagesProgress] = useState(0);
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
@@ -31,6 +37,24 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
         fetchData()
     }, [])
 
+    useEffect(() => {
+    if (imagesLoaded) return; // prevent reloading
+    
+    let loadedCount = 0;
+    imagesData.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = img.onerror = () => {
+        loadedCount++;
+        setImagesProgress(Math.round((loadedCount / imagesData.length) * 100));
+
+        if (loadedCount === imagesData.length) {
+          setImagesLoaded(true);
+        }
+      };
+    });
+  }, [imagesLoaded]);
+
     async function registerUser(formData:UserForm){
       const {data} = await createUser(formData)
       if(data){
@@ -41,7 +65,7 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
     }
 
   return (
-    <AppDataContext.Provider value={{registerUser, isFetching, users, setUsers }}>
+    <AppDataContext.Provider value={{imagesProgress, imagesLoaded, setImagesLoaded, registerUser, isFetching, users, setUsers }}>
       {children}
     </AppDataContext.Provider>
   );

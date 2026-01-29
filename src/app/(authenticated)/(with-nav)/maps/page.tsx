@@ -1,5 +1,5 @@
 import { Map, maps } from "@/lib/dummy";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 
 export default function Page() {

@@ -1,7 +1,7 @@
 "use client"
 
 import { checkpoints } from "@/lib/dummy";
-import Image from "next/image";
+import Image from "@/components/optimizeImage";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
