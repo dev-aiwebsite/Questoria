@@ -10,8 +10,8 @@ export default function Page() {
             <div className="absolute top-0 mt-10 -z-2">
                 <Clouds />
             </div>
-            <div className="bg-white rounded-2xl border-3 border-black prose space-y-6 text-base p-10 my-auto overflow-auto">
-                <h2 className="p-2 rounded-xl text-3xl font-medium uppercase !mb-10 font-serif">WELCOME TO QUESTORIA</h2>
+            <div className="bg-white rounded-2xl border-3 border-black prose space-y-4 text-base p-10 my-auto overflow-auto">
+                <h1>WELCOME TO QUESTORIA</h1>
                 
                     <p>
                         <strong>A game made for curious explorers.</strong>
@@ -29,10 +29,7 @@ export default function Page() {
                     height={200}
                     />
 
-                    <p>
-                        <strong>Meet your guide, a Southern Brown Bandicoot!</strong>
-                        <br />
-                        These shy foragers help keep gardens healthy as they search for food and turn over soil. As you explore, you’ll collect the foods bandicoots look for in the wild.
+                    <p><strong>Meet your guide, a Southern Brown Bandicoot!</strong> These shy foragers help keep gardens healthy as they search for food and turn over soil. As you explore, you’ll collect the foods bandicoots look for in the wild.
                     </p>
 
                 <Link

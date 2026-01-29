@@ -78,3 +78,10 @@
 - [x] Add logic for map time completion
 - [x] Update complete page accordingly
 
+### 🚀 Lite Version Updates
+**Date:** 29 January 2026
+
+### Welcome Page
+- Close the gaps at the top of the title
+- Move copy of the 2nd paragraph. (continues text) must be inline
+- Update App Icon

@@ -11,7 +11,7 @@ import { useState } from "react";
 
 
 export default function Page() {
-  const [isSuccess, setIsSuccess] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {currentUser} = useCurrentUserContext()
   
