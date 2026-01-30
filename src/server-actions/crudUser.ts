@@ -1,9 +1,11 @@
 "use server";
 
 import pool from "@/lib/db";
+import { PsqlError } from "@/types/psql";
 import { nanoid } from "nanoid";
 
 type Result<T> = {
+  code?: string;
   success: boolean;
   message: string;
   data?: T;
@@ -57,7 +59,9 @@ export async function createUser(data: UserForm): Promise<Result<User>> {
       data: result.rows[0] as User,
     };
   } catch (error: unknown) {
+    
     return {
+      code: error instanceof Error ? (error as unknown as PsqlError).code : "UNKNOWN_ERROR",
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",
     };
