@@ -1209,11 +1209,11 @@ export const onboardingQuestions: OnboardingQuestions[] = [
       },
       {
         id: "q1c2",
-        text: "A trusty companion or band of friends (how many?) 🏹",
+        text: "A trusty companion or band of friends 🏹",
       },
       {
         id: "q1c3",
-        text: "Kids, family, or a merry crew of little explorers (how many?) 🐾",
+        text: "Kids, family, or a merry crew of little explorers 🐾",
       },
     ]
   },

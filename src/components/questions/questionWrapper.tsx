@@ -77,7 +77,7 @@ export default function QuestionWrapper({
             <button
                 onClick={handleSubmit}
                 disabled={!isAnswered || isLoading}
-                className="w-fit mt-4 ml-auto font-bold min-w-[100px] primary input disabled:!bg-stone-300 disabled:cursor-not-allowed"
+                className="!flex flex-row flex-nowrap gap-2 w-fit mt-4 ml-auto font-bold min-w-[100px] primary input disabled:!bg-stone-300 disabled:cursor-not-allowed"
             >
                 {isSuccess ? "STARTING JOURNEY..." : <>
                                     {isLoading && <LoaderCircle className="animate-spin" />}
