@@ -29,7 +29,7 @@ export default function Page() {
                     height={200}
                     />
 
-                    <p><strong>Meet your guide, a Southern Brown Bandicoot!</strong> These shy foragers help keep gardens healthy as they search for food and turn over soil. As you explore, you’ll collect the foods bandicoots look for in the wild.
+                    <p><strong>Meet your guide, Bindi, a Southern Brown Bandicoot!</strong> These shy foragers help keep gardens healthy as they search for food and turn over soil. As you explore, you’ll collect the foods bandicoots look for in the wild.
                     </p>
 
                 <Link
