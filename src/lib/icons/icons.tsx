@@ -168,3 +168,50 @@ export const IconLogoText  = ({strokeWidth=1, width = 79, height = 17, className
 <path d="M70.5184 14.9632L73.1614 0.322572C73.1753 0.267076 73.21 0.239328 73.2655 0.239328H76.3559C76.4114 0.239328 76.4461 0.267076 76.46 0.322572L78.999 14.9632C79.0059 15.0326 78.9781 15.0672 78.9157 15.0672H76.5536C76.4843 15.0672 76.4461 15.0326 76.4392 14.9632L76.2103 13.4023H73.3071L73.0782 14.9632C73.0713 15.0326 73.0366 15.0672 72.9741 15.0672H70.6017C70.5462 15.0672 70.5184 15.0326 70.5184 14.9632ZM74.9096 5.14034L74.7847 4.34952L74.6911 5.14034L73.7337 11.1235H75.7836L74.9096 5.14034Z" fill="currentColor"/>
   </svg>
 );
+
+export const IconIosShare = ({strokeWidth=1, width = 50, height = 50, className }:IconType) => {
+  return (
+    <svg
+  className={className}
+    width={width}
+    height={height}
+    strokeWidth={strokeWidth}
+      viewBox="0 0 50 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      
+    >
+      <path
+        d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"
+        fill="currentColor"
+      />
+      <path d="M24 7h2v21h-2z" fill="currentColor" />
+      <path
+        d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+
+export const LongArrowDown = ({strokeWidth=1, width = 24, height = 24, className }:IconType) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    className={className}
+    width={width}
+    height={height}
+    strokeWidth={strokeWidth}
+  >
+    <path
+      d="M12 4L12 20M12 20L18 14M12 20L6 14"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

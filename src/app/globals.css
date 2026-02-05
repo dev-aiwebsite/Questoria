@@ -204,3 +204,33 @@ body {
 button:disabled {
     filter: grayscale(0.5);
 }
+
+.ios-app-icon {
+    color: transparent;
+    margin: auto;
+    border-radius: 18px;
+    box-shadow: 0 0 50px #fff5, 0 0 5px #fff3;
+}
+
+
+.install-app-arrow {
+    position: fixed;
+    z-index: 9999999999999999999999;
+    pointer-events: none;
+    animation: bouncing-arrow-animation 3s infinite;
+}
+
+.install-app-arrow.iphone.chrome {
+    top: -5px;
+    right: 0px;
+    height: 70px;
+    width: 70px;
+    rotate: 180deg;
+}
+
+.install-app-arrow.iphone.safari {
+    bottom: -5px;
+    right: 24px;
+    height: 70px;
+    width: 70px;
+}
